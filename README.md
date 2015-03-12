@@ -1,7 +1,32 @@
 # PimGento
+
 PimGento is a Magento extension that allows you to import your catalog from Akeneo CSV files into Magento.
 
+## How it works
+
+Pimgento reads CSV files from Akeneo and insert data directly in Magento database.
+In this way, it makes imports very fast and doesn't disturb your e-commerce website.
+With PimGento, you can import these informations :
+* Categories
+* Families
+* Attributes
+* Options
+* Products
+* Products positions by category
+* Images
+* Stocks
+
 ## Features
+
+* Plug and Play : We payed attention to the code and followed the Magento code instructions so you can easly install this extension on your store without any troubleshooting (see [installation](#installation)).
+* Totally flexible : We add plenty of configurations. We didn't write any specific value in our code : No hard coding.
+* User Friendly : We think the interface the easiest possible. We developp a dashboard where you can see your import running. We even add some colors :)
+* Manual or automatic : Free to choose ! You can either upload and import your CSV files from the Magento backoffice or simply let the automatics tasks run different import with CSV files located in a directory of your server.
+* SEO ready : 404 pages, it's over ! With PimGento, you don't loose SEO on your product and category pages. If their names change, Pimgento create automatically a rewrite from the old URL to the new one.
+* Synchrone / Asynchrone : We can import right now your data in order to show them on the fron-office or schedule a task in the coming days. Very usefull to prepare a marketing operation for instance.
+* Fast import : PimGento is from 10 to 20 times faster than API or import system deliver with Magento.
+* Performance : Imports with PimGento don't slow down the store. Besides, you can select which cache you want to clear at the end of your import.
+* Multi-X : PimGento supports all types of Magento structure. If you had multi-website and multi-store with lot of different languages, imports still work well.
 
 ## Requirements
 
@@ -23,13 +48,9 @@ Adaptations for other Magento versions are in development (see [roadmap](#roadma
 * Disconnect / reconnect to the Back Office
 * Refresh Magento compilation (System > Tools > Compilation)
 
-## Configuration
+## Configuration and Usage
 
-## Usage
-
-## Cronjob
-
-PimGento use Magento cronjob so you have nothing to add in your crontab.
+* PimGento use Magento cronjob so you have nothing to add in your crontab.
 
 ## Roadmap
 
