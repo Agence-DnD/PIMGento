@@ -1,0 +1,77 @@
+<?php
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+
+<?php if ($this->getComment()): ?>
+    <p class="task-comment"><?php echo $this->getComment() ?></p>
+<?php endif; ?>
+
+<?php foreach($this->getOptions() as $key => $option): ?>
+
+    <?php if($option['option'] == 'multiselect'): ?>
+
+        <label class="label" for="option-<?php echo $key ?>"><?php echo $option['label'] ?></label>
+        <div class="task-option">
+            <select id="option-<?php echo $key ?>" name="<?php echo $option['name'] ?>" multiple="multiple">
+                <?php foreach($option['options'] as $select): ?>
+                    <option value="<?php echo $select['value'] ?>"<?php if ($this->getValue($option) == $select['value']): ?> selected="selected"<?php endif; ?>><?php echo $select['label'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+    <?php endif; ?>
+
+    <?php if($option['option'] == 'select'): ?>
+
+        <label class="label" for="option-<?php echo $key ?>"><?php echo $option['label'] ?></label>
+        <div class="task-option">
+            <select id="option-<?php echo $key ?>" name="<?php echo $option['name'] ?>">
+                <?php foreach($option['options'] as $select): ?>
+                    <option value="<?php echo $select['value'] ?>"<?php if ($this->getValue($option) == $select['value']): ?> selected="selected"<?php endif; ?>><?php echo $select['label'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+    <?php endif; ?>
+
+    <?php if($option['option'] == 'radio'): ?>
+
+        <span class="label"><?php echo $option['label'] ?></span>
+        <div class="task-option">
+            <?php foreach($option['options'] as $i => $select): ?>
+                <input id="option-<?php echo $key ?>-<?php echo $i ?>" type="radio" name="<?php echo $option['name'] ?>" value="<?php echo $select['value'] ?>"<?php if ($this->getValue($option) == $select['value']): ?> checked="checked"<?php endif; ?> />
+                <label for="option-<?php echo $key ?>-<?php echo $i ?>"><?php echo $select['label'] ?></label>
+            <?php endforeach; ?>
+        </div>
+
+    <?php endif; ?>
+
+    <?php if($option['option'] == 'text'): ?>
+
+        <label class="label" for="option-<?php echo $key ?>"><?php echo $option['label'] ?></label>
+        <div class="task-option">
+            <input id="option-<?php echo $key ?>" class="large" type="text" name="<?php echo $option['name'] ?>" value="<?php echo $this->getValue($option) ?>" />
+        </div>
+
+    <?php endif; ?>
+
+    <?php if($option['option'] == 'checkbox'): ?>
+
+        <label class="label" for="option-<?php echo $key ?>"><?php echo $option['label'] ?></label>
+        <div class="task-option">
+            <input id="option-<?php echo $key ?>" type="checkbox" name="<?php echo $option['name'] ?>" value="1" />
+        </div>
+
+    <?php endif; ?>
+
+    <?php if($option['option'] == 'hidden'): ?>
+
+        <input id="option-<?php echo $key ?>" type="hidden" name="<?php echo $option['name'] ?>" value="<?php echo $this->getValue($option) ?>" />
+
+    <?php endif; ?>
+
+<?php endforeach; ?>

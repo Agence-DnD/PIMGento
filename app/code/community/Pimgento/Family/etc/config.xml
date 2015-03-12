@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Pimgento_Family>
+            <version>0.1.0</version>
+        </Pimgento_Family>
+    </modules>
+    <global>
+        <models>
+            <pimgento_family>
+                <class>Pimgento_Family_Model</class>
+            </pimgento_family>
+        </models>
+        <helpers>
+            <pimgento_family>
+                <class>Pimgento_Family_Helper</class>
+            </pimgento_family>
+        </helpers>
+        <events>
+            <task_executor_load_task>
+                <observers>
+                    <pimgento_family_add_task>
+                        <class>pimgento_family/observer</class>
+                        <method>addTask</method>
+                    </pimgento_family_add_task>
+                </observers>
+            </task_executor_load_task>
+            <eav_entity_attribute_set_delete_before>
+                <observers>
+                    <pimgento_family_delete_family>
+                        <class>pimgento_family/observer</class>
+                        <method>deleteFamilyCode</method>
+                    </pimgento_family_delete_family>
+                </observers>
+            </eav_entity_attribute_set_delete_before>
+        </events>
+    </global>
+    <default>
+        <pimdata>
+            <family>
+                <cron_enabled>0</cron_enabled>
+                <cron_file>families.csv</cron_file>
+            </family>
+        </pimdata>
+    </default>
+    <crontab>
+        <jobs>
+            <pimdata_family_cron>
+                <run>
+                    <model>pimgento_family/cron::run</model>
+                </run>
+            </pimdata_family_cron>
+        </jobs>
+    </crontab>
+</config>

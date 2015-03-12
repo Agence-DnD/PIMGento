@@ -1,0 +1,40 @@
+<?php
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+
+<?php if(!$this->getDisabledTitle()): ?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="width:50%;"><h3 class="icon-head head-task"><?php echo $this->getHeader() ?></h3></td>
+        </tr>
+    </table>
+</div>
+<?php endif; ?>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">
+            <?php echo $this->__('Execute task') ?>
+        </h4>
+    </div>
+    <fieldset>
+        <legend><?php echo $this->__('Execute task') ?></legend>
+        <table cellspacing="0" class="task-executor">
+            <tr>
+                <td class="launcher-column">
+                    <div class="launcher"><?php echo $this->getLauncher() ?></div>
+                </td>
+                <td>
+                    <ul id="task-console" class="task-console">
+                        <li><?php echo $this->__('Welcome to task executor') ?></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</div>

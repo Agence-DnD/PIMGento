@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <sections>
+        <pimdata>
+            <groups>
+                <position translate="label" module="pimgento_core">
+                    <label>Product position</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>9</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <cron_enabled translate="label">
+                            <label>Active cron</label>
+                            <frontend_type>select</frontend_type>
+                            <backend_model>pimgento_core/system_config_backend_pimgento_cron_status</backend_model>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </cron_enabled>
+                        <cron_expression translate="label">
+                            <label>Cron expression</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>pimgento_core/system_config_backend_pimgento_cron_expr</backend_model>
+                            <comment>Exemple: 0 1 * * *</comment>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <cron_enabled>1</cron_enabled>
+                            </depends>
+                        </cron_expression>
+                        <cron_file translate="label">
+                            <label>File</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>File name in "/var/import/"</comment>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <cron_enabled>1</cron_enabled>
+                            </depends>
+                        </cron_file>
+                    </fields>
+                </position>
+            </groups>
+        </pimdata>
+    </sections>
+</config>

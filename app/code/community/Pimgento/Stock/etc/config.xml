@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Pimgento_Stock>
+            <version>0.1.0</version>
+        </Pimgento_Stock>
+    </modules>
+    <global>
+        <models>
+            <pimgento_stock>
+                <class>Pimgento_Stock_Model</class>
+            </pimgento_stock>
+        </models>
+        <helpers>
+            <pimgento_stock>
+                <class>Pimgento_Stock_Helper</class>
+            </pimgento_stock>
+        </helpers>
+        <events>
+            <task_executor_load_task>
+                <observers>
+                    <pimgento_stock_add_task>
+                        <class>pimgento_stock/observer</class>
+                        <method>addTask</method>
+                    </pimgento_stock_add_task>
+                </observers>
+            </task_executor_load_task>
+        </events>
+    </global>
+    <default>
+        <pimdata>
+            <stock>
+                <cron_enabled>0</cron_enabled>
+                <cron_file>stock.csv</cron_file>
+            </stock>
+        </pimdata>
+    </default>
+    <crontab>
+        <jobs>
+            <pimdata_stock_cron>
+                <run>
+                    <model>pimgento_stock/cron::run</model>
+                </run>
+            </pimdata_stock_cron>
+        </jobs>
+    </crontab>
+</config>

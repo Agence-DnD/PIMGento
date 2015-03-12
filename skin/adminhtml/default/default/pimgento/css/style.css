@@ -1,0 +1,20 @@
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+.head-task{background-image:url(../images/icon.png)}
+.task-executor{width:100%}
+.task-executor .launcher{width:620px;background:#d7e5ef url(../images/task-executor.png) no-repeat bottom left;padding:5px;border:1px solid #ccc;min-height:430px}
+.task-executor .launcher-column{width:630px;padding:0 5px 0 0}
+.task-executor .uploader .file-row{margin:5px 0 0 0;height:26px;line-height:25px}
+.task-executor .task-command{margin-bottom:10px}
+.task-executor .task-command p{font-weight:bold;margin:0}
+.task-executor .task-command select{height:30px}
+.task-executor .task-option{margin-bottom:10px}
+.task-executor .task-comment{background:#fff9e9;border:1px solid #eee2be;margin-bottom:10px;padding:5px;font-size:11px}
+.task-executor .label{font-weight:bold;display:block;margin-bottom:3px}
+.task-executor select, .task-executor input.large{width:100%;padding:5px 0;box-sizing:border-box}
+.task-console{border:1px solid #ccc;background:#000 url(../images/process-background.jpg) no-repeat top left;padding:5px 10px;width:610px;margin:0;color:#0F0;height:430px;overflow-y:scroll}
+.task-console .execute{background:url(../images/import-loader.gif) no-repeat right}

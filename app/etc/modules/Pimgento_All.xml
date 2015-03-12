@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Pimgento_Core>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Core />
+                <Mage_Adminhtml />
+            </depends>
+        </Pimgento_Core>
+        <Pimgento_Category>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+                <Mage_Catalog />
+            </depends>
+        </Pimgento_Category>
+        <Pimgento_Family>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+                <Mage_Catalog />
+            </depends>
+        </Pimgento_Family>
+        <Pimgento_Attribute>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+                <Pimgento_Family />
+                <Mage_Catalog />
+            </depends>
+        </Pimgento_Attribute>
+        <Pimgento_Option>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+                <Pimgento_Attribute />
+                <Mage_Catalog />
+            </depends>
+        </Pimgento_Option>
+        <Pimgento_Product>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+                <Pimgento_Family />
+                <Pimgento_Attribute />
+                <Mage_Catalog />
+            </depends>
+        </Pimgento_Product>
+        <Pimgento_Image>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+                <Pimgento_Product />
+            </depends>
+        </Pimgento_Image>
+        <Pimgento_Stock>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+                <Pimgento_Product />
+            </depends>
+        </Pimgento_Stock>
+        <Pimgento_Position>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+                <Pimgento_Product />
+                <Pimgento_Category />
+            </depends>
+        </Pimgento_Position>
+    </modules>
+</config>

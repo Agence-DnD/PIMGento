@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Pimgento_Attribute>
+            <version>0.2.0</version>
+        </Pimgento_Attribute>
+    </modules>
+    <global>
+        <blocks>
+            <pimgento_attribute>
+                <class>Pimgento_Attribute_Block</class>
+            </pimgento_attribute>
+        </blocks>
+        <models>
+            <pimgento_attribute>
+                <class>Pimgento_Attribute_Model</class>
+            </pimgento_attribute>
+        </models>
+        <helpers>
+            <pimgento_attribute>
+                <class>Pimgento_Attribute_Helper</class>
+            </pimgento_attribute>
+        </helpers>
+        <events>
+            <task_executor_load_task>
+                <observers>
+                    <pimgento_attribute_add_task>
+                        <class>pimgento_attribute/observer</class>
+                        <method>addTask</method>
+                    </pimgento_attribute_add_task>
+                </observers>
+            </task_executor_load_task>
+            <catalog_entity_attribute_delete_after>
+                <observers>
+                    <pimgento_attribute_delete_attribute>
+                        <class>pimgento_attribute/observer</class>
+                        <method>deleteAttributeCode</method>
+                    </pimgento_attribute_delete_attribute>
+                </observers>
+            </catalog_entity_attribute_delete_after>
+        </events>
+    </global>
+    <default>
+        <pimdata>
+            <attribute>
+                <cron_enabled>0</cron_enabled>
+                <cron_file>attributes.csv</cron_file>
+                <cache>collections,eav</cache>
+            </attribute>
+        </pimdata>
+    </default>
+    <crontab>
+        <jobs>
+            <pimdata_attribute_cron>
+                <run>
+                    <model>pimgento_attribute/cron::run</model>
+                </run>
+            </pimdata_attribute_cron>
+        </jobs>
+    </crontab>
+</config>

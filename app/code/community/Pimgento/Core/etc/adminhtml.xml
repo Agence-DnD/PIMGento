@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <menu>
+        <catalog>
+            <children>
+                <pimgento_data translate="title" module="pimgento_core">
+                    <title>Import PIM data</title>
+                    <sort_order>1000</sort_order>
+                    <action>adminhtml/task</action>
+                </pimgento_data>
+            </children>
+        </catalog>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <catalog>
+                        <children>
+                            <pimgento_data translate="title" module="pimgento_core">
+                                <title>Import PIM data</title>
+                                <sort_order>1000</sort_order>
+                            </pimgento_data>
+                        </children>
+                    </catalog>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <pimdata translate="title" module="pimgento_core">
+                                        <title>Pim DATA</title>
+                                    </pimdata>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
