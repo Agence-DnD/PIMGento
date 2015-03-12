@@ -1,6 +1,7 @@
 # PimGento
-================
 PimGento is a Magento extension that allows you to import your catalog from Akeneo CSV files into Magento.
+
+## Features
 
 ## Requirements
 
@@ -11,7 +12,7 @@ PimGento is a Magento extension that allows you to import your catalog from Aken
 
 Adaptations for other Magento versions are in development (see [roadmap](#roadmap))
 
-## Install module in Magento
+## Installation
 
 * Copy the folder app/code/community/Pimgento and paste it in the folder app/code/community
 * Copy the folder app/design/adminhtml/default/default/template/pimgento and paste it in the folder app/design/adminhtml/default/default/template
@@ -22,7 +23,11 @@ Adaptations for other Magento versions are in development (see [roadmap](#roadma
 * Disconnect / reconnect to the Back Office
 * Refresh Magento compilation (System > Tools > Compilation)
 
-## CRONJOB
+## Configuration
+
+## Usage
+
+## Cronjob
 
 PimGento use Magento cronjob so you have nothing to add in your crontab.
 
