@@ -16,15 +16,15 @@ class Pimgento_Attribute_Helper_Data extends Mage_Core_Helper_Data
     public function getTypes()
     {
         $types = array(
-            'pimgento_catalog_identifier'   => $this->_types('text'),
-            'pimgento_catalog_text'         => $this->_types('text'),
-            'pimgento_catalog_metric'       => $this->_types('text'),
-            'pimgento_catalog_number'       => $this->_types('text'),
-            'pimgento_catalog_textarea'     => $this->_types('textarea'),
-            'pimgento_catalog_date'         => $this->_types('date'),
-            'pimgento_catalog_boolean'      => $this->_types('boolean'),
-            'pimgento_catalog_simpleselect' => $this->_types('select'),
-            'pimgento_catalog_multiselect'  => $this->_types('multiselect'),
+            'pim_catalog_identifier'   => $this->_types('text'),
+            'pim_catalog_text'         => $this->_types('text'),
+            'pim_catalog_metric'       => $this->_types('text'),
+            'pim_catalog_number'       => $this->_types('text'),
+            'pim_catalog_textarea'     => $this->_types('textarea'),
+            'pim_catalog_date'         => $this->_types('date'),
+            'pim_catalog_boolean'      => $this->_types('boolean'),
+            'pim_catalog_simpleselect' => $this->_types('select'),
+            'pim_catalog_multiselect'  => $this->_types('multiselect'),
             'default'                  => $this->_types('text'),
         );
 
