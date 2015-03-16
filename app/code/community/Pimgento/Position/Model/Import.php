@@ -191,6 +191,13 @@ class Pimgento_Position_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function reindex($task)
     {
+        if (!$this->getConfig('reindex')) {
+            $task->setMessage(
+                Mage::helper('pimgento_position')->__('Reindex is disabled')
+            );
+            return false;
+        }
+
         /* @var $indexer Mage_Index_Model_Indexer */
         $indexer = Mage::getSingleton('index/indexer');
 

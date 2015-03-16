@@ -259,6 +259,13 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
      */
     public function reindex($task)
     {
+        if (!$this->getConfig('reindex')) {
+            $task->setMessage(
+                Mage::helper('pimgento_attribute')->__('Reindex is disabled')
+            );
+            return false;
+        }
+
         /* @var $indexer Mage_Index_Model_Indexer */
         $indexer = Mage::getSingleton('index/indexer');
 

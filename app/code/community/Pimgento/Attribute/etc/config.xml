@@ -53,6 +53,7 @@
                 <cron_enabled>0</cron_enabled>
                 <cron_file>attributes.csv</cron_file>
                 <cache>collections,eav</cache>
+                <reindex>1</reindex>
             </attribute>
         </pimdata>
     </default>

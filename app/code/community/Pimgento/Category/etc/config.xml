@@ -51,6 +51,7 @@
                 <anchor>1</anchor>
                 <update_url>0</update_url>
                 <cache>block_html,collections</cache>
+                <reindex>1</reindex>
             </category>
         </pimdata>
     </default>

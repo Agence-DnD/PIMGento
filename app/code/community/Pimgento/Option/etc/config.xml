@@ -58,6 +58,7 @@
             <option>
                 <cron_enabled>0</cron_enabled>
                 <cron_file>attributes-options.csv</cron_file>
+                <reindex>1</reindex>
             </option>
         </pimdata>
     </default>

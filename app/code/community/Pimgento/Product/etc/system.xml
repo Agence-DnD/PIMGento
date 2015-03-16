@@ -63,12 +63,21 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </cache>
+                        <reindex translate="label">
+                            <label>Reindex Data</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </reindex>
                         <matches translate="label">
                             <label>Match attributes</label>
                             <frontend_model>pimgento_product/adminhtml_system_match</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
                             <comment>Exemple: description > meta_description</comment>
-                            <sort_order>5</sort_order>
+                            <sort_order>6</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -77,7 +86,7 @@
                             <label>Default Tax Class</label>
                             <frontend_type>select</frontend_type>
                             <source_model>pimgento_product/system_config_source_tax_class</source_model>
-                            <sort_order>6</sort_order>
+                            <sort_order>7</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -86,7 +95,7 @@
                             <label>Create configurable</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>7</sort_order>
+                            <sort_order>8</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -96,7 +105,7 @@
                             <frontend_type>multiselect</frontend_type>
                             <source_model>pimgento_product/system_config_source_configurable_attribute</source_model>
                             <comment>Set "use to create configurable product" to "yes" in attribute configuration</comment>
-                            <sort_order>8</sort_order>
+                            <sort_order>9</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -109,7 +118,7 @@
                             <frontend_model>pimgento_product/adminhtml_system_configurable</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
                             <comment>Use the value column to force data for specific attribute. Otherwise, leave blank to retrieve the value of the first simple product</comment>
-                            <sort_order>9</sort_order>
+                            <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
