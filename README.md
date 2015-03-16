@@ -19,14 +19,14 @@ With PimGento, you can import these informations :
 ## Features
 
 * Plug and Play : We payed attention to the code and followed the Magento code instructions so you can easly install this extension on your store without any troubleshooting (see [installation](#installation)).
-* Totally flexible : We add plenty of configurations. We didn't write any specific value in our code : No hard coding.
-* User Friendly : We think the interface the easiest possible. We developp a dashboard where you can see your import running. We even add some colors :)
+* Totally flexible : We added plenty of configurations. We didn't write any specific value in our code : No hard coding.
+* User Friendly : We thought the interface the easiest possible. We developp a dashboard where you can see your import running. We even add some colors :)
 * Manual or automatic : Free to choose ! You can either upload and import your CSV files from the Magento backoffice or simply let the automatics tasks run different import with CSV files located in a directory of your server.
 * SEO ready : 404 pages, it's over ! With PimGento, you don't loose SEO on your product and category pages. If their names change, Pimgento create automatically a rewrite from the old URL to the new one.
-* Synchrone / Asynchrone : We can import right now your data in order to show them on the fron-office or schedule a task in the coming days. Very usefull to prepare a marketing operation for instance.
-* Fast import : PimGento is from 10 to 20 times faster than API or import system deliver with Magento.
+* Synchrone / Asynchrone : You can import right now your data in order to show them on the fron-office or schedule a task in the coming days. Very usefull to prepare a marketing operation for instance.
+* Fast import : PimGento is from 10 to 20 times faster than API and native Magento import/export system.
 * Performance : Imports with PimGento don't slow down the store. Besides, you can select which cache you want to clear at the end of your import.
-* Multi-X : PimGento supports all types of Magento structure. If you had multi-website and multi-store with lot of different languages, imports still work well.
+* Multi-X : PimGento supports all types of Magento structure. If you have multi-website and multi-store with lot of differents languages, imports still work well.
 
 ## Requirements
 
@@ -50,7 +50,18 @@ Adaptations for other Magento versions are in development (see [roadmap](#roadma
 
 ## Configuration and Usage
 
-* PimGento use Magento cronjob so you have nothing to add in your crontab.
+All PimGento configurations can be found in the Magento back-office at this path :
+=> System>Configuration>Catalog>PIM
+
+* General
+..* Active Log :
+..* CSV lines terminated by :
+..* CSV fields terminated by :
+
+* Categories
+..* Active cron :
+
+*NB* : PimGento use Magento cronjob so you have nothing to add in your crontab.
 
 ## Roadmap
 
@@ -58,4 +69,4 @@ Adaptations for other Magento versions are in development (see [roadmap](#roadma
 * Compatibility with Magento >= 1.8 EE
 * Create this type of product : Bundle, packed, virtual and downloadable products.
 * Think about a way to delete data
-* Crossell management
+* Crossell and upsell management
