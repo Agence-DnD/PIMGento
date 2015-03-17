@@ -60,6 +60,57 @@ System>Configuration>Catalog>PIM
 
 * Categories
   * Active cron : if set Yes, you can enable the automatic import.
+    * CRON expression : Configure when the automatic import will execute.
+    * File : The filename of the CSV file used for the automatic import.
+  * Flush cache : Choose which cache you want to clear after the import.
+  * Category depth : Choose the depth of your e-commerce navigation.
+  * Is anchor : If set yes, all categories will be created as an anchor category.
+  * Update url key : If set yes, it will create automatically an URL rewrite if the category name changed.
+
+* Families
+  * Active cron : if set Yes, you can enable the automatic import.
+    * CRON expression : Configure when the automatic import will execute.
+    * File : The filename of the CSV file used for the automatic import.
+  * Flush cache : Choose which cache you want to clear after the import.
+
+* Attributes
+  * Active cron : if set Yes, you can enable the automatic import.
+    * CRON expression : Configure when the automatic import will execute.
+    * File : The filename of the CSV file used for the automatic import.
+  * Flush cache : Choose which cache you want to clear after the import.
+  * Specific types : You can make a mapping between PIM and MAGENTO attributes types.
+
+* Options
+  * Active cron : if set Yes, you can enable the automatic import.
+    * CRON expression : Configure when the automatic import will execute.
+    * File : The filename of the CSV file used for the automatic import. 
+  * Flush cache : Choose which cache you want to clear after the import.
+
+* Products
+  * Active cron : if set Yes, you can enable the automatic import.
+    * CRON expression : Configure when the automatic import will execute.
+    * File : The filename of the CSV file used for the automatic import. 
+  * Flush cache : Choose which cache you want to clear after the import.
+  * Match attributes : You can make a mapping between PIM and MAGENTO attributes for simple product.
+  * Default tax class : Choose the default tax class for each product imported.
+  * Create Configurable : If set yes, it will create configurable product from the simple product data.
+  * Configurable values : You can make a mapping between PIM and MAGENTO attributes for configurable product.
+
+* Images
+  * Active cron : if set Yes, you can enable the automatic import.
+    * CRON expression : Configure when the automatic import will execute.
+    * File : The filename of the CSV file used for the automatic import.
+  * Delete image : If set Yes, delete all images used for the import.
+  
+* Stock
+  * Active cron : if set Yes, you can enable the automatic import.
+    * CRON expression : Configure when the automatic import will execute.
+    * File : The filename of the CSV file used for the automatic import.
+
+* Product position
+  * Active cron : if set Yes, you can enable the automatic import.
+    * CRON expression : Configure when the automatic import will execute.
+    * File : The filename of the CSV file used for the automatic import.
 
 **NB** : PimGento use Magento cronjob so you have nothing to add in your crontab.
 
