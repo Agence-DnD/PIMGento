@@ -35,26 +35,30 @@ class Pimgento_Image_Model_Observer
                         'method'  => 'pimgento_image/import::createTable'
                     ),
                     2 => array(
+                        'comment' => $helper->__('Detect configurable'),
+                        'method'  => 'pimgento_image/import::detectConfigurable'
+                    ),
+                    3 => array(
                         'comment' => $helper->__('Move images'),
                         'method'  => 'pimgento_image/import::moveImages'
                     ),
-                    3 => array(
+                    4 => array(
                         'comment' => $helper->__('Match entities'),
                         'method'  => 'pimgento_image/import::matchEntity'
                     ),
-                    4 => array(
+                    5 => array(
                         'comment' => $helper->__('Associate images to products'),
                         'method'  => 'pimgento_image/import::setValues'
                     ),
-                    5 => array(
+                    6 => array(
                         'comment' => $helper->__('Drop temporary table'),
                         'method'  => 'pimgento_image/import::dropTable'
                     ),
-                    6 => array(
+                    7 => array(
                         'comment' => $helper->__('Reindex Data'),
                         'method'  => 'pimgento_image/import::reindex'
                     ),
-                    7 => array(
+                    8 => array(
                         'comment' => $helper->__('Clean cache'),
                         'method'  => 'pimgento_image/import::cleanCache'
                     ),

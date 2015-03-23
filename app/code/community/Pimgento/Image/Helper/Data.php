@@ -89,4 +89,27 @@ class Pimgento_Image_Helper_Data extends Mage_Core_Helper_Data
         return $files;
     }
 
+    /**
+     * Copy folder
+     *
+     * @param string $source
+     * @param string $destination
+     */
+    public function copyFolder($source, $destination)
+    {
+        $handle = opendir($source);
+
+        mkdir($destination);
+
+        while(($file = readdir($handle)) !== false)  {
+            if ($file != "." and $file != "..") {
+                if (is_dir($source . DS . $file)) {
+                    $this->copyFolder($source . DS . $file, $destination . DS . $file);
+                } else {
+                    copy($source . DS . $file, $destination . DS . $file);
+                }
+            }
+        }
+    }
+
 }

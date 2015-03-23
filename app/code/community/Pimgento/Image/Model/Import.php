@@ -31,7 +31,60 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Move images (Step 2)
+     * Detect configurable (Step 2)
+     *
+     * @param Pimgento_Core_Model_Task $task
+     *
+     * @return bool
+     */
+    public function detectConfigurable($task)
+    {
+        $resource = $this->getResource();
+        $adapter  = $this->getAdapter();
+
+        /* @var $helper Pimgento_Image_Helper_Data */
+        $helper = Mage::helper('pimgento_image');
+
+        $directory = $helper->getImageDir();
+
+        $images = $helper->getFiles($directory);
+
+        foreach ($images as $sku => $pictures) {
+
+            $parents = $adapter->fetchCol(
+                $adapter->select()
+                    ->from(
+                        array(
+                            's' => $resource->getTable('catalog/product_super_link')
+                        ),
+                        array()
+                    )
+                    ->joinInner(
+                        array('e2' => $resource->getTable('catalog/product')),
+                        's.product_id = e2.entity_id AND e2.sku = "' . $sku . '"',
+                        array()
+                    )
+                    ->joinInner(
+                        array('e1' => $resource->getTable('catalog/product')),
+                        's.parent_id = e1.entity_id',
+                        array(
+                            'e1.sku',
+                        )
+                    )
+            );
+
+            if (count($parents)) {
+                foreach ($parents as $parent) {
+                    $helper->copyFolder($directory . DS . $sku, $directory . DS . $parent);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Move images (Step 3)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -115,7 +168,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Match Entity with Code (Step 3)
+     * Match Entity with Code (Step 4)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -129,7 +182,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Set values (Step 4)
+     * Set values (Step 5)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -188,7 +241,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Drop table (Step 5)
+     * Drop table (Step 6)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -202,7 +255,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Reindex (Step 5)
+     * Reindex (Step 7)
      *
      * @param Pimgento_Core_Model_Task $task
      *
