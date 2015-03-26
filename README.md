@@ -116,8 +116,8 @@ System>Configuration>Catalog>PIM
 
 ## Roadmap
 
-* Compatibility with Magento >= 1.4 CE
-* Compatibility with Magento >= 1.8 EE
+* Compatibility with Magento >= 1.6 CE
+* Compatibility with Magento >= 1.10 EE
 * Create this type of product : Bundle, packed, virtual and downloadable products.
 * Think about a way to delete data
 * Crossell and upsell management
