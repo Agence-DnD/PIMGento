@@ -33,7 +33,7 @@ With PimGento, you can import these informations :
 * Magento >= 1.9 CE
 * Magento >= 1.14 EE
 * Set local_infile mysql variable to TRUE
-* The PHP function system must be allowed on the server
+* Flash Player
 
 Adaptations for other Magento versions are in development (see [roadmap](#roadmap))
 
@@ -50,11 +50,16 @@ Adaptations for other Magento versions are in development (see [roadmap](#roadma
 
 ## Configuration and Usage
 
+* Configure store language and currency before import
+* Magento website code must be the same than Akeneo canal code
+* After category import, set the "Root Category" for store in "System > Manage Store".
+
 All PimGento configurations can be found in the Magento back-office at this path :
-System>Configuration>Catalog>PIM
+System > Configuration > Catalog > Pimgento
 
 * General
   * Active Log : if set Yes, write everything happens during the import in a file.
+  * Log file : Log file name in var/log directory.
   * CSV lines terminated by : Choose the character used to make a carriage return.
   * CSV fields terminated by : Choose the delimiter of your CSV files.
 
@@ -120,4 +125,3 @@ System>Configuration>Catalog>PIM
 * Compatibility with Magento >= 1.10 EE
 * Create this type of product : Bundle, packed, virtual and downloadable products.
 * Think about a way to delete data
-* Crossell and upsell management

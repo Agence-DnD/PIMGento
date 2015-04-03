@@ -9,7 +9,7 @@
 <config>
     <sections>
         <pimdata translate="label" module="pimgento_core">
-            <label>PIM</label>
+            <label>Pimgento</label>
             <tab>catalog</tab>
             <frontend_type>text</frontend_type>
             <sort_order>9000</sort_order>
