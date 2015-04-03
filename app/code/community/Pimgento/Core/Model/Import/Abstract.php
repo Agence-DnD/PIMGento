@@ -113,6 +113,18 @@ abstract class Pimgento_Core_Model_Import_Abstract
     }
 
     /**
+     * Check if column exists
+     *
+     * @param string $column
+     *
+     * @return bool
+     */
+    protected function columnExists($column)
+    {
+        return $this->getAdapter()->tableColumnExists($this->getTable(), $column);
+    }
+
+    /**
      * Check required columns
      *
      * @param array $columns
@@ -123,7 +135,7 @@ abstract class Pimgento_Core_Model_Import_Abstract
     protected function columnsRequired($columns, $task)
     {
         foreach ($columns as $column) {
-            if (!$this->getAdapter()->tableColumnExists($this->getTable(), $column)) {
+            if (!$this->columnExists($column)) {
                 $task->setMessage(
                     Mage::helper('pimgento_product')->__('Column "%s" not found, step ignored', $column)
                 );

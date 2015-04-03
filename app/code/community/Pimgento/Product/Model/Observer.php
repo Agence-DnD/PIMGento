@@ -91,7 +91,7 @@ class Pimgento_Product_Model_Observer
                         'method'  => 'pimgento_product/import::initStock'
                     ),
                     16 => array(
-                        'comment' => $helper->__('Set related products'),
+                        'comment' => $helper->__('Set related, up-sell and cross-sell products'),
                         'method'  => 'pimgento_product/import::setRelated'
                     ),
                     17 => array(

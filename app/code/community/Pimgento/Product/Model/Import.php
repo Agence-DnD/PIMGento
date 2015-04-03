@@ -963,7 +963,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Set related (Step 16)
+     * Set related, up-sell and cross-sell (Step 16)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -974,43 +974,65 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
-        if (!$this->columnsRequired(array('RELATED-products'), $task)) {
-            return false;
+        $related = array();
+
+        if ($this->columnExists('RELATED-products')) {
+            $related[] = array(
+                'type_id' => 1,
+                'column'  => 'RELATED-products',
+            );
         }
 
-        /* @var $product Pimgento_Product_Model_Import */
-        $product = Mage::getModel('pimgento_product/import');
+        if ($this->columnExists('UPSELL-products')) {
+            $related[] = array(
+                'type_id' => 4,
+                'column'  => 'UPSELL-products',
+            );
+        }
 
-        $select = $adapter->select()
-            ->from(
-                array(
-                    'c' => $resource->getTable('pimgento_core/code')
-                ),
-                array()
-            )
-            ->joinInner(
-                array('p' => $this->getTable()),
-                'FIND_IN_SET(`c`.`code`, `p`.`RELATED-products`) AND `c`.`import` = "' . $product->getCode() . '"',
-                array(
-                    'product_id'        => 'p.entity_id',
-                    'linked_product_id' => 'c.entity_id',
-                    'link_type_id'      => $this->_zde(1)
+        if ($this->columnExists('CROSSSELL-products')) {
+            $related[] = array(
+                'type_id' => 5,
+                'column'  => 'CROSSSELL-products',
+            );
+        }
+
+        foreach ($related as $type) {
+            /* @var $product Pimgento_Product_Model_Import */
+            $product = Mage::getModel('pimgento_product/import');
+
+            $select = $adapter->select()
+                ->from(
+                    array(
+                        'c' => $resource->getTable('pimgento_core/code')
+                    ),
+                    array()
                 )
-            )
-            ->joinInner(
-                array('e' => $resource->getTable('catalog/product')),
-                'c.entity_id = e.entity_id',
-                array()
+                ->joinInner(
+                    array('p' => $this->getTable()),
+                    'FIND_IN_SET(`c`.`code`, `p`.`' . $type['column'] . '`)
+                        AND `c`.`import` = "' . $product->getCode() . '"',
+                    array(
+                        'product_id'        => 'p.entity_id',
+                        'linked_product_id' => 'c.entity_id',
+                        'link_type_id'      => $this->_zde($type['type_id'])
+                    )
+                )
+                ->joinInner(
+                    array('e' => $resource->getTable('catalog/product')),
+                    'c.entity_id = e.entity_id',
+                    array()
+                );
+
+            $insert = $adapter->insertFromSelect(
+                $select,
+                $resource->getTable('catalog/product_link'),
+                array('product_id', 'linked_product_id', 'link_type_id'),
+                1
             );
 
-        $insert = $adapter->insertFromSelect(
-            $select,
-            $resource->getTable('catalog/product_link'),
-            array('product_id', 'linked_product_id', 'link_type_id'),
-            1
-        );
-
-        $adapter->query($insert);
+            $adapter->query($insert);
+        }
 
         return true;
     }
