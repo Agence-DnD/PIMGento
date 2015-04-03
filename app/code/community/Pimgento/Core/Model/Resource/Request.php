@@ -240,14 +240,14 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
         $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
         $linesTerminated  = Mage::getStoreConfig('pimdata/general/csv_lines_terminated');
 
-        $query = "LOAD DATA LOCAL INFILE '" . $file . "' REPLACE
+        $query = "LOAD DATA INFILE '" . $file . "' REPLACE
               INTO TABLE " . $this->getTableName($name) . "
               FIELDS TERMINATED BY '" . $fieldsTerminated . "'
-              OPTIONALLY ENCLOSED BY '\\\"'
+              OPTIONALLY ENCLOSED BY '\"'
               LINES TERMINATED BY '" . $linesTerminated . "'
               IGNORE 1 LINES;";
 
-        $this->_query($query, '--local-infile');
+        $this->_query($query, array(PDO::MYSQL_ATTR_LOCAL_INFILE => 1));
 
         $adapter = $this->_getReadAdapter();
 
@@ -376,18 +376,13 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
      * Execute Query from command line
      *
      * @param string $query
-     * @param string $options
+     * @param array $options
      *
      * @return $this
      * @throws Exception
      */
-    protected function _query($query, $options = '')
+    protected function _query($query, $options = array())
     {
-        /* @var $helper Pimgento_Core_Helper_Data */
-        $helper = Mage::helper('pimgento_core');
-
-        $error = $helper->getLogDir() . 'import.tmp.log';
-
         /* @var $connConfig Mage_Core_Model_Config_Element */
         $connConfig = Mage::getConfig()->getResourceConnectionConfig('core_write');
 
@@ -395,18 +390,11 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
             throw new Exception(Mage::helper('pimgento_core')->__('Connection to database is not active'));
         }
 
-        system('mysql '.$options.
-            ' -h '.$connConfig->host.
-            ' -u '.$connConfig->username.
-            ' -p'.$connConfig->password.
-            ' '.$connConfig->dbname.
-            ' -e "'.$query.'" 2> '.$error, $result);
+        $dsn = 'mysql:host=' . $connConfig->host . ';dbname=' . $connConfig->dbname;
+        $pdo = new PDO($dsn, $connConfig->username, $connConfig->password, $options);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        if ($result) {
-            throw new Exception(file_get_contents($error));
-        }
-
-        unlink($error);
+        $pdo->exec($query);
 
         return $this;
     }

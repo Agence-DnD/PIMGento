@@ -132,6 +132,15 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $attributes = explode(',', $this->getConfig('configurable_attributes'));
 
+        if (!count($attributes)) {
+            $task->setMessage(
+                Mage::helper('pimgento_product')->__(
+                    'No attribute selected in configuration, configurables will not be created'
+                )
+            );
+            return false;
+        }
+
         foreach ($attributes as $id) {
             $code = $adapter->fetchOne(
                 $adapter->select()
@@ -212,6 +221,11 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 foreach ($columns as $attribute => $cols) {
                     foreach ($cols as $column) {
                         if ($adapter->tableColumnExists($this->getTable(), $column)) {
+
+                            $adapter->update(
+                                $this->getTable(), array($column => $this->_zde('NULL')), '`' . $column . '` = ""'
+                            );
+
                             $values[$column] = $this->_zde('MIN(`' . $column . '`)');
                         }
                     }
@@ -761,7 +775,108 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Set categories (Step 13)
+     * Set configurable prices (Step 13)
+     *
+     * @param Pimgento_Core_Model_Task $task
+     *
+     * @return bool
+     */
+    public function setConfigurablePrices($task)
+    {
+        if (!$this->getConfig('configurable_enabled')) {
+            $task->setMessage(
+                Mage::helper('pimgento_product')->__('Configurable product creation is disabled')
+            );
+            return false;
+        }
+
+        $resource = $this->getResource();
+        $adapter  = $this->getAdapter();
+
+        $priceId = $adapter->fetchOne(
+            $adapter->select()
+                ->from($resource->getTable('eav/attribute'), array('attribute_id'))
+                ->where('entity_type_id = ?', 4)
+                ->where('attribute_code = ?', 'price')
+                ->limit(1));
+
+        $specialPriceId = $adapter->fetchOne(
+            $adapter->select()
+                ->from($resource->getTable('eav/attribute'), array('attribute_id'))
+                ->where('entity_type_id = ?', 4)
+                ->where('attribute_code = ?', 'special_price')
+                ->limit(1));
+
+        $attributes = explode(',', $this->getConfig('configurable_attributes'));
+
+        if (count($attributes) && $priceId && $specialPriceId) {
+
+            $attributeId = end($attributes);
+
+            $select = $adapter->select()
+                ->from(
+                    array(
+                        'l' => $resource->getTable('catalog/product_super_link')
+                    ),
+                    array(
+                        'product_super_attribute_id' => 'a.product_super_attribute_id',
+                        'value_index'                => 'o.option_id',
+                        'is_percent'                 => $this->_zde(0),
+                        'pricing_value'              => $this->_zde(
+                            'IF(
+                            IF(d3.value, d3.value, d1.value) - IF(d4.value, d4.value, d2.value) >= 0,
+                            IF(d3.value, d3.value, d1.value) - IF(d4.value, d4.value, d2.value),
+                            0
+                        )'
+                        ),
+                        'website_id'                 => $this->_zde(0),
+                    )
+                )->joinInner(
+                    array('d1' => $resource->getValueTable('catalog/product', 'decimal')),
+                    'd1.entity_id = l.product_id AND d1.attribute_id = ' . $priceId . ' AND d1.store_id = 0',
+                    array()
+                )->joinInner(
+                    array('d2' => $resource->getValueTable('catalog/product', 'decimal')),
+                    'd2.entity_id = l.parent_id AND d2.attribute_id = ' . $priceId . ' AND d2.store_id = 0',
+                    array()
+                )->joinLeft(
+                    array('d3' => $resource->getValueTable('catalog/product', 'decimal')),
+                    'd3.entity_id = l.product_id AND d3.attribute_id = ' . $specialPriceId . ' AND d3.store_id = 0',
+                    array()
+                )->joinLeft(
+                    array('d4' => $resource->getValueTable('catalog/product', 'decimal')),
+                    'd4.entity_id = l.parent_id AND d4.attribute_id = ' . $specialPriceId . ' AND d4.store_id = 0',
+                    array()
+                )->joinInner(
+                    array('a' => $resource->getTable('catalog/product_super_attribute')),
+                    'l.parent_id = a.product_id',
+                    array()
+                )->joinInner(
+                    array('i' => $resource->getValueTable('catalog/product', 'int')),
+                    'a.attribute_id = i.attribute_id AND i.entity_id = l.product_id',
+                    array()
+                )->joinInner(
+                    array('o' => $resource->getTable('eav/attribute_option')),
+                    'a.attribute_id = o.attribute_id AND o.attribute_id = ' . $attributeId . ' AND i.value = o.option_id',
+                    array()
+                )->having('pricing_value > 0');
+
+            $insert = $adapter->insertFromSelect(
+                $select,
+                $resource->getTable('catalog/product_super_attribute_pricing'),
+                array('product_super_attribute_id', 'value_index', 'is_percent', 'pricing_value', 'website_id'),
+                1
+            );
+
+            $adapter->query($insert);
+
+        }
+
+        return true;
+    }
+
+    /**
+     * Set categories (Step 14)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -811,7 +926,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Init Stock (Step 14)
+     * Init Stock (Step 15)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -848,7 +963,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Set related (Step 15)
+     * Set related (Step 16)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -901,7 +1016,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Drop table (Step 16)
+     * Drop table (Step 17)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -915,7 +1030,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Reindex (Step 17)
+     * Reindex (Step 18)
      *
      * @param Pimgento_Core_Model_Task $task
      *

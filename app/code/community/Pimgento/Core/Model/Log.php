@@ -8,8 +8,6 @@
 class Pimgento_Core_Model_Log
 {
 
-    const LOG_FILE_NAME = 'pimgento.log';
-
     /**
      * Add log when error is sent
      *
@@ -22,7 +20,9 @@ class Pimgento_Core_Model_Log
         /* @var $tasks Pimgento_Core_Model_Task */
         $error = $observer->getEvent()->getError();
 
-        $this->_log($error, Zend_Log::ERR, self::LOG_FILE_NAME);
+        if ($this->getFile()) {
+            $this->_log($error, Zend_Log::ERR, $this->getFile());
+        }
 
         return $this;
     }
@@ -82,6 +82,29 @@ class Pimgento_Core_Model_Log
     }
 
     /**
+     * Retrieve log file name
+     *
+     * @retun string
+     */
+    public function getFile()
+    {
+        $file = trim(Mage::getStoreConfig('pimdata/general/log_file'), '/');
+
+        if ($file) {
+            $log = Mage::getBaseDir('var') . DS . 'log' . DS . $file;
+
+            $directory = dirname($log);
+            if ($directory) {
+                if (!is_dir($directory)) {
+                    mkdir($directory, 0777, true);
+                }
+            }
+        }
+
+        return $file;
+    }
+
+    /**
      * Check if log is enabled
      *
      * @return int
@@ -101,8 +124,8 @@ class Pimgento_Core_Model_Log
      */
     protected function _log($message, $level)
     {
-        if ($this->logEnabled()) {
-            Mage::log($message, $level, self::LOG_FILE_NAME, true);
+        if ($this->logEnabled() && $this->getFile()) {
+            Mage::log($message, $level, $this->getFile(), true);
         }
     }
 

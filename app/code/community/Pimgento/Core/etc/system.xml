@@ -35,10 +35,19 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </log>
+                        <log_file translate="label">
+                            <label>Log file</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>var/log/[file]</comment>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </log_file>
                         <csv_lines_terminated translate="label">
                             <label>CSV lines terminated by</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>2</sort_order>
+                            <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -46,7 +55,7 @@
                         <csv_fields_terminated translate="label">
                             <label>CSV fields terminated by</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>3</sort_order>
+                            <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>

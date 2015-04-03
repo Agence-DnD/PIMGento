@@ -107,7 +107,8 @@
         <pimdata>
             <general>
                 <log>1</log>
-                <csv_lines_terminated>\r\n</csv_lines_terminated>
+                <log_file>pimgento/import.log</log_file>
+                <csv_lines_terminated>\n</csv_lines_terminated>
                 <csv_fields_terminated>;</csv_fields_terminated>
             </general>
         </pimdata>

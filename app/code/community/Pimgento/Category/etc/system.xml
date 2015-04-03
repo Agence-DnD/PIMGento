@@ -67,6 +67,7 @@
                             <label>Reindex Data</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Versions greater than EE 1.13 have asynchronous indexing, select "no"</comment>
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -96,7 +97,7 @@
                             <label>Update Url Key</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <comment>Update URL key when category name is updated</comment>
+                            <comment>Update URL key when category name is updated, a redirect from the old url is created</comment>
                             <sort_order>8</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>

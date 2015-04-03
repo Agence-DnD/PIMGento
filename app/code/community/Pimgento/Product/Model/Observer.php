@@ -75,30 +75,34 @@ class Pimgento_Product_Model_Observer
                         'method'  => 'pimgento_product/import::setWebsites'
                     ),
                     12 => array(
-                        'comment' => $helper->__('Set products price'),
+                        'comment' => $helper->__('Set products prices'),
                         'method'  => 'pimgento_product/import::setPrices'
                     ),
                     13 => array(
+                        'comment' => $helper->__('Set configurable prices'),
+                        'method'  => 'pimgento_product/import::setConfigurablePrices'
+                    ),
+                    14 => array(
                         'comment' => $helper->__('Set products categories'),
                         'method'  => 'pimgento_product/import::setCategories'
                     ),
-                    14 => array(
+                    15 => array(
                         'comment' => $helper->__('Init stock'),
                         'method'  => 'pimgento_product/import::initStock'
                     ),
-                    15 => array(
+                    16 => array(
                         'comment' => $helper->__('Set related products'),
                         'method'  => 'pimgento_product/import::setRelated'
                     ),
-                    16 => array(
+                    17 => array(
                         'comment' => $helper->__('Drop temporary table'),
                         'method'  => 'pimgento_product/import::dropTable'
                     ),
-                    17 => array(
+                    18 => array(
                         'comment' => $helper->__('Reindex data'),
                         'method'  => 'pimgento_product/import::reindex'
                     ),
-                    18 => array(
+                    19 => array(
                         'comment' => $helper->__('Clean cache'),
                         'method'  => 'pimgento_product/import::cleanCache'
                     ),

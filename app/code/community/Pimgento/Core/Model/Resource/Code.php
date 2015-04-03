@@ -68,8 +68,6 @@ class Pimgento_Core_Model_Resource_Code extends Mage_Core_Model_Resource_Db_Abst
                 $this->getMainTable(), $values
             );
 
-        } else {
-            Mage::throwException(Mage::helper('pimgento_core')->__('Empty import or entity_id value'));
         }
 
         return $this;

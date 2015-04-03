@@ -183,7 +183,9 @@ class Pimgento_Core_Model_Request extends Mage_Core_Model_Abstract
         $line = preg_replace("/\\r\\n/", "", fgets($handle));
         fclose($handle);
 
-        return explode(';', $line);
+        $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
+
+        return explode($fieldsTerminated, $line);
     }
 
 }
