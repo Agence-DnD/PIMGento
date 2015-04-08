@@ -99,7 +99,9 @@ class Pimgento_Image_Helper_Data extends Mage_Core_Helper_Data
     {
         $handle = opendir($source);
 
-        mkdir($destination);
+        if (!is_dir($destination)) {
+            mkdir($destination);
+        }
 
         while(($file = readdir($handle)) !== false)  {
             if ($file != "." and $file != "..") {
