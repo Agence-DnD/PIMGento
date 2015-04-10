@@ -43,6 +43,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
+                            <depends>
+                                <log>1</log>
+                            </depends>
                         </log_file>
                         <csv_lines_terminated translate="label">
                             <label>CSV lines terminated by</label>

@@ -73,12 +73,21 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </reindex>
+                        <exclusions>
+                            <label>Code exclusion</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Comma separated</comment>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </exclusions>
                         <types>
                             <label>Specific types</label>
                             <frontend_model>pimgento_attribute/adminhtml_system_Type</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
                             <comment>Match attribute types</comment>
-                            <sort_order>6</sort_order>
+                            <sort_order>7</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>

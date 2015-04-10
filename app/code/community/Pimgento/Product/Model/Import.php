@@ -87,12 +87,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $adapter->changeColumn($this->getTable(), $sku, 'code', 'VARCHAR(255)');
 
+        $this->deleteExclusion();
+
         $adapter->addColumn($this->getTable(), $sku, 'VARCHAR(255) NOT NULL default ""');
         $values = array(
             $sku => $this->_zde('`code`')
         );
         $adapter->update($this->getTable(), $values);
-
 
         $adapter->addColumn($this->getTable(), '_type_id', 'VARCHAR(255) NOT NULL default "simple"');
         $adapter->addColumn($this->getTable(), '_options_container', 'VARCHAR(255) NOT NULL default "container2"');

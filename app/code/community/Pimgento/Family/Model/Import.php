@@ -51,6 +51,8 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
         }
 
+        $this->deleteExclusion();
+
         $task->setMessage(
             Mage::helper('pimgento_family')->__('%s lines found', $lines)
         );

@@ -51,6 +51,8 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
             );
         }
 
+        $this->deleteExclusion();
+
         $task->setMessage(
             Mage::helper('pimgento_attribute')->__('%s lines found', $lines)
         );

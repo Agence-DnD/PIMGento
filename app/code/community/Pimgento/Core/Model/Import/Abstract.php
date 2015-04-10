@@ -61,6 +61,25 @@ abstract class Pimgento_Core_Model_Import_Abstract
     }
 
     /**
+     * Remove exclusion from config
+     *
+     * @return bool
+     */
+    public function deleteExclusion()
+    {
+        $exclusions = $this->getConfig('exclusions');
+
+        if ($exclusions) {
+            $exclusions = explode(',', $exclusions);
+            foreach ($exclusions as $code) {
+                $this->getAdapter()->delete($this->getTable(), array('code = ?' => $code));
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Retrieve config data
      *
      * @param string $option

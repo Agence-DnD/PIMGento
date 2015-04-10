@@ -63,6 +63,15 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </cache>
+                        <exclusions>
+                            <label>Code exclusion</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Comma separated</comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </exclusions>
                     </fields>
                 </family>
             </groups>
