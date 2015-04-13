@@ -84,7 +84,7 @@
                         </exclusions>
                         <types>
                             <label>Specific types</label>
-                            <frontend_model>pimgento_attribute/adminhtml_system_Type</frontend_model>
+                            <frontend_model>pimgento_attribute/adminhtml_system_type</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
                             <comment>Match attribute types</comment>
                             <sort_order>7</sort_order>

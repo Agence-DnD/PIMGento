@@ -1,0 +1,10 @@
+<?php
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+<?php $column   = $this->getColumn(); ?>
+<?php $websites = $this->getWebsites(); ?>
+<select name="<?php echo $this->getInputName() ?>"<?php if (isset($column['style'])): ?> style="<?php echo $column['style'] ?>"<?php endif; ?>><option value="#{<?php echo $this->getColumnName() ?>}">#{<?php echo $this->getColumnName() ?>}</option><?php foreach($websites as $website): ?><option value="<?php echo $website->getCode() ?>"><?php echo $website->getCode() ?></option><?php endforeach; ?></select>

@@ -7,4 +7,4 @@
 ?>
 <?php $column  = $this->getColumn(); ?>
 <?php $options = $this->getOptions(); ?>
-<div>#{<?php echo $this->getColumnName() ?>}</div> <select name="<?php echo $this->getInputName() ?>"<?php if (isset($column['style'])): ?> style="<?php echo $column['style'] ?>"<?php endif; ?>><option value=""></option><?php foreach($options as $option): ?><option value="<?php echo $option['value'] ?>"><?php echo $option['label'] ?></option><?php endforeach; ?></select>
+<select name="<?php echo $this->getInputName() ?>"<?php if (isset($column['style'])): ?> style="<?php echo $column['style'] ?>"<?php endif; ?>><option value="#{<?php echo $this->getColumnName() ?>}">#{<?php echo $this->getColumnName() ?>}</option><?php foreach($options as $option): ?><option value="<?php echo $option['value'] ?>"><?php echo $option['value'] ?></option><?php endforeach; ?></select>

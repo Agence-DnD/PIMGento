@@ -54,9 +54,11 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
                 $currencies[$currency] = array();
             }
 
+            $code = $this->getChannel($store->getWebsite()->getCode());
+
             $currencies[$currency][] = array(
                 'id'   => $store->getId(),
-                'code' => $store->getWebsite()->getCode(),
+                'code' => $code,
             );
         }
 
@@ -75,7 +77,7 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
         $websites = array();
 
         foreach ($stores as $store) {
-            $code = $store->getWebsite()->getCode();
+            $code = $this->getChannel($store->getWebsite()->getCode());
 
             if (!isset($websites[$code])) {
                 $websites[$code] = array();
@@ -85,6 +87,31 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
         }
 
         return $websites;
+    }
+
+    /**
+     * Retrieve channel with website code
+     *
+     * @param string $code
+     *
+     * @return string
+     */
+    public function getChannel($code)
+    {
+        if (Mage::getStoreConfig('pimdata/general/websites')) {
+            $websites = unserialize(Mage::getStoreConfig('pimdata/general/websites'));
+
+            if (is_array($websites)) {
+                foreach ($websites as $match) {
+                    if ($code == $match['website']) {
+                        $code = $match['channel'];
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $code;
     }
 
     /**
