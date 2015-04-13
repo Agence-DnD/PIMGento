@@ -628,19 +628,23 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         ->limit(1)
                     );
 
-                    $values = array(
-                        'parent_id' => $row['entity_id'],
-                        'child_id'  => $childId,
-                    );
+                    if ($childId) {
 
-                    $adapter->insertIgnore($resource->getTable('catalog/product_relation'), $values);
+                        $values = array(
+                            'parent_id' => $row['entity_id'],
+                            'child_id'  => $childId,
+                        );
 
-                    $values = array(
-                        'product_id' => $childId,
-                        'parent_id'  => $row['entity_id'],
-                    );
+                        $adapter->insertIgnore($resource->getTable('catalog/product_relation'), $values);
 
-                    $adapter->insertIgnore($resource->getTable('catalog/product_super_link'), $values);
+                        $values = array(
+                            'product_id' => $childId,
+                            'parent_id'  => $row['entity_id'],
+                        );
+
+                        $adapter->insertIgnore($resource->getTable('catalog/product_super_link'), $values);
+
+                    }
                 }
 
             }
