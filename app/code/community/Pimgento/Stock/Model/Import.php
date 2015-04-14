@@ -110,6 +110,36 @@ class Pimgento_Stock_Model_Import extends Pimgento_Core_Model_Import_Abstract
             return false;
         }
 
+        /* Add configurable */
+        $select = $adapter->select()
+            ->from(
+                array(
+                    's' => $this->getTable()
+                ),
+                array(
+                    'qty'        => $this->_zde('SUM(`s`.`qty`)'),
+                    'entity_id'  => 'r.parent_id',
+                )
+            )
+            ->joinInner(
+                array(
+                    'r' => $resource->getTable('catalog/product_relation')
+                ),
+                'r.child_id = s.entity_id',
+                array()
+            )
+            ->group('r.parent_id');
+
+        $insert = $adapter->insertFromSelect(
+            $select,
+            $this->getTable(),
+            array('qty', 'entity_id'),
+            1
+        );
+
+        $adapter->query($insert);
+
+        /* Update stock */
         $select = $adapter->select()
             ->from(
                 $this->getTable(),
