@@ -15,7 +15,7 @@ class Pimgento_Attribute_Block_Adminhtml_System_Type
     public function __construct()
     {
         $this->addColumn('pimgento_type', array(
-                'label' => Mage::helper('pimgento_attribute')->__('Pim Type'),
+                'label' => Mage::helper('pimgento_attribute')->__('Pim type'),
                 'style' => 'width:120px',
             ));
 
