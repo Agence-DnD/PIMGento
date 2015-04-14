@@ -14,6 +14,8 @@ class Pimgento_Product_Block_Adminhtml_System_Configurable
      */
     public function __construct()
     {
+        $this->setTemplate('pimgento/product/configurable.phtml');
+
         $this->addColumn('attribute', array(
                 'label' => Mage::helper('pimgento_product')->__('Pim Attribute'),
                 'style' => 'width:120px',
