@@ -136,11 +136,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         if (!count($attributes)) {
             $task->setMessage(
                 Mage::helper('pimgento_product')->__(
-                    'No attribute selected in configuration, configurables will not be created'
+                    'No attribute selected in configuration, configurable products will not be created'
                 )
             );
             return false;
         }
+
+        $success = true;
 
         foreach ($attributes as $id) {
             $code = $adapter->fetchOne(
@@ -239,7 +241,17 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $matches = unserialize($this->getConfig('configurable_values'));
 
         foreach ($matches as $match) {
-            $values[$match['attribute']] = $match['value'] !== '' ? $this->_zde($match['value']) : $match['attribute'];
+            if ($adapter->tableColumnExists($this->getTable(), $match['attribute'])) {
+                $values[$match['attribute']] =
+                    $match['value'] !== '' ? $this->_zde($match['value']) : $match['attribute'];
+            } else {
+                $success = false;
+                $task->setMessage(
+                    Mage::helper('pimgento_product')->__(
+                        'Warning: %s column not found in CSV file', $match['attribute']
+                    )
+                );
+            }
         }
 
         $select = $adapter->select()
@@ -252,7 +264,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $adapter->query($insert);
 
-        return true;
+        return $success;
     }
 
     /**

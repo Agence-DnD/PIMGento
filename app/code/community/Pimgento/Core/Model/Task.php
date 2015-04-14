@@ -60,12 +60,12 @@ class Pimgento_Core_Model_Task extends Varien_Object
             $model = Mage::getSingleton($alias);
             if (!$model) {
                 $this->error(
-                    $this->_getHelper()->__('"%s" model does not exists', $alias)
+                    $this->_getHelper()->__('%s model does not exists', $alias)
                 );
             }
             if (!method_exists($model, $method)) {
                 $this->error(
-                    $this->_getHelper()->__('"%s" method does not exists in "%s"', $method, get_class($model))
+                    $this->_getHelper()->__('%s method does not exists in %s', $method, get_class($model))
                 );
             }
             $execute = $model->$method($this);

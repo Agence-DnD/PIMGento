@@ -28,7 +28,7 @@ class Pimgento_Attribute_Model_Observer
             array(
                 'label'   => $helper->__('Pim: Import Attributes'),
                 'type'    => 'file',
-                'comment' => $helper->__('Import attributes from PIM, upload CSV file.'),
+                'comment' => $helper->__('Import attributes, upload a CSV file.'),
                 'steps' => array(
                     1 => array(
                         'comment' => $helper->__('Create temporary table'),
@@ -39,15 +39,15 @@ class Pimgento_Attribute_Model_Observer
                         'method'  => 'pimgento_attribute/import::insertData'
                     ),
                     3 => array(
-                        'comment' => $helper->__('Match family code with entity'),
+                        'comment' => $helper->__('Match PIM code with entity'),
                         'method'  => 'pimgento_attribute/import::matchEntity'
                     ),
                     4 => array(
-                        'comment' => $helper->__('Match type with Magento logic'),
+                        'comment' => $helper->__('Match types'),
                         'method'  => 'pimgento_attribute/import::matchType'
                     ),
                     5 => array(
-                        'comment' => $helper->__('Add attributes if not exists'),
+                        'comment' => $helper->__('Add attributes'),
                         'method'  => 'pimgento_attribute/import::addAttributes'
                     ),
                     6 => array(
@@ -55,7 +55,7 @@ class Pimgento_Attribute_Model_Observer
                         'method'  => 'pimgento_attribute/import::updateAttributes'
                     ),
                     7 => array(
-                        'comment' => $helper->__('Update family'),
+                        'comment' => $helper->__('Update families'),
                         'method'  => 'pimgento_attribute/import::updatefamily'
                     ),
                     8 => array(
@@ -63,7 +63,7 @@ class Pimgento_Attribute_Model_Observer
                         'method'  => 'pimgento_attribute/import::dropTable'
                     ),
                     9 => array(
-                        'comment' => $helper->__('Reindex Data'),
+                        'comment' => $helper->__('Reindex data'),
                         'method'  => 'pimgento_attribute/import::reindex'
                     ),
                     10 => array(

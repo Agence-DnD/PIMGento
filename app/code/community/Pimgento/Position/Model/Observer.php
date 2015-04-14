@@ -29,7 +29,7 @@ class Pimgento_Position_Model_Observer
                 'label'   => $helper->__('Categories: Update product positions'),
                 'type'    => 'file',
                 'comment' => $helper->__(
-                    'Update product positions. Upload CSV with 3 columns : "sku", "category" and "position"'
+                    'Update product positions. Upload CSV with 3 columns: sku, category and position'
                 ),
                 'steps' => array(
                     1 => array(
@@ -45,7 +45,7 @@ class Pimgento_Position_Model_Observer
                         'method'  => 'pimgento_position/import::updateColumn'
                     ),
                     4 => array(
-                        'comment' => $helper->__('Match product code with entity'),
+                        'comment' => $helper->__('Match PIM code with entity'),
                         'method'  => 'pimgento_position/import::matchEntity'
                     ),
                     5 => array(

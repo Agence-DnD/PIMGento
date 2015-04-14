@@ -39,7 +39,7 @@ class Pimgento_Core_Model_System_Config_Backend_Pimgento_Cron_Expr extends Mage_
                 Mage::app()->cleanCache(array('config'));
 
             } catch (Exception $e) {
-                throw new Exception(Mage::helper('cron')->__('Unable to save the cron expression.'));
+                throw new Exception(Mage::helper('cron')->__('Can not save the cron expression'));
             }
 
         }

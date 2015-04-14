@@ -19,7 +19,7 @@
                     <show_in_store>0</show_in_store>
                     <fields>
                         <cron_enabled translate="label">
-                            <label>Active cron</label>
+                            <label>Enable Cron</label>
                             <frontend_type>select</frontend_type>
                             <backend_model>pimgento_core/system_config_backend_pimgento_cron_status</backend_model>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
@@ -32,7 +32,7 @@
                             <label>Cron expression</label>
                             <frontend_type>text</frontend_type>
                             <backend_model>pimgento_core/system_config_backend_pimgento_cron_expr</backend_model>
-                            <comment>Exemple: 0 1 * * *</comment>
+                            <comment>Example: 0 1 * * *</comment>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -44,7 +44,7 @@
                         <cron_file translate="label">
                             <label>File</label>
                             <frontend_type>text</frontend_type>
-                            <comment>File name in "/var/import/"</comment>
+                            <comment>File name in /var/import/</comment>
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -54,10 +54,10 @@
                             </depends>
                         </cron_file>
                         <cache translate="label">
-                            <label>Flush Cache</label>
+                            <label>Clear cache</label>
                             <frontend_type>multiselect</frontend_type>
                             <source_model>pimgento_core/system_config_source_cache_type</source_model>
-                            <comment>Flush specific cache after import</comment>
+                            <comment>Clear a specific cache after import</comment>
                             <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -67,14 +67,14 @@
                             <label>Reindex Data</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <comment>Versions greater than EE 1.13 have asynchronous indexing, select "no"</comment>
+                            <comment>Versions greater than EE 1.13 have asynchronous indexing, index can be disabled</comment>
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </reindex>
                         <exclusions>
-                            <label>Code exclusion</label>
+                            <label>PIM code exclusion</label>
                             <frontend_type>text</frontend_type>
                             <comment>Comma separated</comment>
                             <sort_order>6</sort_order>
@@ -103,7 +103,7 @@
                             <show_in_store>0</show_in_store>
                         </anchor>
                         <update_url translate="label">
-                            <label>Update Url Key</label>
+                            <label>Update URL Key</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <comment>Update URL key when category name is updated, a redirect from the old url is created</comment>

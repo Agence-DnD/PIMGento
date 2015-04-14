@@ -19,7 +19,7 @@
                     <show_in_store>0</show_in_store>
                     <fields>
                         <cron_enabled translate="label">
-                            <label>Active cron</label>
+                            <label>Enable Cron</label>
                             <frontend_type>select</frontend_type>
                             <backend_model>pimgento_core/system_config_backend_pimgento_cron_status</backend_model>
                             <source_model>adminhtml/system_config_source_yesno</source_model>

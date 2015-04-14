@@ -71,7 +71,7 @@ class Pimgento_Position_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         if (!$this->columnsRequired(array('sku'), $task)) {
             $task->error(
-                Mage::helper('pimgento_position')->__('Column "sku" not found')
+                Mage::helper('pimgento_position')->__('Column %s not found', 'sku')
             );
         }
 

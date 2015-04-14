@@ -20,7 +20,7 @@ abstract class Pimgento_Core_Model_Import_Abstract
     {
         if (!$this->getCode()) {
             throw new Exception(
-                Mage::helper('pimgento_core')->__('"%s" must have a $_code', get_class($this))
+                Mage::helper('pimgento_core')->__('%s must have an import code', get_class($this))
             );
         }
     }
@@ -49,11 +49,11 @@ abstract class Pimgento_Core_Model_Import_Abstract
             Mage::app()->cleanCache(explode(',', $tags));
 
             $task->setMessage(
-                Mage::helper('pimgento_category')->__('Cache cleaned for : %s ', $tags)
+                Mage::helper('pimgento_core')->__('Cache cleaned for: %s', $tags)
             );
         } else {
             $task->setMessage(
-                Mage::helper('pimgento_category')->__('No cache cleaned')
+                Mage::helper('pimgento_core')->__('No cache cleaned')
             );
         }
 
@@ -156,7 +156,7 @@ abstract class Pimgento_Core_Model_Import_Abstract
         foreach ($columns as $column) {
             if (!$this->columnExists($column)) {
                 $task->setMessage(
-                    Mage::helper('pimgento_product')->__('Column "%s" not found, step ignored', $column)
+                    Mage::helper('pimgento_product')->__('Column %s not found, step ignored', $column)
                 );
                 return false;
             }

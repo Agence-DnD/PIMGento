@@ -40,7 +40,7 @@ class Pimgento_Core_Model_Resource_Code extends Mage_Core_Model_Resource_Db_Abst
             );
 
         } else {
-            Mage::throwException(Mage::helper('pimgento_core')->__('Empty import or code or entity_id value'));
+            Mage::throwException(Mage::helper('pimgento_core')->__('Error between PIM code and Magento entity'));
         }
 
         return $this;

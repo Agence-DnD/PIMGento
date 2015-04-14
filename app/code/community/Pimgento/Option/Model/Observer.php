@@ -28,7 +28,7 @@ class Pimgento_Option_Model_Observer
             array(
                 'label'   => $helper->__('Pim: Import Options'),
                 'type'    => 'file',
-                'comment' => $helper->__('Import options from PIM, upload CSV file.'),
+                'comment' => $helper->__('Import options, upload CSV file.'),
                 'steps' => array(
                     1 => array(
                         'comment' => $helper->__('Create temporary table'),
@@ -39,7 +39,7 @@ class Pimgento_Option_Model_Observer
                         'method'  => 'pimgento_option/import::insertData'
                     ),
                     3 => array(
-                        'comment' => $helper->__('Match option code with entity'),
+                        'comment' => $helper->__('Match PIM code with entity'),
                         'method'  => 'pimgento_option/import::matchEntity'
                     ),
                     4 => array(

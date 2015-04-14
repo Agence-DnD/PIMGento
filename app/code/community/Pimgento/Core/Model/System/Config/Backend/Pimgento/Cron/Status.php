@@ -28,7 +28,7 @@ class Pimgento_Core_Model_System_Config_Backend_Pimgento_Cron_Status extends Mag
                 Mage::getModel('core/config_data')->load($modelPath, 'path')->delete();
 
             } catch (Exception $e) {
-                throw new Exception(Mage::helper('cron')->__('Unable to delete the cron expression.'));
+                throw new Exception(Mage::helper('cron')->__('Can not remove cron expression'));
             }
 
         }

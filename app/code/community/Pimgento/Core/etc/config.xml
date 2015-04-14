@@ -102,6 +102,15 @@
                 </pimgento_core>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Pimgento_Core>
+                    <files>
+                        <default>Pimgento_Core.csv</default>
+                    </files>
+                </Pimgento_Core>
+            </modules>
+        </translate>
     </adminhtml>
     <default>
         <pimdata>

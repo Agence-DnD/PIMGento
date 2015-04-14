@@ -207,7 +207,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $attribute = $resource->getAttribute('media_gallery', 4);
 
         if (!$attribute) {
-            $task->setMessage($helper->__('Attribute "media_gallery" not found'));
+            $task->setMessage($helper->__('Attribute %s not found', 'media_gallery'));
             return false;
         }
 

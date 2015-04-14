@@ -28,7 +28,7 @@ class Pimgento_Category_Model_Observer
             array(
                 'label'   => $helper->__('Pim: Import Categories'),
                 'type'    => 'file',
-                'comment' => $helper->__('Import categories from PIM, upload CSV file.'),
+                'comment' => $helper->__('Import categories, upload CSV file.'),
                 'steps' => array(
                     1 => array(
                         'comment' => $helper->__('Create temporary table'),
@@ -39,7 +39,7 @@ class Pimgento_Category_Model_Observer
                         'method'  => 'pimgento_category/import::insertData'
                     ),
                     3 => array(
-                        'comment' => $helper->__('Match category code with entity'),
+                        'comment' => $helper->__('Match PIM code with entity'),
                         'method'  => 'pimgento_category/import::matchEntity'
                     ),
                     4 => array(
@@ -59,11 +59,11 @@ class Pimgento_Category_Model_Observer
                         'method'  => 'pimgento_category/import::setValues'
                     ),
                     8 => array(
-                        'comment' => $helper->__('Update children count'),
+                        'comment' => $helper->__('Count of child categories'),
                         'method'  => 'pimgento_category/import::updateChildrenCount'
                     ),
                     9 => array(
-                        'comment' => $helper->__('Update URL Keys for new categories'),
+                        'comment' => $helper->__('Update URL keys'),
                         'method'  => 'pimgento_category/import::updateUrl'
                     ),
                     10 => array(

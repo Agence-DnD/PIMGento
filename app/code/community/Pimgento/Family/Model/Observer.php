@@ -28,7 +28,7 @@ class Pimgento_Family_Model_Observer
             array(
                 'label'   => $helper->__('Pim: Import Families'),
                 'type'    => 'file',
-                'comment' => $helper->__('Import families from PIM, upload CSV file.'),
+                'comment' => $helper->__('Import families, upload CSV file.'),
                 'steps' => array(
                     1 => array(
                         'comment' => $helper->__('Create temporary table'),
@@ -39,11 +39,11 @@ class Pimgento_Family_Model_Observer
                         'method'  => 'pimgento_family/import::insertData'
                     ),
                     3 => array(
-                        'comment' => $helper->__('Match family code with entity'),
+                        'comment' => $helper->__('Match PIM code with entity'),
                         'method'  => 'pimgento_family/import::matchEntity'
                     ),
                     4 => array(
-                        'comment' => $helper->__('Insert Families'),
+                        'comment' => $helper->__('Create Families'),
                         'method'  => 'pimgento_family/import::insertFamily'
                     ),
                     5 => array(

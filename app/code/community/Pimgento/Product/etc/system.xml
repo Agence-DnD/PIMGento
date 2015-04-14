@@ -19,7 +19,7 @@
                     <show_in_store>0</show_in_store>
                     <fields>
                         <cron_enabled translate="label">
-                            <label>Active cron</label>
+                            <label>Enable Cron</label>
                             <frontend_type>select</frontend_type>
                             <backend_model>pimgento_core/system_config_backend_pimgento_cron_status</backend_model>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
@@ -54,10 +54,10 @@
                             </depends>
                         </cron_file>
                         <cache translate="label">
-                            <label>Flush Cache</label>
+                            <label>Clear cache</label>
                             <frontend_type>multiselect</frontend_type>
                             <source_model>pimgento_core/system_config_source_cache_type</source_model>
-                            <comment>Flush specific cache after import</comment>
+                            <comment>Clear a specific cache after import</comment>
                             <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -67,14 +67,14 @@
                             <label>Reindex Data</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <comment>Versions greater than EE 1.13 have asynchronous indexing, select "no"</comment>
+                            <comment>Versions greater than EE 1.13 have asynchronous indexing, index can be disabled</comment>
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </reindex>
                         <exclusions translate="label">
-                            <label>Code exclusion</label>
+                            <label>PIM code exclusion</label>
                             <frontend_type>text</frontend_type>
                             <comment>Comma separated</comment>
                             <sort_order>6</sort_order>
@@ -86,7 +86,7 @@
                             <label>Match attributes</label>
                             <frontend_model>pimgento_product/adminhtml_system_match</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
-                            <comment>Exemple: description > meta_description</comment>
+                            <comment>Example: description > meta_description</comment>
                             <sort_order>7</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -111,10 +111,10 @@
                             <show_in_store>0</show_in_store>
                         </configurable_enabled>
                         <configurable_attributes translate="label">
-                            <label>Attributes to use</label>
+                            <label>Configurable attributes</label>
                             <frontend_type>multiselect</frontend_type>
                             <source_model>pimgento_product/system_config_source_configurable_attribute</source_model>
-                            <comment>Set "use to create configurable product" to "yes" in attribute configuration</comment>
+                            <comment>Only attributes used to create configurable products</comment>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -124,11 +124,11 @@
                             </depends>
                         </configurable_attributes>
                         <configurable_values translate="label">
-                            <label>Configurable values</label>
+                            <label>Default configurable attributes values</label>
                             <frontend_type>text</frontend_type>
                             <frontend_model>pimgento_product/adminhtml_system_configurable</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
-                            <comment>Use the value column to force data for specific attribute. Otherwise, leave blank to retrieve the value of the first simple product</comment>
+                            <comment>Use the value column to force data for specific attribute. Leave empty to retrieve the value of the first simple product.</comment>
                             <sort_order>11</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>

@@ -28,7 +28,7 @@ class Pimgento_Stock_Model_Observer
             array(
                 'label'   => $helper->__('Stock: Update'),
                 'type'    => 'file',
-                'comment' => $helper->__('Update stock. Upload CSV with 2 columns : "sku" and "qty"'),
+                'comment' => $helper->__('Update stock. Upload CSV with 2 columns: sku and qty'),
                 'steps' => array(
                     1 => array(
                         'comment' => $helper->__('Create temporary table'),
@@ -43,7 +43,7 @@ class Pimgento_Stock_Model_Observer
                         'method'  => 'pimgento_stock/import::updateColumn'
                     ),
                     4 => array(
-                        'comment' => $helper->__('Match product code with entity'),
+                        'comment' => $helper->__('Match PIM code with entity'),
                         'method'  => 'pimgento_stock/import::matchEntity'
                     ),
                     5 => array(

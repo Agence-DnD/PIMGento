@@ -28,7 +28,7 @@ class Pimgento_Product_Model_Observer
             array(
                 'label'   => $helper->__('Pim: Import Products'),
                 'type'    => 'file',
-                'comment' => $helper->__('Import products from PIM, upload CSV file.'),
+                'comment' => $helper->__('Import products, upload CSV file.'),
                 'steps' => array(
                     1 => array(
                         'comment' => $helper->__('Create temporary table'),
@@ -43,11 +43,11 @@ class Pimgento_Product_Model_Observer
                         'method'  => 'pimgento_product/import::updateColumn'
                     ),
                     4 => array(
-                        'comment' => $helper->__('Create configurable'),
+                        'comment' => $helper->__('Detect configurable products'),
                         'method'  => 'pimgento_product/import::createConfigurable'
                     ),
                     5 => array(
-                        'comment' => $helper->__('Match product code with entity'),
+                        'comment' => $helper->__('Match PIM code with entity'),
                         'method'  => 'pimgento_product/import::matchEntity'
                     ),
                     6 => array(
@@ -59,31 +59,31 @@ class Pimgento_Product_Model_Observer
                         'method'  => 'pimgento_product/import::updateValues'
                     ),
                     8 => array(
-                        'comment' => $helper->__('Create entities'),
+                        'comment' => $helper->__('Create product entities'),
                         'method'  => 'pimgento_product/import::createEntities'
                     ),
                     9 => array(
-                        'comment' => $helper->__('Set products values'),
+                        'comment' => $helper->__('Set values to attributes'),
                         'method'  => 'pimgento_product/import::setValues'
                     ),
                     10 => array(
-                        'comment' => $helper->__('Update configurable link'),
+                        'comment' => $helper->__('Update configurable products relation'),
                         'method'  => 'pimgento_product/import::updateConfigurable'
                     ),
                     11 => array(
-                        'comment' => $helper->__('Set products website'),
+                        'comment' => $helper->__('Set products to websites'),
                         'method'  => 'pimgento_product/import::setWebsites'
                     ),
                     12 => array(
-                        'comment' => $helper->__('Set products prices'),
+                        'comment' => $helper->__('Update prices'),
                         'method'  => 'pimgento_product/import::setPrices'
                     ),
                     13 => array(
-                        'comment' => $helper->__('Set configurable prices'),
+                        'comment' => $helper->__('Update configurable prices'),
                         'method'  => 'pimgento_product/import::setConfigurablePrices'
                     ),
                     14 => array(
-                        'comment' => $helper->__('Set products categories'),
+                        'comment' => $helper->__('Update categories relation'),
                         'method'  => 'pimgento_product/import::setCategories'
                     ),
                     15 => array(
@@ -91,7 +91,7 @@ class Pimgento_Product_Model_Observer
                         'method'  => 'pimgento_product/import::initStock'
                     ),
                     16 => array(
-                        'comment' => $helper->__('Set related, up-sell and cross-sell products'),
+                        'comment' => $helper->__('Update related, up-sell and cross-sell products'),
                         'method'  => 'pimgento_product/import::setRelated'
                     ),
                     17 => array(

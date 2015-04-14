@@ -28,7 +28,7 @@ class Pimgento_Image_Model_Observer
             array(
                 'label' => $helper->__('Pim: Import Images'),
                 'type'  => 'button',
-                'comment' => $helper->__('Import images from "%s" directory', 'media/import/files/'),
+                'comment' => $helper->__('Import images from %s directory', 'media/import/files/'),
                 'steps' => array(
                     1 => array(
                         'comment' => $helper->__('Create temporary table'),
@@ -43,7 +43,7 @@ class Pimgento_Image_Model_Observer
                         'method'  => 'pimgento_image/import::moveImages'
                     ),
                     4 => array(
-                        'comment' => $helper->__('Match entities'),
+                        'comment' => $helper->__('Match PIM code with entity'),
                         'method'  => 'pimgento_image/import::matchEntity'
                     ),
                     5 => array(
