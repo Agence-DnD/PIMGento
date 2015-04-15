@@ -28,7 +28,7 @@ With PIMGento, you can import :
 
 * **Totally flexible:** We added plenty of configurations. We didn't write any specific value in our code : No hard coding.
 
-* ***User Friendly:** We thought the interface the easiest possible. We developed a dashboard where you can see your import running. We even added some colors :)
+* **User Friendly:** We thought the interface the easiest possible. We developed a dashboard where you can see your import running. We even added some colors :)
 
 * **Manual or automatic:** Free to choose ! You can either upload and import your CSV files from the Magento back-office or simply let the automatics tasks run different import with CSV files located in a directory of your server.
 
