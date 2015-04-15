@@ -44,11 +44,11 @@ Compatibility for previous Magento versions are in development (see [roadmap](#r
 
 ## Installation
 
-* Copy the folder **app/code/community/Pimgento** and paste it in the folder app/code/community
-* Copy the folder **app/design/adminhtml/default/default/template/pimgento** and paste it in the folder **app/design/adminhtml/default/default/template**
-* Copy the file **app/design/adminhtml/default/default/layout/pimgento.xml** and paste it in the folder **app/design/adminhtml/default/default/layout**
-* Copy the file **app/etc/modules/Pimgento_All.xml** and paste it in the folder app/etc/modules
-* Copy the folder **skin/adminhtml/default/default/pimgento** and paste it in the folder **skin/adminhtml/default/default**
+* Copy the folder _app/code/community/Pimgento_ and paste it in the folder _app/code/community_
+* Copy the folder _app/design/adminhtml/default/default/template/pimgento_ and paste it in the folder _app/design/adminhtml/default/default/template_
+* Copy the file _app/design/adminhtml/default/default/layout/pimgento.xml_ and paste it in the folder _app/design/adminhtml/default/default/layout_
+* Copy the file _app/etc/modules/Pimgento_All.xml_ and paste it in the folder app/etc/modules
+* Copy the folder _skin/adminhtml/default/default/pimgento_ and paste it in the folder _skin/adminhtml/default/default_
 * Clear the cache (System > Cache Management)
 * Disconnect / reconnect to the Back Office
 * Refresh Magento compilation (System > Tools > Compilation)
@@ -63,72 +63,72 @@ All PIMGento configurations can be found in the Magento back-office at this path
 **System > Configuration > Catalog > Pimgento**
 
 * **General**
-  * Enable Log: if set Yes, write everything happens during the import in a file.
-  * Log file: Log file name in var/log directory.
-  * CSV line ending: Choose the character used to make a carriage return.
-  * CSV delimiter: Choose the delimiter of your CSV files.
-  * Admin language: Default language for admin values (products, categories, attributes, options). Example: en_US, de_DE, fr_FR...
-  * Add website mapping: Match Magento website with PIM channel
+  * _Enable Log_:_ if set Yes, write everything happens during the import in a file.
+  * _Log file:_ Log file name in var/log directory.
+  * _CSV line ending:_ Choose the character used to make a carriage return.
+  * _CSV delimiter:_ Choose the delimiter of your CSV files.
+  * _Admin language:_ Default language for admin values (products, categories, attributes, options). Example: en_US, de_DE, fr_FR...
+  * _Add website mapping:_ Match Magento website with PIM channel
 
 * **Categories**
-  * Enable Cron: if set Yes, you can enable the automatic import.
-    * CRON expression: Configure when the automatic import will execute.
-    * File: The filename of the CSV file used for the automatic import.
-  * Clear cache: Choose which cache you want to clear after the import.
-  * PIM code exclusion: PIM codes not to add in Magento, comma separated. Example: CAT01,CAT18,CAT56
-  * Category depth: Choose the depth of your e-commerce navigation.
-  * Is anchor: If set yes, all categories will be created as an anchor category.
-  * Update url key: If set yes, it will create automatically an URL rewrite if the category name changed.
+  * _Enable Cron:_ if set Yes, you can enable the automatic import.
+    * _CRON expression:_ Configure when the automatic import will execute.
+    * _File:_ The filename of the CSV file used for the automatic import.
+  * _Clear cache:_ Choose which cache you want to clear after the import.
+  * _PIM code exclusion:_ PIM codes not to add in Magento, comma separated. Example: CAT01,CAT18,CAT56
+  * _Category depth:_ Choose the depth of your e-commerce navigation.
+  * _Is anchor:_ If set yes, all categories will be created as an anchor category.
+  * _Update url key:_ If set yes, it will create automatically an URL rewrite if the category name changed.
 
 * **Families**
-  * Enable Cron: if set Yes, you can enable the automatic import.
-    * CRON expression: Configure when the automatic import will execute.
-    * File: The filename of the CSV file used for the automatic import.
-  * Clear cache: Choose which cache you want to clear after the import.
-  * PIM code exclusion: PIM codes not to add in Magento, comma separated. Example: FAM01,FAM18,FAM56
+  * _Enable Cron:_ if set Yes, you can enable the automatic import.
+    * _CRON expression:_ Configure when the automatic import will execute.
+    * _File:_ The filename of the CSV file used for the automatic import.
+  * _Clear cache:_ Choose which cache you want to clear after the import.
+  * _PIM code exclusion:_ PIM codes not to add in Magento, comma separated. Example: FAM01,FAM18,FAM56
 
 * **Attributes**
-  * Enable Cron: if set Yes, you can enable the automatic import.
-    * CRON expression: Configure when the automatic import will execute.
-    * File: The filename of the CSV file used for the automatic import.
-  * Clear cache: Choose which cache you want to clear after the import.
-  * PIM code exclusion: PIM codes not to add in Magento, comma separated. Example: ATT01,ATT18,ATT56
-  * Specific types: You can make a mapping between PIM and MAGENTO attributes types.
+  * _Enable Cron:_ if set Yes, you can enable the automatic import.
+    * _CRON expression:_ Configure when the automatic import will execute.
+    * _File:_ The filename of the CSV file used for the automatic import.
+  * _Clear cache:_ Choose which cache you want to clear after the import.
+  * _PIM code exclusion:_ PIM codes not to add in Magento, comma separated. Example: ATT01,ATT18,ATT56
+  * _Specific types:_ You can make a mapping between PIM and MAGENTO attributes types.
 
 * **Options**
-  * Enable Cron: if set Yes, you can enable the automatic import.
-    * CRON expression: Configure when the automatic import will execute.
-    * File: The filename of the CSV file used for the automatic import.
-  * Clear cache: Choose which cache you want to clear after the import.
-  * PIM code exclusion: PIM codes not to add in Magento, comma separated. Example: OPT01,OPT18,OPT56
+  * _Enable Cron:_ if set Yes, you can enable the automatic import.
+    * _CRON expression:_ Configure when the automatic import will execute.
+    * _File:_ The filename of the CSV file used for the automatic import.
+  * _Clear cache:_ Choose which cache you want to clear after the import.
+  * _PIM code exclusion:_ PIM codes not to add in Magento, comma separated. Example: OPT01,OPT18,OPT56
 
 * **Products**
-  * Enable Cron: if set Yes, you can enable the automatic import.
-    * CRON expression: Configure when the automatic import will execute.
-    * File: The filename of the CSV file used for the automatic import.
-  * Clear cache: Choose which cache you want to clear after the import.
-  * PIM code exclusion: PIM codes not to add in Magento, comma separated. Example: SKU01,SKU18,SKU56
-  * Match attributes: You can make a mapping between PIM and MAGENTO attributes for simple product.
-  * Default tax class: Choose the default tax class for each product imported.
-  * Create Configurable: If set yes, it will create configurable product from the simple product data.
-    * Configurable attributes: attributes to use for create configurable products
-    * Configurable values: You can make a mapping between PIM and MAGENTO attributes for configurable product.
+  * _Enable Cron:_ if set Yes, you can enable the automatic import.
+    * _CRON expression:_ Configure when the automatic import will execute.
+    * _File:_ The filename of the CSV file used for the automatic import.
+  * _Clear cache:_ Choose which cache you want to clear after the import.
+  * _PIM code exclusion:_ PIM codes not to add in Magento, comma separated. Example: SKU01,SKU18,SKU56
+  * _Match attributes:_ You can make a mapping between PIM and MAGENTO attributes for simple product.
+  * _Default tax class:_ Choose the default tax class for each product imported.
+  * _Create Configurable:_ If set yes, it will create configurable product from the simple product data.
+    * _Configurable attributes:_ attributes to use for create configurable products
+    * _Configurable values:_ You can make a mapping between PIM and MAGENTO attributes for configurable product.
 
 * **Images**
-  * Enable Cron: if set Yes, you can enable the automatic import.
-    * CRON expression: Configure when the automatic import will execute.
-    * File: The filename of the CSV file used for the automatic import.
-  * Delete image: If set Yes, delete all images used for the import.
+  * _Enable Cron:_ if set Yes, you can enable the automatic import.
+    * _CRON expression:_ Configure when the automatic import will execute.
+    * _File:_ The filename of the CSV file used for the automatic import.
+  * _Delete image:_ If set Yes, delete all images used for the import.
   
 * **Stock**
-  * Enable Cron: if set Yes, you can enable the automatic import.
-    * CRON expression: Configure when the automatic import will execute.
-    * File: The filename of the CSV file used for the automatic import.
+  * _Enable Cron:_ if set Yes, you can enable the automatic import.
+    * _CRON expression:_ Configure when the automatic import will execute.
+    * _File:_ The filename of the CSV file used for the automatic import.
 
 * **Product position**
-  * Enable Cron: if set Yes, you can enable the automatic import.
-    * CRON expression: Configure when the automatic import will execute.
-    * File: The filename of the CSV file used for the automatic import.
+  * _Enable Cron:_ if set Yes, you can enable the automatic import.
+    * _CRON expression:_ Configure when the automatic import will execute.
+    * _File:_ The filename of the CSV file used for the automatic import.
 
 **NB**: PIMGento uses native Magento Cronjob, so you have nothing to add in your Crontab.
 
