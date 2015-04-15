@@ -5,7 +5,9 @@ PIMGento is a Magento extension that allows you to import your catalog from Aken
 ## How it works
 
 PIMGento reads CSV files from Akeneo and insert datas directly in Magento database.
+
 In this way, it makes imports very fast and doesn't disturb your e-commerce website.
+
 With PIMGento, you can import :
 * Categories
 * Families
@@ -16,20 +18,34 @@ With PIMGento, you can import :
 * Images
 * Stocks
 
-## Demo
-Avalaible on our YouTube Channel : [PIMGento : Official Magento Extension for Akeneo PIM](https://www.youtube.com/watch?v=MpC01qVIVFA )
-
 ## Features
 
 * **Plug and Play:** We payed attention to the code and followed the Magento code instructions so you can easily install this extension on your store without any troubleshooting (see [installation](#installation)).
+
 * **Totally flexible:** We added plenty of configurations. We didn't write any specific value in our code : No hard coding.
-* **User Friendly:** We thought the interface the easiest possible. We developed a dashboard where you can see your import running. We even added some colors :)
-* **Manual or automatic:** Free to choose ! You can either upload and import your CSV files from the Magento back-office or simply let the automatics tasks run different import with CSV files located in a directory of your server.
+
+* * **User Friendly:** We thought the interface the easiest possible. We developed a dashboard where you can see your import running. We even added some colors :)
+
+* * * **Manual or automatic:** Free to choose ! You can either upload and import your CSV files from the Magento back-office or simply let the automatics tasks run different import with CSV files located in a directory of your server.
+
 * **SEO ready:** 404 pages, it's over ! With PIMGento, you don't loose SEO on your product and category pages. If their names change, PIMGento create automatically a rewrite from the old URL to the new one.
+
 * **Synchrone** / Asynchrone: You can import right now your data in order to show them on the front-office or schedule a task in the coming days. Very usefull to prepare a marketing operation for instance.
+
 * **Fast import:** PIMGento is from 10 to 20 times faster than API and native Magento import/export system.
+
 * **Performance:** Imports with PIMGento don't slow down the store. Besides, you can select which cache you want to clear at the end of your import.
+
 * **Multi-X:** PIMGento supports all types of Magento structure. If you have multi-website and multi-store with lot of differents languages, imports will still work well.
+
+## Demo / POC
+* Magento setup with Akeneo sample datas in less than [4 minutes !] (https://www.youtube.com/watch?v=MpC01qVIVFA )
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=MpC01qVIVFA
+" target="_blank"><img src="http://img.youtube.com/vi/MpC01qVIVFA/0.jpg" 
+alt="Video PIMGento for Akeneo" width="240" height="180" border="10" /></a>
+
+* Configuration options for the backend [(Sceenshots)](http://imgur.com/a/OUnNl)
 
 ## Requirements
 
@@ -138,3 +154,7 @@ All PIMGento configurations can be found in the Magento back-office at this path
 * Compatibility with Magento >= 1.10 EE
 * Create this type of product : Bundle, packed, virtual and downloadable products.
 * Think about a way to delete data
+
+## About us
+
+Founded by lovers of innovation and design, [Agence Dn'D] (http://www.dnd.fr) assists companies for 11 years in the creation and development of customized digital (open source) solutions for web and E-commerce.
