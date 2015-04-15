@@ -9,7 +9,7 @@
 <config>
     <modules>
         <Pimgento_Stock>
-            <version>0.1.0</version>
+            <version>1.0.0</version>
         </Pimgento_Stock>
     </modules>
     <global>
