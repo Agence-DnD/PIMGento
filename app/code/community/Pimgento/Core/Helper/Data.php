@@ -47,8 +47,14 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
     {
         $stores = Mage::app()->getStores();
 
+        $default = Mage::getStoreConfig(Mage_Directory_Model_Currency::XML_PATH_CURRENCY_BASE, 0);
+
+        if (!$default) {
+            $default = 'USD';
+        }
+
         $currencies = array(
-            'EUR' => array(
+            $default => array(
                 array('id' => 0, 'code' => 'admin')
             )
         );
