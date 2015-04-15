@@ -17,6 +17,8 @@
 "Log file","Fichier des logs"
 "CSV: line ending","CSV : fin de ligne"
 "CSV: delimiter","CSV : délimiteur de champs"
+"Admin language","Langue de l'admin"
+"Default language for admin values","Langage par défaut pour les valeurs de l'administration"
 "Add website mapping","Correspondance des websites"
 "Match website with Pim channel","Correspondance entre le website Magento et le canal du PIM"
 "Yes","Oui"

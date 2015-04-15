@@ -17,7 +17,13 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
     {
         $stores = Mage::app()->getStores();
 
-        $lang = array('fr_FR' => array(0));
+        $adminLang = Mage::getStoreConfig('pimdata/general/admin_lang');
+
+        if (!$adminLang) {
+            $adminLang = 'en_US';
+        }
+
+        $lang = array($adminLang => array(0));
 
         foreach ($stores as $store) {
             $local = Mage::getStoreConfig('general/locale/code', $store->getId());

@@ -62,12 +62,21 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </csv_fields_terminated>
+                        <admin_lang translate="label">
+                            <label>Admin language</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Default language for admin values</comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </admin_lang>
                         <websites translate="label">
                             <label>Add website mapping</label>
                             <frontend_model>pimgento_core/adminhtml_system_website</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
                             <comment>Match website with Pim channel</comment>
-                            <sort_order>5</sort_order>
+                            <sort_order>6</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>

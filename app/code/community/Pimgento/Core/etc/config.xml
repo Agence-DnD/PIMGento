@@ -119,6 +119,7 @@
                 <log_file>pimgento/import.log</log_file>
                 <csv_lines_terminated>\n</csv_lines_terminated>
                 <csv_fields_terminated>;</csv_fields_terminated>
+                <admin_lang>en_US</admin_lang>
             </general>
         </pimdata>
     </default>
