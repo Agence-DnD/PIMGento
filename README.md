@@ -1,6 +1,10 @@
 # PIMGento
 
+![alt text][logo]
+[logo]: http://i.imgur.com/0KabJ2e.png "PIMGento : "
+
 PIMGento is a Magento extension that allows you to import your catalog from Akeneo CSV files into Magento.
+
 
 ## How it works
 
@@ -24,9 +28,9 @@ With PIMGento, you can import :
 
 * **Totally flexible:** We added plenty of configurations. We didn't write any specific value in our code : No hard coding.
 
-* * **User Friendly:** We thought the interface the easiest possible. We developed a dashboard where you can see your import running. We even added some colors :)
+* ***User Friendly:** We thought the interface the easiest possible. We developed a dashboard where you can see your import running. We even added some colors :)
 
-* * * **Manual or automatic:** Free to choose ! You can either upload and import your CSV files from the Magento back-office or simply let the automatics tasks run different import with CSV files located in a directory of your server.
+* **Manual or automatic:** Free to choose ! You can either upload and import your CSV files from the Magento back-office or simply let the automatics tasks run different import with CSV files located in a directory of your server.
 
 * **SEO ready:** 404 pages, it's over ! With PIMGento, you don't loose SEO on your product and category pages. If their names change, PIMGento create automatically a rewrite from the old URL to the new one.
 
