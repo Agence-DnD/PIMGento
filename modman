@@ -1,0 +1,7 @@
+app/code/community/Pimgento
+app/design/adminhtml/default/default/layout/pimgento.xml
+app/design/adminhtml/default/default/template/pimgento
+app/etc/modules/Pimgento_All.xml
+app/locale/en_US/Pimgento_Core.csv
+app/locale/fr_FR/Pimgento_Core.csv
+skin/adminhtml/default/default/pimgento
