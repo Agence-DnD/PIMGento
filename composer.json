@@ -1,0 +1,21 @@
+{
+  "name": "agence-dnd/pimgento",
+  "description": "PimGento is a Magento extension that allows you to import your catalog from Akeneo CSV files into Magento",
+  "minimum-stability": "dev",
+  "license": "OSL-3.0",
+  "authors": [
+    {
+      "name": "Mathtieu Vion",
+      "email": "{firstname}.{lastname}@agence-dnd.fr"
+    }
+  ],
+  "require": {
+    "magento-hackathon/magento-composer-installer": "2.*"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://packages.firegento.com"
+    }
+  ]
+}
