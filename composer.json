@@ -3,6 +3,7 @@
   "description": "PimGento is a Magento extension that allows you to import your catalog from Akeneo CSV files into Magento",
   "minimum-stability": "dev",
   "license": "OSL-3.0",
+  "type":"magento-module",
   "authors": [
     {
       "name": "Mathtieu Vion",
