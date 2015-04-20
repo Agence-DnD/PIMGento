@@ -64,6 +64,7 @@ You have to install [DnD-MagentoConnectorBundle](https://github.com/Agence-DnD/D
 
 ## Installation
 
+### Manually
 * Copy the folder _app/code/community/Pimgento_ and paste it in the folder _app/code/community_
 * Copy the folder _app/design/adminhtml/default/default/template/pimgento_ and paste it in the folder _app/design/adminhtml/default/default/template_
 * Copy the file _app/design/adminhtml/default/default/layout/pimgento.xml_ and paste it in the folder _app/design/adminhtml/default/default/layout_
@@ -72,6 +73,25 @@ You have to install [DnD-MagentoConnectorBundle](https://github.com/Agence-DnD/D
 * Clear the cache (System > Cache Management)
 * Disconnect / reconnect to the Back Office
 * Refresh Magento compilation (System > Tools > Compilation)
+
+### Via composer
+
+- Add into in the `require` section:
+
+`"agence-dnd/pimgento":"dev-master"`
+
+- Add into the `requirements` section:
+
+```
+	{
+		"type": "vcs",
+		"url": "git@github.com:Agence-DnD/PIMGento.git"
+	}
+```
+
+### Via modman
+
+`modman clone git@github.com:Agence-DnD/PIMGento.git`
 
 ## Configuration and Usage
 
