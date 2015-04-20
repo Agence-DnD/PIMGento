@@ -6,8 +6,8 @@
   "type":"magento-module",
   "authors": [
     {
-      "name": "Mathtieu Vion",
-      "email": "{firstname}.{lastname}@agence-dnd.fr"
+      "name": "Agence Dnd",
+      "email": "magento@dnd.fr"
     }
   ],
   "require": {
