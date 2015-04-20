@@ -1,0 +1,8 @@
+{
+    "name": "Agence-DnD/PIMGento",
+    "description": "PIMGento is a Magento extension that allows you to import your catalog from Akeneo CSV files into Magento.",
+    "type": "magento-module",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
