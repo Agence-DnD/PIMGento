@@ -95,6 +95,7 @@ You have to install [DnD-MagentoConnectorBundle](https://github.com/Agence-DnD/D
 
 ## Configuration and Usage
 
+* Allow magento to follow symlinks in "System > Advanced > Developer > Templates Settings" (set to "yes")
 * Configure your store language and currency before import
 * After category import, set the "Root Category" for store in "System > Manage Store"
 * After attributes import, set attributes used to create configurable products
