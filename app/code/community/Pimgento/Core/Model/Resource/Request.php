@@ -369,7 +369,7 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
      */
     protected function _formatField($field)
     {
-        return str_replace(PHP_EOL, '', preg_replace('/\s+/', ' ', trim($field)));
+        return trim(str_replace(PHP_EOL, '', preg_replace('/\s+/', ' ', trim($field))),'"');
     }
 
     /**
