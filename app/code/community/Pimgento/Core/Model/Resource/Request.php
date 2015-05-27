@@ -390,7 +390,12 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
             throw new Exception(Mage::helper('pimgento_core')->__('Connection to database is not active'));
         }
 
-        $dsn = 'mysql:host=' . $connConfig->host . ';dbname=' . $connConfig->dbname;
+        list($host, $port) = explode(':', $connConfig->host);
+        $dsn = 'mysql:host=' . $host . ';dbname=' . $connConfig->dbname;
+        if ($port) {
+            $dsn .= ';port=' . $port;
+        }
+        
         $pdo = new PDO($dsn, $connConfig->username, $connConfig->password, $options);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
