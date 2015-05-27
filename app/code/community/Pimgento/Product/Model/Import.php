@@ -158,6 +158,14 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
             if ($code) {
+                if (!$adapter->tableColumnExists($this->getTable(), $code)) {
+                    $task->setMessage(
+                        Mage::helper('pimgento_product')->__(
+                            'Attribute %s not found in Akeneo, configurable products will not be created', $code
+                        )
+                    );
+                    return false;
+                }
                 $values = array(
                     '_attributes' => $this->_zde('TRIM(BOTH "," FROM CONCAT(`_attributes`, ",", "' . $id . '"))')
                 );
@@ -478,7 +486,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
                     $translation = true;
 
-                    if (preg_match('/^(?P<attribute>.*)-' . $code . '$/', $column, $matches)) {
+                    if (preg_match('/^(?P<attribute>[^-]*)-' . $code . '$/', $column, $matches)) {
 
                         foreach ($ids as $key => $storeId) {
 

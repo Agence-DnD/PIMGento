@@ -91,11 +91,17 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
         foreach ($stores as $store) {
             $code = $this->getChannel($store->getWebsite()->getCode());
 
+            $local = Mage::getStoreConfig('general/locale/code', $store->getId());
+
             if (!isset($websites[$code])) {
                 $websites[$code] = array();
             }
+            if (!isset($websites[$local . '-' . $code])) {
+                $websites[$local . '-' . $code] = array();
+            }
 
             $websites[$code][] = $store->getId();
+            $websites[$local . '-' . $code][] = $store->getId();
         }
 
         return $websites;
