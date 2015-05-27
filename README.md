@@ -58,6 +58,7 @@ You have to install [DnD-MagentoConnectorBundle](https://github.com/Agence-DnD/D
 * Magento >= 1.9 CE
 * Magento >= 1.14 EE
 * Set local_infile mysql variable to TRUE
+* Database encoding must be UTF-8
 * Flash Player
 
 > Compatibility for previous Magento versions are in development (see [roadmap](#roadmap))
