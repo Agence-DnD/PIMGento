@@ -50,6 +50,13 @@
                 <Mage_Catalog />
             </depends>
         </Pimgento_Option>
+        <Pimgento_Variant>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+            </depends>
+        </Pimgento_Variant>
         <Pimgento_Product>
             <active>true</active>
             <codePool>community</codePool>
