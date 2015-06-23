@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "magento-hackathon/magento-composer-installer": "2.*"
+    "magento-hackathon/magento-composer-installer": ">=2.0"
   },
   "repositories": [
     {
