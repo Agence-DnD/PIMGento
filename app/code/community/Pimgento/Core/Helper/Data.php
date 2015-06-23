@@ -53,9 +53,15 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
             $default = 'USD';
         }
 
+        $adminLang = Mage::getStoreConfig('pimdata/general/admin_lang');
+
+        if (!$adminLang) {
+            $adminLang = 'en_US';
+        }
+
         $currencies = array(
             $default => array(
-                array('id' => 0, 'code' => 'admin')
+                array('id' => 0, 'code' => 'admin', 'lang' => $adminLang)
             )
         );
 
@@ -68,9 +74,12 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
 
             $code = $this->getChannel($store->getWebsite()->getCode());
 
+            $local = Mage::getStoreConfig('general/locale/code', $store->getId());
+
             $currencies[$currency][] = array(
                 'id'   => $store->getId(),
                 'code' => $code,
+                'lang' => $local,
             );
         }
 
@@ -103,6 +112,22 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
             $websites[$code][] = $store->getId();
             $websites[$local . '-' . $code][] = $store->getId();
         }
+
+        // Add admin
+        $website = Mage::getModel('core/website')->load(1, 'is_default');
+
+        $code    = $this->getChannel($website->getCode());
+        $local   = Mage::getStoreConfig('pimdata/general/admin_lang');
+
+        if (!isset($websites[$code])) {
+            $websites[$code] = array();
+        }
+        if (!isset($websites[$local . '-' . $code])) {
+            $websites[$local . '-' . $code] = array();
+        }
+
+        $websites[$code][] = 0;
+        $websites[$local . '-' . $code][] = 0;
 
         return $websites;
     }

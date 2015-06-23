@@ -220,12 +220,14 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
                 $columns = array(
                     'price'         => array(
-                        $price . '-' . $currency,
-                        $price . '-' . $data['code'] . '-' . $currency
+                        $price . '-' . $currency, // price-USD
+                        $price . '-' . $data['code'] . '-' . $currency, // price-website-USD
+                        $price . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency, // price-en_US-website-USD
                     ),
                     'special_price' => array(
                         $specialPrice . '-' . $currency,
-                        $specialPrice . '-' . $data['code'] . '-' . $currency
+                        $specialPrice . '-' . $data['code'] . '-' . $currency,
+                        $specialPrice . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
                     ),
                 );
 
@@ -761,18 +763,20 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                             ->limit(1)
                     );
                     if ($code) {
-                        $data['code'] = $code;
+                        $data['code'] = $helper->getChannel($code);
                     }
                 }
 
                 $columns = array(
                     'price'         => array(
-                        $price . '-' . $currency,
-                        $price . '-' . $data['code'] . '-' . $currency
+                        $price . '-' . $currency, // price-USD
+                        $price . '-' . $data['code'] . '-' . $currency, // price-website-USD
+                        $price . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency, // price-en_US-website-USD
                     ),
                     'special_price' => array(
                         $specialPrice . '-' . $currency,
-                        $specialPrice . '-' . $data['code'] . '-' . $currency
+                        $specialPrice . '-' . $data['code'] . '-' . $currency,
+                        $specialPrice . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
                     ),
                 );
 
