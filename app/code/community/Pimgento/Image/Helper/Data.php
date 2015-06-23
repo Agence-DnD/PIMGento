@@ -74,11 +74,12 @@ class Pimgento_Image_Helper_Data extends Mage_Core_Helper_Data
                     $path      = Mage_Core_Model_File_Uploader::getDispretionPath($fileName);
                     $fileName  = $path . DS . $fileName;
 
-                    $files[$sku][] = array(
+                    $files[$sku][$directory] = array(
                         'directory' => $directory . DS,
                         'file'      => $file,
                         'name'      => $fileName,
                     );
+                    ksort($files[$sku]);
                 }
             }
 
