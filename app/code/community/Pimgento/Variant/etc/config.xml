@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Pimgento_Variant>
+            <version>1.0.0</version>
+        </Pimgento_Variant>
+    </modules>
+    <global>
+        <models>
+            <pimgento_variant>
+                <class>Pimgento_Variant_Model</class>
+            </pimgento_variant>
+        </models>
+        <resources>
+            <pimgento_variant_setup>
+                <setup>
+                    <module>Pimgento_Variant</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </pimgento_variant_setup>
+        </resources>
+        <helpers>
+            <pimgento_variant>
+                <class>Pimgento_Variant_Helper</class>
+            </pimgento_variant>
+        </helpers>
+        <events>
+            <task_executor_load_task>
+                <observers>
+                    <pimgento_variant_add_task>
+                        <class>pimgento_variant/observer</class>
+                        <method>addTask</method>
+                    </pimgento_variant_add_task>
+                </observers>
+            </task_executor_load_task>
+        </events>
+    </global>
+    <default>
+        <pimdata>
+            <variant>
+                <cron_enabled>0</cron_enabled>
+                <cron_file>variant.csv</cron_file>
+            </variant>
+        </pimdata>
+    </default>
+    <crontab>
+        <jobs>
+            <pimdata_variant_cron>
+                <run>
+                    <model>pimgento_variant/cron::run</model>
+                </run>
+            </pimdata_variant_cron>
+        </jobs>
+    </crontab>
+</config>
