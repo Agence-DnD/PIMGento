@@ -140,3 +140,5 @@
 "Connection to database is not active","La connexion à la base de données n'est pas activée"
 "Can not save the cron expression","Impossible d'enregistrer l'expression Cron"
 "Can not remove the cron expression","Impossible de supprimer l'expression Cron"
+"Flush catalog image cache","Suppression du cache des images"
+"Cache flushing is disabled","La suppression des images est désactivée"

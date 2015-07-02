@@ -326,4 +326,27 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
         return true;
     }
 
+    /**
+     * Flush catalog image cache (Step 8)
+     *
+     * @param Pimgento_Core_Model_Task $task
+     *
+     * @return bool
+     */
+    public function cleanImage($task)
+    {
+        if (!Mage::getStoreConfig('pimdata/image/cache')) {
+            $task->setMessage(
+                Mage::helper('pimgento_image')->__('Cache flushing is disabled')
+            );
+            return false;
+        }
+
+        Mage::getModel('catalog/product_image')->clearCache();
+
+        Mage::dispatchEvent('clean_catalog_images_cache_after');
+
+        return true;
+    }
+
 }

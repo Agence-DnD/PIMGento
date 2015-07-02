@@ -39,6 +39,7 @@
             <image>
                 <cron_enabled>0</cron_enabled>
                 <delete>1</delete>
+                <cache>1</cache>
             </image>
         </pimdata>
     </default>
