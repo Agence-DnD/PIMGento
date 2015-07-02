@@ -21,7 +21,7 @@ class Pimgento_Variant_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $this->launch('pimgento_variant');
+        $this->launch('pimgento_variant', Mage::getStoreConfig('pimdata/variant/cron_file'));
 
         return $this;
     }
