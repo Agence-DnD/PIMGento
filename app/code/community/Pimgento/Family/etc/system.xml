@@ -44,7 +44,7 @@
                         <cron_file translate="label">
                             <label>File</label>
                             <frontend_type>text</frontend_type>
-                            <comment>File name in "/var/import/"</comment>
+                            <comment>File(s) name in /var/import/, files delimited by semicolon</comment>
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>

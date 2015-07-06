@@ -21,7 +21,16 @@ class Pimgento_Option_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $this->launch('pimgento_option', Mage::getStoreConfig('pimdata/option/cron_file'));
+        $cronFiles = Mage::getStoreConfig('pimdata/option/cron_file');
+
+        if ($cronFiles) {
+            $files = explode(';', $cronFiles);
+            foreach ($files as $file) {
+                if ($file) {
+                    $this->launch('pimgento_option', $file);
+                }
+            }
+        }
 
         return $this;
     }

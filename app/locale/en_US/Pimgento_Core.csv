@@ -42,7 +42,7 @@
 "Update URL Key","Update URL Key"
 "Update URL key when category name is updated, a redirect from the old url is created","Update URL key when category name is updated, a redirect from the old url is created"
 "File","File"
-"File name in /var/import/","File name in /var/import/"
+"File(s) name in /var/import/, files delimited by semicolon","File(s) name in /var/import/, files delimited by semicolon"
 "Specific types","Specific types"
 "Match attribute types","Match attribute types"
 "Pim type","Pim type"
