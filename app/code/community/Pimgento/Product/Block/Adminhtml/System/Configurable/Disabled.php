@@ -5,7 +5,7 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Pimgento_Product_Block_Adminhtml_System_Configurable
+class Pimgento_Product_Block_Adminhtml_System_Configurable_Disabled
     extends Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract
 {
 
@@ -14,15 +14,10 @@ class Pimgento_Product_Block_Adminhtml_System_Configurable
      */
     public function __construct()
     {
-        $this->setTemplate('pimgento/product/configurable.phtml');
+        $this->setTemplate('pimgento/product/configurable/disabled.phtml');
 
         $this->addColumn('attribute', array(
                 'label' => Mage::helper('pimgento_product')->__('Pim Attribute'),
-                'style' => 'width:120px',
-            ));
-
-        $this->addColumn('value', array(
-                'label' => Mage::helper('pimgento_product')->__('Value'),
                 'style' => 'width:120px',
             ));
 

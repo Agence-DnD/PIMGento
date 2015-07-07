@@ -142,3 +142,4 @@
 "Can not remove the cron expression","Can not remove the cron expression"
 "Flush catalog image cache","Flush catalog image cache"
 "Cache flushing is disabled","Cache flushing is disabled"
+"Disable attributes updating for configurable","Disable attributes updating for configurable"

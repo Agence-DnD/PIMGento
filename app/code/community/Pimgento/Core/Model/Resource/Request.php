@@ -59,6 +59,13 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
             array(),
             'entity_id'
         );
+        $table->addColumn(
+            '_is_new',
+            Varien_Db_Ddl_Table::TYPE_INTEGER,
+            1,
+            array('default' => 0),
+            '_is_new'
+        );
         if ($unique) {
             $table->addIndex(
                 'UNQ_PIMGENTO_CODE_' . strtoupper($name) . '_ENTITY_ID', array('entity_id'), array('type' => 'UNIQUE')
@@ -117,7 +124,8 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
             $adapter->query('SET @id = ' . $this->_getIncrementId($entity));
 
             $values = array(
-                'entity_id' => new Zend_Db_Expr('@id := @id + 1')
+                'entity_id' => new Zend_Db_Expr('@id := @id + 1'),
+                '_is_new'   => new Zend_Db_Expr('1'),
             );
             $adapter->update($this->getTableName($name), $values, 'entity_id IS NULL');
 
@@ -192,6 +200,10 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
                                 'value'          => $value
                             )
                         );
+
+                    if ($this->columnExists($this->getTableName($name), $value)) {
+                        $select->where('TRIM(`' . $value . '`) <> ?', new Zend_Db_Expr('""'));
+                    }
 
                     $backendType = $attribute['backend_type'];
 

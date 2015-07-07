@@ -398,6 +398,21 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             }
         }
 
+        if ($this->getConfig('configurable_enabled')) {
+            $disabled = unserialize($this->getConfig('configurable_update'));
+
+            $exclude = array();
+            foreach ($disabled as $pim) {
+                if ($this->columnExists($pim['attribute'])) {
+                    $exclude[$pim['attribute']] = $this->_zde('""');
+                }
+            }
+
+            if (count($exclude)) {
+                $adapter->update($this->getTable(), $exclude, '_type_id = "configurable" AND _is_new = 0');
+            }
+        }
+
         return true;
     }
 

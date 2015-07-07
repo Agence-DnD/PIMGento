@@ -126,7 +126,7 @@
                         <configurable_values translate="label">
                             <label>Default configurable attributes values</label>
                             <frontend_type>text</frontend_type>
-                            <frontend_model>pimgento_product/adminhtml_system_configurable</frontend_model>
+                            <frontend_model>pimgento_product/adminhtml_system_configurable_default</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
                             <comment>Use the value column to force data for specific attribute. Leave empty to retrieve the value of the first simple product.</comment>
                             <sort_order>11</sort_order>
@@ -137,6 +137,19 @@
                                 <configurable_enabled>1</configurable_enabled>
                             </depends>
                         </configurable_values>
+                        <configurable_update translate="label">
+                            <label>Disable attributes updating for configurable</label>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>pimgento_product/adminhtml_system_configurable_disabled</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <configurable_enabled>1</configurable_enabled>
+                            </depends>
+                        </configurable_update>
                     </fields>
                 </product>
             </groups>
