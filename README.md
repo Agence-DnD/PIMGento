@@ -8,7 +8,7 @@ PIMGento is a Magento extension that allows you to import your catalog from Aken
 
 ## How it works
 
-PIMGento reads CSV files from Akeneo and insert datas directly in Magento database.
+PIMGento reads CSV files from Akeneo and insert data directly in Magento database.
 
 In this way, it makes imports very fast and doesn't disturb your e-commerce website.
 
@@ -34,16 +34,16 @@ With PIMGento, you can import :
 
 * **SEO ready:** 404 pages, it's over ! With PIMGento, you don't loose SEO on your product and category pages. If their names change, PIMGento create automatically a rewrite from the old URL to the new one.
 
-* **Synchrone** / Asynchrone: You can import right now your data in order to show them on the front-office or schedule a task in the coming days. Very usefull to prepare a marketing operation for instance.
+* **Synchronous** / Asynchronous: You can import right now your data in order to show them on the front-office or schedule a task in the coming days. Very useful to prepare a marketing operation for instance.
 
 * **Fast import:** PIMGento is from 10 to 20 times faster than API and native Magento import/export system.
 
 * **Performance:** Imports with PIMGento don't slow down the store. Besides, you can select which cache you want to clear at the end of your import.
 
-* **Multi-X:** PIMGento supports all types of Magento structure. If you have multi-website and multi-store with lot of differents languages, imports will still work well.
+* **Multi-X:** PIMGento supports all types of Magento structure. If you have multi-website and multi-store with lot of different languages, imports will still work well.
 
 ## Demo / POC
-* Magento setup with Akeneo sample datas in less than [4 minutes !] (https://www.youtube.com/watch?v=MpC01qVIVFA )
+* Magento setup with Akeneo sample data in less than [4 minutes !] (https://www.youtube.com/watch?v=MpC01qVIVFA )
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=MpC01qVIVFA
 " target="_blank"><img src="http://img.youtube.com/vi/MpC01qVIVFA/0.jpg" 
