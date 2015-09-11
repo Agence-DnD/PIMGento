@@ -1005,7 +1005,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     'product_id'                => 'entity_id',
                     'stock_id'                  => $this->_zde(1),
                     'qty'                       => $this->_zde(0),
-                    'is_in_stock'               => $this->_zde(0),
+                    'is_in_stock'               => $this->_zde('IF(`type_id` = "configurable", 1, 0)'),
                     'low_stock_date'            => $this->_zde('NULL'),
                     'stock_status_changed_auto' => $this->_zde(0),
                 )
