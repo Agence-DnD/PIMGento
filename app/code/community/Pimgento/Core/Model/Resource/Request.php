@@ -72,6 +72,8 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
             );
         }
 
+        $table->setOption('type', 'MYISAM');
+
         $adapter->createTable($table);
 
         return $this;
