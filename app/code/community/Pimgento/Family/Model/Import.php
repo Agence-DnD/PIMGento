@@ -91,7 +91,7 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $this->getTable(),
                 array(
                     'attribute_set_id'   => 'entity_id',
-                    'entity_type_id'     => $this->_zde(4),
+                    'entity_type_id'     => $this->_zde($this->_entity_type_id('catalog_product')),
                     'attribute_set_name' => 'label',
                     'sort_order'         => $this->_zde(1),
                 )
