@@ -204,7 +204,7 @@ abstract class Pimgento_Core_Model_Import_Abstract
              $this->_entity_type_ids = array();
              $entity_types = Mage::getModel('eav/entity_type')->getCollection();
              foreach ($entity_types as $type) {
-                 $this->_entity_type_ids[$type->getEntityCode()] = $type->getId();
+                 $this->_entity_type_ids[$type->getEntityTypeCode()] = $type->getId();
              }
 
         }
