@@ -198,7 +198,7 @@ abstract class Pimgento_Core_Model_Import_Abstract
      *
      * @return string
      */
-    protected function _entity_type_id($type_code)
+    protected function _getEntityTypeId($type_code)
     {
         if (!isset($this->_entity_type_ids)) {
              $this->_entity_type_ids = array();

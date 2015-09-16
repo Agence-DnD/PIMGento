@@ -442,7 +442,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $this->getTable(),
                 array(
                     'entity_id'        => 'entity_id',
-                    'entity_type_id'   => $this->_zde($this->_entity_type_id('catalog_product')),
+                    'entity_type_id'   => $this->_zde($this->_getEntityTypeId('catalog_product')),
                     'attribute_set_id' => $family,
                     'type_id'          => '_type_id',
                     'sku'              => 'code',
@@ -487,7 +487,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $values['visibility'] = $this->_zde('IF(`_type_id` = "simple" AND `groups` <> "", 1, 4)');
         }
 
-        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->_entity_type_id('catalog_product'), 0);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->_getEntityTypeId('catalog_product'), 0);
 
         /* @var $helper Pimgento_Core_Helper_Data */
         $helper = Mage::helper('pimgento_core');
@@ -551,7 +551,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                             }
 
                             $this->getRequest()->setValues(
-                                $this->getCode(), 'catalog/product', $values, $this->_entity_type_id('catalog_product'), $storeId
+                                $this->getCode(), 'catalog/product', $values, $this->_getEntityTypeId('catalog_product'), $storeId
                             );
                         }
 
@@ -857,14 +857,14 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $priceId = $adapter->fetchOne(
             $adapter->select()
                 ->from($resource->getTable('eav/attribute'), array('attribute_id'))
-                ->where('entity_type_id = ?', $this->_entity_type_id('catalog_product'))
+                ->where('entity_type_id = ?', $this->_getEntityTypeId('catalog_product'))
                 ->where('attribute_code = ?', 'price')
                 ->limit(1));
 
         $specialPriceId = $adapter->fetchOne(
             $adapter->select()
                 ->from($resource->getTable('eav/attribute'), array('attribute_id'))
-                ->where('entity_type_id = ?', $this->_entity_type_id('catalog_product'))
+                ->where('entity_type_id = ?', $this->_getEntityTypeId('catalog_product'))
                 ->where('attribute_code = ?', 'special_price')
                 ->limit(1));
 
