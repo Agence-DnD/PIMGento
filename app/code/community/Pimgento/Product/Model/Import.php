@@ -487,7 +487,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $values['visibility'] = $this->_zde('IF(`_type_id` = "simple" AND `groups` <> "", 1, 4)');
         }
 
-        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->_entity_type_id('catalog_product'), 0);
 
         /* @var $helper Pimgento_Core_Helper_Data */
         $helper = Mage::helper('pimgento_core');
@@ -551,7 +551,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                             }
 
                             $this->getRequest()->setValues(
-                                $this->getCode(), 'catalog/product', $values, 4, $storeId
+                                $this->getCode(), 'catalog/product', $values, $this->_entity_type_id('catalog_product'), $storeId
                             );
                         }
 
