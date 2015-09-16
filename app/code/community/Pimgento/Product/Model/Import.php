@@ -576,7 +576,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 }
 
                 $this->getRequest()->setValues(
-                    $this->getCode(), 'catalog/product', $values, 4, 0
+                    $this->getCode(), 'catalog/product', $values, $this->_getEntityTypeId('catalog_product'), 0
                 );
             }
 
@@ -824,7 +824,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
                 if (count($values)) {
                     $this->getRequest()->setValues(
-                        $this->getCode(), 'catalog/product', $values, 4, $data['id']
+                        $this->getCode(), 'catalog/product', $values, $this->_getEntityTypeId('catalog_product'), $data['id']
                     );
                 }
 
