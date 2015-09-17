@@ -368,6 +368,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $columns = $request->getFirstLine($file);
 
         foreach ($columns as $column) {
+
+            $columnPrefix = explode('-', $column);
+            $columnPrefix = reset($columnPrefix);
+
             if ($adapter->tableColumnExists($this->getTable(), $column)) {
 
                 $select = $adapter->select()
@@ -382,7 +386,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         array(
                             'c' => $resource->getTable('pimgento_core/code')
                         ),
-                        'FIND_IN_SET(REPLACE(`c`.`code`,"' . $column . '_",""), `p`.`' . $column . '`)
+                        'FIND_IN_SET(REPLACE(`c`.`code`,"' . $columnPrefix . '_",""), `p`.`' . $column . '`)
                         AND `c`.`import` = "' . $option->getCode() . '"',
                         array(
                             $column => new Zend_Db_Expr('GROUP_CONCAT(`c`.`entity_id` SEPARATOR ",")')
