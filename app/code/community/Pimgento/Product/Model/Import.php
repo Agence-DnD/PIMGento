@@ -452,16 +452,33 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     'sku'              => 'code',
                     'has_options'      => $this->_zde(0),
                     'required_options' => $this->_zde(0),
-                    'created_at'       => $this->_zde('now()'),
                     'updated_at'       => $this->_zde('now()'),
                 )
             );
 
         $insert = $adapter->insertFromSelect(
-            $parents, $resource->getTable('catalog/product'), array(), 1
+            $parents,
+            $resource->getTable('catalog/product'),
+            array(
+                'entity_id',
+                'entity_type_id',
+                'attribute_set_id',
+                'type_id',
+                'sku',
+                'has_options',
+                'required_options',
+                'updated_at'
+            ),
+            1
         );
 
         $adapter->query($insert);
+
+        $values = array(
+            'created_at' => $this->_zde('now()'),
+            'updated_at' => $this->_zde('now()'), // avoids possiblity of updated_at being before created_at
+        );
+        $adapter->update($resource->getTable('catalog/category'), $values, 'created_at is null');
 
         return true;
     }

@@ -187,7 +187,6 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     'entity_type_id'   => $this->_zde(3),
                     'attribute_set_id' => $this->_zde(3),
                     'parent_id'        => 'parent_id',
-                    'created_at'       => $this->_zde('now()'),
                     'updated_at'       => $this->_zde('now()'),
                     'path'             => 'path',
                     'position'         => 'position',
@@ -197,10 +196,29 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $insert = $adapter->insertFromSelect(
-            $parents, $resource->getTable('catalog/category'), array(), 1
+            $parents,
+            $resource->getTable('catalog/category'),
+            array(
+                'entity_id',
+                'entity_type_id',
+                'attribute_set_id',
+                'parent_id',
+                'updated_at',
+                'path',
+                'position',
+                'level',
+                'children_count'
+            ),
+            1
         );
 
         $adapter->query($insert);
+
+        $values = array(
+            'created_at' => $this->_zde('now()'),
+            'updated_at' => $this->_zde('now()'), // avoids possiblity of updated_at being before created_at
+        );
+        $adapter->update($resource->getTable('catalog/category'), $values, 'created_at is null');
 
         return true;
     }
