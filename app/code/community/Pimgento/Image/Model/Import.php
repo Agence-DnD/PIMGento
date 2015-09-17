@@ -205,9 +205,9 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'thumbnail'   => 'thumbnail',
         );
 
-        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->_getEntityTypeId('catalog_product'), 0);
 
-        $attribute = $resource->getAttribute('media_gallery', 4);
+        $attribute = $resource->getAttribute('media_gallery', $this->_getEntityTypeId('catalog_product'));
 
         if (!$attribute) {
             $task->setMessage($helper->__('Attribute %s not found', 'media_gallery'));

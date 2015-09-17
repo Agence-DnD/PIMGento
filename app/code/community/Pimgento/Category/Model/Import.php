@@ -184,7 +184,7 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $this->getTable(),
                 array(
                     'entity_id'        => 'entity_id',
-                    'entity_type_id'   => $this->_zde(3),
+                    'entity_type_id'   => $this->_zde($this->_getEntityTypeId('catalog_category')),
                     'attribute_set_id' => $this->_zde(3),
                     'parent_id'        => 'parent_id',
                     'created_at'       => $this->_zde('now()'),
@@ -222,7 +222,7 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
         );
 
         // Do not update
-        $this->getRequest()->setValues($this->getCode(), 'catalog/category', $values, 3, 0, 2);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/category', $values, $this->_getEntityTypeId('catalog_category'), 0, 2);
 
         /* @var $helper Pimgento_Core_Helper_Data */
         $helper = Mage::helper('pimgento_core');
@@ -239,7 +239,7 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         'name' => 'label-' . $local,
                     );
 
-                    $this->getRequest()->setValues($this->getCode(), 'catalog/category', $values, 3, $storeId);
+                    $this->getRequest()->setValues($this->getCode(), 'catalog/category', $values, $this->_getEntityTypeId('catalog_category'), $storeId);
                 }
 
             }
@@ -284,7 +284,7 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
-        $attribute = $resource->getAttribute('url_key', 3);
+        $attribute = $resource->getAttribute('url_key', $this->_getEntityTypeId('catalog_category'));
 
         /* @var $url Mage_Catalog_Model_Product_Url */
         $url = Mage::getModel('catalog/product_url');
@@ -310,7 +310,7 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         $new = $url->formatUrlKey($row['name']);
 
                         $values = array(
-                            'entity_type_id' => $this->_zde(3),
+                            'entity_type_id' => $this->_zde($this->_getEntityTypeId('catalog_category')),
                             'attribute_id'   => $this->_zde($attribute['attribute_id']),
                             'store_id'       => $this->_zde($storeId),
                             'entity_id'      => $row['entity_id'],

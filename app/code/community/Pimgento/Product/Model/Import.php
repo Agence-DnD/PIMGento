@@ -446,7 +446,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $this->getTable(),
                 array(
                     'entity_id'        => 'entity_id',
-                    'entity_type_id'   => $this->_zde(4),
+                    'entity_type_id'   => $this->_zde($this->_getEntityTypeId('catalog_product')),
                     'attribute_set_id' => $family,
                     'type_id'          => '_type_id',
                     'sku'              => 'code',
@@ -491,7 +491,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $values['visibility'] = $this->_zde('IF(`_type_id` = "simple" AND `groups` <> "", 1, 4)');
         }
 
-        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->_getEntityTypeId('catalog_product'), 0);
 
         /* @var $helper Pimgento_Core_Helper_Data */
         $helper = Mage::helper('pimgento_core');
@@ -555,7 +555,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                             }
 
                             $this->getRequest()->setValues(
-                                $this->getCode(), 'catalog/product', $values, 4, $storeId
+                                $this->getCode(), 'catalog/product', $values, $this->_getEntityTypeId('catalog_product'), $storeId
                             );
                         }
 
@@ -580,7 +580,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 }
 
                 $this->getRequest()->setValues(
-                    $this->getCode(), 'catalog/product', $values, 4, 0
+                    $this->getCode(), 'catalog/product', $values, $this->_getEntityTypeId('catalog_product'), 0
                 );
             }
 
@@ -828,7 +828,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
                 if (count($values)) {
                     $this->getRequest()->setValues(
-                        $this->getCode(), 'catalog/product', $values, 4, $data['id']
+                        $this->getCode(), 'catalog/product', $values, $this->_getEntityTypeId('catalog_product'), $data['id']
                     );
                 }
 
@@ -861,14 +861,14 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $priceId = $adapter->fetchOne(
             $adapter->select()
                 ->from($resource->getTable('eav/attribute'), array('attribute_id'))
-                ->where('entity_type_id = ?', 4)
+                ->where('entity_type_id = ?', $this->_getEntityTypeId('catalog_product'))
                 ->where('attribute_code = ?', 'price')
                 ->limit(1));
 
         $specialPriceId = $adapter->fetchOne(
             $adapter->select()
                 ->from($resource->getTable('eav/attribute'), array('attribute_id'))
-                ->where('entity_type_id = ?', 4)
+                ->where('entity_type_id = ?', $this->_getEntityTypeId('catalog_product'))
                 ->where('attribute_code = ?', 'special_price')
                 ->limit(1));
 

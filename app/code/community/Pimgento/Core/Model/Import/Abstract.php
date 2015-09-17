@@ -14,6 +14,11 @@ abstract class Pimgento_Core_Model_Import_Abstract
     protected $_code;
 
     /**
+     * @var array
+     */
+    protected $_entity_type_ids;
+
+    /**
      * Constructor
      */
     public function _construct()
@@ -184,6 +189,26 @@ abstract class Pimgento_Core_Model_Import_Abstract
     protected function _zde($value)
     {
         return new Zend_Db_Expr($value);
+    }
+
+    /**
+     * Get entity_type_id for a specified entity_type_code
+     *
+     * @param $type_code
+     *
+     * @return string
+     */
+    protected function _getEntityTypeId($type_code)
+    {
+        if (!isset($this->_entity_type_ids)) {
+             $this->_entity_type_ids = array();
+             $entity_types = Mage::getModel('eav/entity_type')->getCollection();
+             foreach ($entity_types as $type) {
+                 $this->_entity_type_ids[$type->getEntityTypeCode()] = $type->getId();
+             }
+
+        }
+        return $this->_entity_type_ids[$type_code];
     }
 
 }
