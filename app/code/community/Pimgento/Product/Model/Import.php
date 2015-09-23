@@ -441,27 +441,27 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $family = $this->_zde($product->getDefaultAttributeSetId());
         }
 
-        $parents = $adapter->select()
-            ->from(
-                $this->getTable(),
-                array(
-                    'entity_id'        => 'entity_id',
-                    'entity_type_id'   => $this->_zde(4),
-                    'attribute_set_id' => $family,
-                    'type_id'          => '_type_id',
-                    'sku'              => 'code',
-                    'has_options'      => $this->_zde(0),
-                    'required_options' => $this->_zde(0),
-                    'created_at'       => $this->_zde('now()'),
-                    'updated_at'       => $this->_zde('now()'),
-                )
-            );
-
-        $insert = $adapter->insertFromSelect(
-            $parents, $resource->getTable('catalog/product'), array(), 1
+        $values = array(
+            'entity_id'        => 'entity_id',
+            'entity_type_id'   => $this->_zde(4),
+            'attribute_set_id' => $family,
+            'type_id'          => '_type_id',
+            'sku'              => 'code',
+            'has_options'      => $this->_zde(0),
+            'required_options' => $this->_zde(0),
+            'updated_at'       => $this->_zde('now()'),
         );
 
-        $adapter->query($insert);
+        $parents = $adapter->select()->from($this->getTable(), $values);
+
+        $adapter->query(
+            $adapter->insertFromSelect($parents, $resource->getTable('catalog/product'), array_keys($values), 1)
+        );
+
+        $values = array(
+            'created_at' => $this->_zde('now()')
+        );
+        $adapter->update($resource->getTable('catalog/product'), $values, 'created_at IS NULL');
 
         return true;
     }
