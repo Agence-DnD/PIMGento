@@ -17,6 +17,7 @@
 "Log file","Log file"
 "CSV: line ending","CSV: line ending"
 "CSV: delimiter","CSV: delimiter"
+"CSV: Use MySql Load Data File","CSV: Use MySql Load Data File"
 "Admin language","Admin language"
 "Default language for admin values","Default language for admin values"
 "Add website mapping","Add website mapping"
