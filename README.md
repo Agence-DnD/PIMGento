@@ -53,13 +53,14 @@ alt="Video PIMGento for Akeneo" width="240" height="180" border="10" /></a>
 
 ## Requirements
 
-You have to install [DnD-MagentoConnectorBundle](https://github.com/Agence-DnD/DnD-MagentoConnectorBundle) for Akeneo >=1.3 in order to generate appropriate CSV files for Magento.
-
+* Akeneo 1.3 and 1.4
 * Magento >= 1.9 CE
 * Magento >= 1.14 EE
 * Set local_infile mysql variable to TRUE
 * Database encoding must be UTF-8
 * Flash Player
+
+With Akeneo 1.3 or 1.4, you need to install this Bundle (https://github.com/akeneo-labs/EnhancedConnectorBundle/) in order to generate appropriate CSV files for Magento.
 
 > Compatibility for previous Magento versions are in development (see [roadmap](#roadmap))
 
