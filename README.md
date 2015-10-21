@@ -82,7 +82,7 @@ With Akeneo 1.3 or 1.4, you need to install this Bundle (https://github.com/aken
 
 `"agence-dnd/pimgento":"dev-master"`
 
-- Add into the `requirements` section:
+- Add into the `repositories` section:
 
 ```
 	{
