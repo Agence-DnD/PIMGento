@@ -190,24 +190,21 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             }
         }
 
-        $family = 'family';
-
-        if (!$adapter->tableColumnExists($this->getTable(), 'family')) {
-            /* @var $product Mage_Catalog_Model_Product */
-            $product = Mage::getModel('catalog/product');
-
-            $family = $this->_zde($product->getDefaultAttributeSetId());
-        }
-
         $values = array(
             'code'               => 'groups',
             '_children'          => $this->_zde('GROUP_CONCAT(`code` SEPARATOR ",")'),
             '_attributes'        => '_attributes',
             '_type_id'           => $this->_zde('"configurable"'),
-            'family'             => $family,
             '_options_container' => $this->_zde('"container1"'),
-            'categories'         => 'categories',
         );
+
+        if ($this->columnExists('family')) {
+            $values['family'] = 'family';
+        }
+
+        if ($this->columnExists('categories')) {
+            $values['categories'] = 'categories';
+        }
 
         /* @var $helper Pimgento_Core_Helper_Data */
         $helper = Mage::helper('pimgento_core');
@@ -317,6 +314,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function updateFamily($task)
     {
+        if (!$this->columnsRequired(array('family'), $task)) {
+            return false;
+        }
+
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
@@ -324,10 +325,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $product = Mage::getModel('catalog/product');
 
         $defaultId = $product->getDefaultAttributeSetId();
-
-        if (!$this->columnsRequired(array('family'), $task)) {
-            $adapter->addColumn($this->getTable(), 'family', 'INT(11) NULL DEFAULT ' . $defaultId);
-        }
 
         /* @var $family Pimgento_Family_Model_Import */
         $family = Mage::getModel('pimgento_family/import');
@@ -432,19 +429,20 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
-        $family = 'family';
+        if (!$this->columnsRequired(array('family'), $task)) {
 
-        if (!$adapter->tableColumnExists($this->getTable(), 'family')) {
-            /* @var $product Mage_Catalog_Model_Porduct */
-            $product = Mage::getModel('catalog/product');
+            $entities = $adapter->select()->from(
+                $resource->getTable('catalog/product'), array('entity_id')
+            );
+            $adapter->delete($this->getTable(), array('entity_id NOT IN (?)' => $entities));
 
-            $family = $this->_zde($product->getDefaultAttributeSetId());
+            return false;
         }
 
         $values = array(
             'entity_id'        => 'entity_id',
             'entity_type_id'   => $this->_zde(4),
-            'attribute_set_id' => $family,
+            'attribute_set_id' => 'family',
             'type_id'          => '_type_id',
             'sku'              => 'code',
             'has_options'      => $this->_zde(0),
