@@ -70,10 +70,12 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $adapter  = $this->getAdapter();
 
+        $column = $this->columnExists('axis') ? 'axis' : 'attributes';
+
         $select = $adapter->select()
             ->from(
                 $this->getTable(),
-                array('code', 'axis')
+                array('code', $column)
             );
 
         $insert = $adapter->insertFromSelect(
