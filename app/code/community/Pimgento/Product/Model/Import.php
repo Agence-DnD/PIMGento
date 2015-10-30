@@ -215,6 +215,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $price = 'price';
         $specialPrice = 'special_price';
+        $msrp = 'msrp';
 
         foreach ($transformer as $attribute => $match) {
 
@@ -224,6 +225,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             if (in_array('special_price', $match)) {
                 $specialPrice = $attribute;
+            }
+
+            if (in_array('msrp', $match)) {
+                $msrp = $attribute;
             }
 
         }
@@ -242,6 +247,11 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         $specialPrice . '-' . $currency,
                         $specialPrice . '-' . $data['code'] . '-' . $currency,
                         $specialPrice . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
+                    ),
+                    'msrp' => array(
+                        $msrp . '-' . $currency,
+                        $msrp . '-' . $data['code'] . '-' . $currency,
+                        $msrp . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
                     ),
                 );
 
@@ -765,6 +775,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $price = 'price';
         $specialPrice = 'special_price';
+        $msrp = 'msrp';
 
         foreach ($transformer as $attribute => $match) {
 
@@ -774,6 +785,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             if (in_array('special_price', $match)) {
                 $specialPrice = $attribute;
+            }
+
+            if (in_array('msrp', $match)) {
+                $msrp = $attribute;
             }
 
         }
@@ -811,6 +826,11 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         $specialPrice . '-' . $currency,
                         $specialPrice . '-' . $data['code'] . '-' . $currency,
                         $specialPrice . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
+                    ),
+                    'msrp'          => array(
+                        $msrp . '-' . $currency,
+                        $msrp . '-' . $data['code'] . '-' . $currency,
+                        $msrp . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
                     ),
                 );
 
