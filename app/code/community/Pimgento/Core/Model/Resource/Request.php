@@ -251,18 +251,22 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
      */
     public function loadDataInfile($name, $file)
     {
-        $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
-        $linesTerminated  = Mage::getStoreConfig('pimdata/general/csv_lines_terminated');
+        $loadInfile = Mage::getStoreConfig('pimdata/general/csv_load_data_infile');
+        if (!$loadInfile) {
+            $this->loadData($name, $file);
+        } else {
+            $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
+            $linesTerminated = Mage::getStoreConfig('pimdata/general/csv_lines_terminated');
 
-        $query = "LOAD DATA INFILE '" . addslashes($file) . "' REPLACE
-              INTO TABLE " . $this->getTableName($name) . "
-              FIELDS TERMINATED BY '" . $fieldsTerminated . "'
-              OPTIONALLY ENCLOSED BY '\"'
-              LINES TERMINATED BY '" . $linesTerminated . "'
-              IGNORE 1 LINES;";
+            $query = "LOAD DATA INFILE '" . addslashes($file) . "' REPLACE
+                  INTO TABLE " . $this->getTableName($name) . "
+                  FIELDS TERMINATED BY '" . $fieldsTerminated . "'
+                  OPTIONALLY ENCLOSED BY '\"'
+                  LINES TERMINATED BY '" . $linesTerminated . "'
+                  IGNORE 1 LINES;";
 
-        $this->_query($query, array(PDO::MYSQL_ATTR_LOCAL_INFILE => 1));
-
+            $this->_query($query, array(PDO::MYSQL_ATTR_LOCAL_INFILE => 1));
+        }
         $adapter = $this->_getReadAdapter();
 
         return $adapter->fetchOne(
@@ -272,6 +276,71 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
                     array('count' => new Zend_Db_Expr('COUNT(*)'))
                 )
         );
+    }
+
+    /**
+     * Read in a file and process the lines.
+     *
+     * @param $name - destination table name
+     * @param $file - csv file holding data
+     *
+     * @throws Exception
+     *
+     * @return int - rows imported
+     */
+    public function loadData($name, $file)
+    {
+        if (!file_exists($file)) {
+            $message = sprintf("%s does not exist.", $file);
+            throw new Exception($message);
+        }
+
+        if (!is_readable($file)) {
+            $message = sprintf("Unable to read %s.", $file);
+            throw new Exception($message);
+        }
+
+        $file_handle = fopen($file, "r");
+
+        if ($file_handle === false) {
+            $message = sprintf("Unable to open %s.", $file);
+            throw new Exception($message);
+        }
+
+        $file_size = filesize($file);
+
+        if ($file_size == 0) {
+            fclose($file_handle);
+            return;
+        }
+
+        $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
+        $linesTerminated  = Mage::getStoreConfig('pimdata/general/csv_lines_terminated');
+
+        $columnNames = [];
+
+        $adapter = $this->_getWriteAdapter();
+        $table = $this->getTableName($name);
+
+        $row_count = 0;
+        while (($csv_line = fgetcsv($file_handle, 1000, $fieldsTerminated, $linesTerminated[0])) !== FALSE) {
+            if (++$row_count == 1) {
+                # Get column names as first row - assumes first row always has this data
+                foreach ($csv_line as $key => $value) {
+                    array_push($columnNames, $value);
+                }
+                continue;
+            }
+            # Build column => value map for insert
+            $columnValues = [];
+            foreach ($csv_line as $key => $value) {
+                $columnValues[$columnNames[$key]] = $value;
+
+            }
+            # Insert our row into the tmp table
+            $adapter->insert($table, $columnValues);
+        }
+        fclose($file_handle);
     }
 
     /**
