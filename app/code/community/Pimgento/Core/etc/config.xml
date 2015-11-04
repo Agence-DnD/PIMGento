@@ -120,6 +120,7 @@
                 <csv_lines_terminated>\n</csv_lines_terminated>
                 <csv_fields_terminated>;</csv_fields_terminated>
                 <admin_lang>en_US</admin_lang>
+                <csv_load_data_infile>1</csv_load_data_infile>
             </general>
         </pimdata>
     </default>

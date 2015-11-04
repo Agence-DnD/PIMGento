@@ -144,3 +144,4 @@
 "Flush catalog image cache","Flush catalog image cache"
 "Cache flushing is disabled","Cache flushing is disabled"
 "Disable attributes updating for configurable","Disable attributes updating for configurable"
+"CSV: Use MySql Load Data File","CSV: Use MySql Load Data File"
