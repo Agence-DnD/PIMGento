@@ -27,7 +27,9 @@ class Pimgento_Core_Model_Cron
 
         if ($command) {
             try {
-                $task->setFile($helper->getCronDir() . $file);
+                if ($file) {
+                    $task->setFile($helper->getCronDir() . $file);
+                }
 
                 while (!$task->taskIsOver()) {
                     $task->execute();

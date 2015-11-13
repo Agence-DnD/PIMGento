@@ -24,7 +24,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
     {
         $file = $task->getFile();
 
-        $this->getRequest()->createTableFromFile($this->getCode(), $file, 14);
+        $this->getRequest()->createTableFromFile($this->getCode(), $file);
 
         return true;
     }

@@ -134,7 +134,9 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $data    = array('code' => $sku);
             $gallery = array();
 
-            foreach ($pictures as $key => $picture) {
+            $key = 0;
+
+            foreach ($pictures as $picture) {
 
                 $ioAdapter->open(
                     array(
@@ -157,6 +159,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
                 $gallery[] = $picture['name'];
 
+                $key++;
             }
 
             $data['gallery'] = join(',', $gallery);
@@ -221,17 +224,47 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             $images = explode(',', $row['gallery']);
 
-            foreach ($images as $image) {
+            $table = $resource->getTable('catalog/product_attribute_media_gallery');
+
+            $adapter->delete($table, 'entity_id = ' . $row['entity_id']);
+
+            foreach ($images as $key => $image) {
 
                 $values = array(
-                   'attribute_id' => $attributeId,
-                   'entity_id'    => $row['entity_id'],
-                   'value'        => $image
+                    'attribute_id' => $attributeId,
+                    'entity_id'    => $row['entity_id'],
+                    'value'        => $image
                 );
 
-                $adapter->insertOnDuplicate(
-                    $resource->getTable('catalog/product_attribute_media_gallery'), $values, array('value')
-                );
+                $adapter->insertOnDuplicate($table, $values, array('value'));
+
+                /* Update position */
+                $valueId = $adapter->lastInsertId($table);
+
+                if (!$valueId) {
+                    $valueId = $adapter->fetchOne(
+                        $adapter->select()
+                            ->from($table, array('value_id'))
+                            ->where('attribute_id = ?', $attributeId)
+                            ->where('entity_id = ?', $row['entity_id'])
+                            ->where('value = ?', $image)
+                            ->limit(1)
+                    );
+                }
+
+                if ($valueId) {
+                    $values = array(
+                        'value_id' => $valueId,
+                        'store_id' => 0,
+                        'label'    => null,
+                        'position' => $key,
+                        'disabled' => 0
+                    );
+
+                    $adapter->insertOnDuplicate(
+                        $resource->getTable('catalog/product_attribute_media_gallery_value'), $values, array('position')
+                    );
+                }
 
             }
 
@@ -289,6 +322,29 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
         }
 
         Mage::dispatchEvent('shell_reindex_finalize_process');
+
+        return true;
+    }
+
+    /**
+     * Flush catalog image cache (Step 8)
+     *
+     * @param Pimgento_Core_Model_Task $task
+     *
+     * @return bool
+     */
+    public function cleanImage($task)
+    {
+        if (!Mage::getStoreConfig('pimdata/image/cache')) {
+            $task->setMessage(
+                Mage::helper('pimgento_image')->__('Cache flushing is disabled')
+            );
+            return false;
+        }
+
+        Mage::getModel('catalog/product_image')->clearCache();
+
+        Mage::dispatchEvent('clean_catalog_images_cache_after');
 
         return true;
     }

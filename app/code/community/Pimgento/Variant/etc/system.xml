@@ -10,10 +10,10 @@
     <sections>
         <pimdata>
             <groups>
-                <family translate="label" module="pimgento_core">
-                    <label>Families</label>
+                <variant translate="label" module="pimgento_core">
+                    <label>Variant</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>3</sort_order>
+                    <sort_order>7</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
                     <show_in_store>0</show_in_store>
@@ -53,27 +53,8 @@
                                 <cron_enabled>1</cron_enabled>
                             </depends>
                         </cron_file>
-                        <cache translate="label">
-                            <label>Clear cache</label>
-                            <frontend_type>multiselect</frontend_type>
-                            <source_model>pimgento_core/system_config_source_cache_type</source_model>
-                            <comment>Clear a specific cache after import</comment>
-                            <sort_order>4</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </cache>
-                        <exclusions>
-                            <label>PIM code exclusion</label>
-                            <frontend_type>text</frontend_type>
-                            <comment>Comma separated</comment>
-                            <sort_order>5</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </exclusions>
                     </fields>
-                </family>
+                </variant>
             </groups>
         </pimdata>
     </sections>

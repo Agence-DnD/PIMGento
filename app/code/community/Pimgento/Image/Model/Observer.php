@@ -59,6 +59,10 @@ class Pimgento_Image_Model_Observer
                         'method'  => 'pimgento_image/import::reindex'
                     ),
                     8 => array(
+                        'comment' => $helper->__('Flush catalog image cache'),
+                        'method'  => 'pimgento_image/import::cleanImage'
+                    ),
+                    9 => array(
                         'comment' => $helper->__('Clean cache'),
                         'method'  => 'pimgento_image/import::cleanCache'
                     ),

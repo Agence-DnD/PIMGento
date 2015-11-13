@@ -179,28 +179,28 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
-        $parents = $adapter->select()
-            ->from(
-                $this->getTable(),
-                array(
-                    'entity_id'        => 'entity_id',
-                    'entity_type_id'   => $this->_zde(3),
-                    'attribute_set_id' => $this->_zde(3),
-                    'parent_id'        => 'parent_id',
-                    'created_at'       => $this->_zde('now()'),
-                    'updated_at'       => $this->_zde('now()'),
-                    'path'             => 'path',
-                    'position'         => 'position',
-                    'level'            => 'level',
-                    'children_count'   => $this->_zde('0'),
-                )
-            );
-
-        $insert = $adapter->insertFromSelect(
-            $parents, $resource->getTable('catalog/category'), array(), 1
+        $values = array(
+            'entity_id'        => 'entity_id',
+            'entity_type_id'   => $this->_zde(3),
+            'attribute_set_id' => $this->_zde(3),
+            'parent_id'        => 'parent_id',
+            'updated_at'       => $this->_zde('now()'),
+            'path'             => 'path',
+            'position'         => 'position',
+            'level'            => 'level',
+            'children_count'   => $this->_zde('0'),
         );
 
-        $adapter->query($insert);
+        $parents = $adapter->select()->from($this->getTable(), $values);
+
+        $adapter->query(
+            $adapter->insertFromSelect($parents, $resource->getTable('catalog/category'), array_keys($values), 1)
+        );
+
+        $values = array(
+            'created_at' => $this->_zde('now()')
+        );
+        $adapter->update($resource->getTable('catalog/category'), $values, 'created_at IS NULL');
 
         return true;
     }

@@ -21,7 +21,16 @@ class Pimgento_Attribute_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $this->launch('pimgento_attribute', Mage::getStoreConfig('pimdata/attribute/cron_file'));
+        $cronFiles = Mage::getStoreConfig('pimdata/attribute/cron_file');
+
+        if ($cronFiles) {
+            $files = explode(';', $cronFiles);
+            foreach ($files as $file) {
+                if ($file) {
+                    $this->launch('pimgento_attribute', $file);
+                }
+            }
+        }
 
         return $this;
     }
