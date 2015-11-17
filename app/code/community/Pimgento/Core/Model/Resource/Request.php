@@ -290,32 +290,23 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
      */
     public function loadData($name, $file)
     {
-        if (!file_exists($file)) {
-            $message = sprintf("%s does not exist.", $file);
+        $file_handle = new SplFileObject($file);
+
+        if (!$file_handle->isFile()) {
+            $message = sprintf("%s is not a file.", $file);
             throw new Exception($message);
         }
 
-        if (!is_readable($file)) {
+        if (!$file_handle->isReadable()) {
             $message = sprintf("Unable to read %s.", $file);
             throw new Exception($message);
         }
 
-        $file_handle = fopen($file, "r");
-
-        if ($file_handle === false) {
-            $message = sprintf("Unable to open %s.", $file);
-            throw new Exception($message);
-        }
-
-        $file_size = filesize($file);
-
-        if ($file_size == 0) {
-            fclose($file_handle);
+        if ($file_handle->getSize() == 0) {
             return;
         }
 
         $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
-        $linesTerminated  = Mage::getStoreConfig('pimdata/general/csv_lines_terminated');
 
         $columnNames = [];
 
@@ -323,24 +314,31 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
         $table = $this->getTableName($name);
 
         $row_count = 0;
-        while (($csv_line = fgetcsv($file_handle, 1000, $fieldsTerminated, $linesTerminated[0])) !== FALSE) {
+
+        while (!$file_handle->eof()) {
+            $csv_line = $file_handle->fgetcsv($fieldsTerminated);
+
             if (++$row_count == 1) {
                 # Get column names as first row - assumes first row always has this data
                 foreach ($csv_line as $key => $value) {
-                    array_push($columnNames, $value);
+                    if ($value) {
+                        array_push($columnNames, $value);
+                    }
                 }
                 continue;
             }
+
             # Build column => value map for insert
             $columnValues = [];
             foreach ($csv_line as $key => $value) {
-                $columnValues[$columnNames[$key]] = $value;
-
+                if (isset($columnNames[$key])) {
+                    $columnValues[$columnNames[$key]] = $value;
+                }
             }
+
             # Insert our row into the tmp table
             $adapter->insert($table, $columnValues);
         }
-        fclose($file_handle);
     }
 
     /**
