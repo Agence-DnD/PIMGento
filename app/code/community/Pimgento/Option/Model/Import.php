@@ -14,6 +14,27 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
     protected $_code = 'option';
 
     /**
+     * Remove exclusion from config
+     *
+     * @return bool
+     */
+    public function deleteExclusion()
+    {
+        parent::deleteExclusion();
+
+        $exclusions = Mage::getStoreConfig('pimdata/attribute/exclusions');
+
+        if ($exclusions) {
+            $exclusions = explode(',', $exclusions);
+            foreach ($exclusions as $code) {
+                $this->getAdapter()->delete($this->getTable(), array('attribute = ?' => $code));
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Create table (Step 1)
      *
      * @param Pimgento_Core_Model_Task $task
