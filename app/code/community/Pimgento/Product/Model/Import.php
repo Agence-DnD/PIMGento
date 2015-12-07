@@ -1121,7 +1121,101 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Drop table (Step 17)
+     * Insert Asset (images) (Step 17)
+     *
+     * @param Pimgento_Core_Model_Task $task
+     *
+     * @return bool
+     */
+    public function setAsset($task)
+    {
+        $resource = $this->getResource();
+        $adapter  = $this->getAdapter();
+        $helper   = Mage::helper('pimgento_asset');
+
+        if (!Mage::helper('core')->isModuleEnabled('Pimgento_Asset')) {
+            $task->setMessage(
+                $helper->__('Asset import is not available')
+            );
+            return false;
+        }
+
+        if (!$adapter->isTableExists('pimgento_asset')) {
+            $task->setMessage(
+                $helper->__('Asset import is not available')
+            );
+            return false;
+        }
+
+        /* @var $assetModel Pimgento_Asset_Model_Import */
+        $assetModel = Mage::getModel('pimgento_asset/import');
+
+        $attributeCode = Mage::getStoreConfig('pimdata/' . $assetModel->getCode() . '/attribute');
+
+        if (!$attributeCode) {
+            $task->setMessage(
+                $helper->__('Please select asset attribute in Pimgento Configuration (Asset)')
+            );
+            return false;
+        }
+
+        if (!$adapter->tableColumnExists($this->getTable(), $attributeCode)) {
+            $task->setMessage(
+                $helper->__('Column "%s" not found', $attributeCode)
+            );
+            return false;
+        }
+
+        $attribute = $resource->getAttribute('media_gallery', 4);
+
+        if (!$attribute) {
+            $task->setMessage($helper->__('Attribute %s not found', 'media_gallery'));
+            return false;
+        }
+
+        $attributeId = $attribute['attribute_id'];
+
+        $exists = $adapter->select()->from(
+            $resource->getTable('catalog/product_attribute_media_gallery'),
+            array('value')
+        );
+
+        $select = $adapter->select()
+            ->from(
+                array(
+                    'a' => $adapter->getTableName('pimgento_asset')
+                ),
+                array()
+            )
+            ->joinInner(
+                array('p' => $this->getTable()),
+                'FIND_IN_SET(`a`.`asset`, `p`.`' . $attributeCode . '`)',
+                array(
+                    'attribute_id' => $this->_zde($attributeId),
+                    'entity_id'    => 'p.entity_id',
+                    'value'        => 'a.image',
+                )
+            )
+            ->joinInner(
+                array('e' => $resource->getTable('catalog/product')),
+                'p.entity_id = e.entity_id',
+                array()
+            )
+            ->where('a.image NOT IN (?)', $exists);
+
+        $insert = $adapter->insertFromSelect(
+            $select, $resource->getTable('catalog/product_attribute_media_gallery'),
+            array('attribute_id', 'entity_id', 'value'),
+            1
+        );
+
+        $adapter->query($insert);
+
+        return true;
+    }
+
+    /**
+     * Drop table (Step 18)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -1135,7 +1229,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Reindex (Step 18)
+     * Reindex (Step 19)
      *
      * @param Pimgento_Core_Model_Task $task
      *
