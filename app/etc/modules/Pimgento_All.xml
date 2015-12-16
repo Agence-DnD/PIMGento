@@ -57,6 +57,13 @@
                 <Pimgento_Core />
             </depends>
         </Pimgento_Variant>
+        <Pimgento_Asset>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Pimgento_Core />
+            </depends>
+        </Pimgento_Asset>
         <Pimgento_Product>
             <active>true</active>
             <codePool>community</codePool>

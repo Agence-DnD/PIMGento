@@ -17,7 +17,7 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
     {
         $stores = Mage::app()->getStores();
 
-        $adminLang = Mage::getStoreConfig('pimdata/general/admin_lang');
+        $adminLang = Mage::getStoreConfig('general/locale/code', 0);
 
         if (!$adminLang) {
             $adminLang = 'en_US';
@@ -53,7 +53,7 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
             $default = 'USD';
         }
 
-        $adminLang = Mage::getStoreConfig('pimdata/general/admin_lang');
+        $adminLang = Mage::getStoreConfig('general/locale/code', 0);
 
         if (!$adminLang) {
             $adminLang = 'en_US';
@@ -117,7 +117,7 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
         $website = Mage::getModel('core/website')->load(1, 'is_default');
 
         $code    = $this->getChannel($website->getCode());
-        $local   = Mage::getStoreConfig('pimdata/general/admin_lang');
+        $local   = Mage::getStoreConfig('general/locale/code', 0);
 
         if (!isset($websites[$code])) {
             $websites[$code] = array();

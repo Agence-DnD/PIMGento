@@ -21,7 +21,7 @@ class Pimgento_Core_Model_Log
         $error = $observer->getEvent()->getError();
 
         if ($this->getFile()) {
-            $this->_log($error, Zend_Log::ERR, $this->getFile());
+            $this->_log($error, Zend_Log::ERR);
         }
 
         return $this;

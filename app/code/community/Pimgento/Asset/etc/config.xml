@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author    Agence Dn'D <magento@dnd.fr>
+ * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Pimgento_Asset>
+            <version>1.0.0</version>
+        </Pimgento_Asset>
+    </modules>
+    <global>
+        <models>
+            <pimgento_asset>
+                <class>Pimgento_Asset_Model</class>
+            </pimgento_asset>
+        </models>
+        <resources>
+            <pimgento_asset_setup>
+                <setup>
+                    <module>Pimgento_Asset</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </pimgento_asset_setup>
+        </resources>
+        <helpers>
+            <pimgento_asset>
+                <class>Pimgento_Asset_Helper</class>
+            </pimgento_asset>
+        </helpers>
+        <events>
+            <task_executor_load_task>
+                <observers>
+                    <pimgento_asset_add_task>
+                        <class>pimgento_asset/observer</class>
+                        <method>addTask</method>
+                    </pimgento_asset_add_task>
+                </observers>
+            </task_executor_load_task>
+        </events>
+    </global>
+    <default>
+        <pimdata>
+            <asset>
+                <cron_enabled>0</cron_enabled>
+                <cron_file>asset.csv</cron_file>
+            </asset>
+        </pimdata>
+    </default>
+    <crontab>
+        <jobs>
+            <pimdata_asset_cron>
+                <run>
+                    <model>pimgento_asset/cron::run</model>
+                </run>
+            </pimdata_asset_cron>
+        </jobs>
+    </crontab>
+</config>
