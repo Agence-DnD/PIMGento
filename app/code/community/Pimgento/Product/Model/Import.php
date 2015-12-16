@@ -991,7 +991,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 array(
                     'category_id' => 'c.entity_id',
                     'product_id'  => 'p.entity_id',
-                    'position'    => $this->_zde(0)
                 )
             )
             ->joinInner(
@@ -1001,7 +1000,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $insert = $adapter->insertFromSelect(
-            $select, $resource->getTable('catalog/category_product'), array('category_id', 'product_id', 'position'), 1
+            $select, $resource->getTable('catalog/category_product'), array('category_id', 'product_id'), 1
         );
 
         $adapter->query($insert);
