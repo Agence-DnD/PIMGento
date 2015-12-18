@@ -124,11 +124,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
+        $adapter->query('SET SESSION group_concat_max_len = 1000000;');
+
         if (!$this->columnsRequired(array('groups'), $task)) {
             return false;
         }
 
-        $adapter->addColumn($this->getTable(), '_children',   'VARCHAR(255) NULL');
+        $adapter->addColumn($this->getTable(), '_children',   'TEXT NULL');
         $adapter->addColumn($this->getTable(), '_attributes', 'VARCHAR(255) NOT NULL DEFAULT ""');
 
         if ($adapter->isTableExists('pimgento_variant')) {
