@@ -642,6 +642,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             $attributes = explode(',', $row['_attributes']);
 
+            $position = 0;
             foreach ($attributes as $id) {
 
                 if (!$id) {
@@ -655,7 +656,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $values = array(
                     'product_id'   => $row['entity_id'],
                     'attribute_id' => $id,
-                    'position'     => 1,
+                    'position'     => $position++,
                 );
 
                 $adapter->insertIgnore($resource->getTable('catalog/product_super_attribute'), $values);
