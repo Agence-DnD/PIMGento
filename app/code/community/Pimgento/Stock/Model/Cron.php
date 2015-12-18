@@ -25,9 +25,9 @@ class Pimgento_Stock_Model_Cron extends Pimgento_Core_Model_Cron
 
         if ($cronFiles) {
             $files = explode(';', $cronFiles);
-            foreach ($files as $file) {
+            foreach ($files as $key => $file) {
                 if ($file) {
-                    $this->launch('update_stock', $file);
+                    $this->launch('update_stock', $file, ($key == count($files) - 1));
                 }
             }
         }

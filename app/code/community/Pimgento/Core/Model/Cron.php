@@ -13,22 +13,35 @@ class Pimgento_Core_Model_Cron
      *
      * @param string $command
      * @param string $file
+     * @param bool   $reindex
      *
      * @return $this
      */
-    public function launch($command, $file = null)
+    public function launch($command, $file = null, $reindex = true)
     {
         /* @var $helper Pimgento_Core_Helper_Data */
         $helper = Mage::helper('pimgento_core');
 
         /* @var $model Pimgento_Core_Model_Task */
         $model = Mage::getSingleton('pimgento_core/task');
-        $task = $model->load($command);
 
         if ($command) {
             try {
+                $task = $model->load($command);
+
+                $task->setFile(null);
                 if ($file) {
                     $task->setFile($helper->getCronDir() . $file);
+                }
+
+                $data = $task->getTask();
+                if ($data['type'] == 'file' && !is_file($task->getFile())) {
+                    return $this;
+                }
+
+                $task->setNoReindex(false);
+                if (!$reindex) {
+                    $task->setNoReindex(true);
                 }
 
                 while (!$task->taskIsOver()) {

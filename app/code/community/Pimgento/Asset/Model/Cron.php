@@ -25,9 +25,9 @@ class Pimgento_Asset_Model_Cron extends Pimgento_Core_Model_Cron
 
         if ($cronFiles) {
             $files = explode(';', $cronFiles);
-            foreach ($files as $file) {
+            foreach ($files as $key => $file) {
                 if ($file) {
-                    $this->launch('pimgento_asset', $file);
+                    $this->launch('pimgento_asset', $file, ($key == count($files) - 1));
                 }
             }
         }
