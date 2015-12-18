@@ -97,6 +97,7 @@ With Akeneo 1.3 or 1.4, you need to install this Bundle (https://github.com/aken
 
 ## Configuration and Usage
 
+* Allow magento to follow symlinks in "System > Advanced > Developer > Templates Settings" (set to "yes")
 * Configure your store language and currency before import
 * After category import, set the "Root Category" for store in "System > Manage Store"
 * After attributes import, set attributes used to create configurable products
