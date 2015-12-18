@@ -220,4 +220,28 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
         return true;
     }
 
+    /**
+     * Remove exclusion from config
+     *
+     * @return bool
+     */
+    public function deleteExclusion()
+    {
+        parent::deleteExclusion();
+
+        /* @var $attribute Pimgento_Attribute_Model_Import */
+        $attribute = Mage::getModel('pimgento_attribute/import');
+
+        $exclusions = Mage::getStoreConfig('pimdata/' . $attribute->getCode() . '/exclusions');
+
+        if ($exclusions) {
+            $exclusions = explode(',', $exclusions);
+            foreach ($exclusions as $code) {
+                $this->getAdapter()->delete($this->getTable(), array('attribute = ?' => $code));
+            }
+        }
+
+        return true;
+    }
+
 }
