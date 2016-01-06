@@ -21,14 +21,11 @@ class Pimgento_Category_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $cronFiles = Mage::getStoreConfig('pimdata/category/cron_file');
+        $files = $this->getFiles('category');
 
-        if ($cronFiles) {
-            $files = explode(';', $cronFiles);
+        if (count($files)) {
             foreach ($files as $key => $file) {
-                if ($file) {
-                    $this->launch('pimgento_category', $file, ($key == count($files) - 1));
-                }
+                $this->launch('pimgento_category', $file, ($key == count($files) - 1));
             }
         }
 

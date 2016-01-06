@@ -21,14 +21,11 @@ class Pimgento_Variant_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $cronFiles = Mage::getStoreConfig('pimdata/variant/cron_file');
+        $files = $this->getFiles('variant');
 
-        if ($cronFiles) {
-            $files = explode(';', $cronFiles);
+        if (count($files)) {
             foreach ($files as $key => $file) {
-                if ($file) {
-                    $this->launch('pimgento_variant', $file, ($key == count($files) - 1));
-                }
+                $this->launch('pimgento_variant', $file, ($key == count($files) - 1));
             }
         }
 

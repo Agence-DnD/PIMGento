@@ -21,14 +21,11 @@ class Pimgento_Stock_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $cronFiles = Mage::getStoreConfig('pimdata/stock/cron_file');
+        $files = $this->getFiles('stock');
 
-        if ($cronFiles) {
-            $files = explode(';', $cronFiles);
+        if (count($files)) {
             foreach ($files as $key => $file) {
-                if ($file) {
-                    $this->launch('update_stock', $file, ($key == count($files) - 1));
-                }
+                $this->launch('update_stock', $file, ($key == count($files) - 1));
             }
         }
 

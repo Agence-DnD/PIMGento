@@ -21,14 +21,11 @@ class Pimgento_Attribute_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $cronFiles = Mage::getStoreConfig('pimdata/attribute/cron_file');
+        $files = $this->getFiles('attribute');
 
-        if ($cronFiles) {
-            $files = explode(';', $cronFiles);
+        if (count($files)) {
             foreach ($files as $key => $file) {
-                if ($file) {
-                    $this->launch('pimgento_attribute', $file, ($key == count($files) - 1));
-                }
+                $this->launch('pimgento_attribute', $file, ($key == count($files) - 1));
             }
         }
 

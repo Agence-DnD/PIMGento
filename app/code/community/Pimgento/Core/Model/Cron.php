@@ -57,4 +57,33 @@ class Pimgento_Core_Model_Cron
         return $this;
     }
 
+    /**
+     * Retrieve files
+     *
+     * @param string $import
+     *
+     * @return array
+     */
+    public function getFiles($import)
+    {
+        /* @var $helper Pimgento_Core_Helper_Data */
+        $helper = Mage::helper('pimgento_core');
+
+        $cronFiles = Mage::getStoreConfig('pimdata/' . $import . '/cron_file');
+
+        $import = array();
+
+        if ($cronFiles) {
+            $files = explode(';', $cronFiles);
+
+            foreach ($files as $key => $file) {
+                if (is_file($helper->getCronDir() . trim($file))) {
+                    $import[] = trim($file);
+                }
+            }
+        }
+
+        return $import;
+    }
+
 }
