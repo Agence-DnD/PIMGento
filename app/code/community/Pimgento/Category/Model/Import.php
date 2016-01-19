@@ -386,6 +386,8 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $this->getRequest()->dropTable($this->getCode());
 
+        Mage::dispatchEvent('task_executor_drop_table_after', array('task' => $task));
+
         return true;
     }
 
