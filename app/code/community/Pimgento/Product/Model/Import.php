@@ -1083,6 +1083,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
         }
 
+        if ($this->columnExists('X_SELL-products')) {
+            $related[] = array(
+                'type_id' => 5,
+                'column'  => 'X_SELL-products',
+            );
+        }
+
         foreach ($related as $type) {
             /* @var $product Pimgento_Product_Model_Import */
             $product = Mage::getModel('pimgento_product/import');
