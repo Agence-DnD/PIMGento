@@ -79,7 +79,7 @@ class Pimgento_Core_Model_Cron
             foreach ($files as $key => $file) {
                 $path = $helper->getCronDir() . trim($file);
                 if (is_file($path)) {
-                    if (filesize($path) > 0) {
+                    if (filesize($path) > 1) {
                         $import[] = trim($file);
                     }
                 }
