@@ -315,7 +315,7 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
         }
 
         $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
-        $linesTerminated  = Mage::getStoreConfig('pimdata/general/csv_lines_terminated');
+        $fieldsEnclosure  = Mage::getStoreConfig('pimdata/general/csv_fields_enclosure');
 
         $columnNames = [];
 
@@ -323,7 +323,7 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
         $table = $this->getTableName($name);
 
         $row_count = 0;
-        while (($csv_line = fgetcsv($file_handle, 1000, $fieldsTerminated, $linesTerminated[0])) !== FALSE) {
+        while (($csv_line = fgetcsv($file_handle, 0, $fieldsTerminated, $fieldsEnclosure)) !== FALSE) {
             if (++$row_count == 1) {
                 # Get column names as first row - assumes first row always has this data
                 foreach ($csv_line as $key => $value) {

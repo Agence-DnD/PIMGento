@@ -124,11 +124,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
+        $adapter->query('SET SESSION group_concat_max_len = 1000000;');
+
         if (!$this->columnsRequired(array('groups'), $task)) {
             return false;
         }
 
-        $adapter->addColumn($this->getTable(), '_children',   'VARCHAR(255) NULL');
+        $adapter->addColumn($this->getTable(), '_children',   'TEXT NULL');
         $adapter->addColumn($this->getTable(), '_attributes', 'VARCHAR(255) NOT NULL DEFAULT ""');
 
         if ($adapter->isTableExists('pimgento_variant')) {
@@ -1085,6 +1087,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
         }
 
+        if ($this->columnExists('X_SELL-products')) {
+            $related[] = array(
+                'type_id' => 5,
+                'column'  => 'X_SELL-products',
+            );
+        }
+
         foreach ($related as $type) {
             /* @var $product Pimgento_Product_Model_Import */
             $product = Mage::getModel('pimgento_product/import');
@@ -1230,6 +1239,8 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $this->getRequest()->dropTable($this->getCode());
 
+        Mage::dispatchEvent('task_executor_drop_table_after', array('task' => $task));
+
         return true;
     }
 
@@ -1242,6 +1253,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function reindex($task)
     {
+        if ($task->getNoReindex()) {
+            return false;
+        }
+
         if (!$this->getConfig('reindex')) {
             $task->setMessage(
                 Mage::helper('pimgento_product')->__('Reindex is disabled')

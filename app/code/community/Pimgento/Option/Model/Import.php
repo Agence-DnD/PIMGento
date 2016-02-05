@@ -175,6 +175,8 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $this->getRequest()->dropTable($this->getCode());
 
+        Mage::dispatchEvent('task_executor_drop_table_after', array('task' => $task));
+
         return true;
     }
 
@@ -187,6 +189,10 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function reindex($task)
     {
+        if ($task->getNoReindex()) {
+            return false;
+        }
+
         if (!$this->getConfig('reindex')) {
             $task->setMessage(
                 Mage::helper('pimgento_option')->__('Reindex is disabled')
@@ -212,6 +218,30 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
         }
 
         Mage::dispatchEvent('shell_reindex_finalize_process');
+
+        return true;
+    }
+
+    /**
+     * Remove exclusion from config
+     *
+     * @return bool
+     */
+    public function deleteExclusion()
+    {
+        parent::deleteExclusion();
+
+        /* @var $attribute Pimgento_Attribute_Model_Import */
+        $attribute = Mage::getModel('pimgento_attribute/import');
+
+        $exclusions = Mage::getStoreConfig('pimdata/' . $attribute->getCode() . '/exclusions');
+
+        if ($exclusions) {
+            $exclusions = explode(',', $exclusions);
+            foreach ($exclusions as $code) {
+                $this->getAdapter()->delete($this->getTable(), array('attribute = ?' => $code));
+            }
+        }
 
         return true;
     }
