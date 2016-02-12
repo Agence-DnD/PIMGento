@@ -457,8 +457,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'attribute_set_id' => 'family',
             'type_id'          => '_type_id',
             'sku'              => 'code',
-            'has_options'      => $this->_zde(0),
-            'required_options' => $this->_zde(0),
             'updated_at'       => $this->_zde('now()'),
         );
 
