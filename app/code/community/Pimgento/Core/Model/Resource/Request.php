@@ -204,7 +204,9 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
                         );
 
                     if ($this->columnExists($this->getTableName($name), $value)) {
-                        $select->where('TRIM(`' . $value . '`) <> ?', new Zend_Db_Expr('""'));
+                        if ($name != 'product' && $entityTypeId != 4) {
+                            $select->where('TRIM(`' . $value . '`) <> ?', new Zend_Db_Expr('""'));
+                        }
                     }
 
                     $backendType = $attribute['backend_type'];
