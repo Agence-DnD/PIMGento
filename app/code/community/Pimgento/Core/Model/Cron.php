@@ -14,10 +14,11 @@ class Pimgento_Core_Model_Cron
      * @param string $command
      * @param string $file
      * @param bool   $reindex
+     * @param Mage_Cron_Model_Schedule $schedule
      *
      * @return $this
      */
-    public function launch($command, $file = null, $reindex = true)
+    public function launch($command, $file = null, $reindex = true, $schedule = null)
     {
         /* @var $helper Pimgento_Core_Helper_Data */
         $helper = Mage::helper('pimgento_core');
@@ -44,10 +45,26 @@ class Pimgento_Core_Model_Cron
                     $task->setNoReindex(true);
                 }
 
+                Mage::dispatchEvent(
+                    'task_executor_cron_start',
+                    array(
+                        'schedule' => $schedule,
+                        'task'     => $task,
+                    )
+                );
+
                 while (!$task->taskIsOver()) {
                     $task->execute();
                     $task->nextStep();
                 }
+
+                Mage::dispatchEvent(
+                    'task_executor_cron_end',
+                    array(
+                        'schedule' => $schedule,
+                        'task'     => $task,
+                    )
+                );
 
             } catch(Exception $e) {
                 $task->dispatchError($e->getMessage());

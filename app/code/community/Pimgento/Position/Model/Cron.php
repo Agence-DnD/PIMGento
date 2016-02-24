@@ -25,7 +25,7 @@ class Pimgento_Position_Model_Cron extends Pimgento_Core_Model_Cron
 
         if (count($files)) {
             foreach ($files as $key => $file) {
-                $this->launch('update_position', $file, ($key == count($files) - 1));
+                $this->launch('update_position', $file, ($key == count($files) - 1), $schedule);
             }
         }
 

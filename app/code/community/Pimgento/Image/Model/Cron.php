@@ -21,7 +21,7 @@ class Pimgento_Image_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $this->launch('pimgento_image');
+        $this->launch('pimgento_image', null, true, $schedule);
 
         return $this;
     }
