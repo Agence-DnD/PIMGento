@@ -89,13 +89,17 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
         /* @var $attribute Pimgento_Attribute_Model_Import */
         $attribute = Mage::getModel('pimgento_attribute/import');
 
+        $columns = array(
+            'option_id'  => 'a.entity_id',
+            'sort_order' => $this->_zde('"0"')
+        );
+
+        if ($this->getRequest()->columnExists($this->getTable(), 'sort_order')) {
+            $columns['sort_order'] = 'a.sort_order';
+        }
+
         $options = $adapter->select()
-            ->from(
-                array('a' => $this->getTable()),
-                array(
-                    'option_id' => 'a.entity_id',
-                )
-            )
+            ->from(array('a' => $this->getTable()), $columns)
             ->joinInner(
                 array('b' => $resource->getTable('pimgento_core/code')),
                 'a.attribute = b.code AND b.import = "' . $attribute->getCode() . '"',
@@ -105,7 +109,7 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $insert = $adapter->insertFromSelect(
-            $options, $resource->getTable('eav/attribute_option'), array('option_id', 'attribute_id'), 2
+            $options, $resource->getTable('eav/attribute_option'), array('option_id', 'sort_order', 'attribute_id'), 1
         );
 
         $adapter->query($insert);
