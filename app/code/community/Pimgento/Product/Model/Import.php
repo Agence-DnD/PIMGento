@@ -527,9 +527,9 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
                 if (preg_match('/^(.*)-(.*)$/', $column)) {
 
-                    if (preg_match('/^(?P<attribute>[^-]*)-' . $code . '$/', $column, $matches)) {
+                    $translation = true;
 
-                        $translation = true;
+                    if (preg_match('/^(?P<attribute>[^-]*)-' . $code . '$/', $column, $matches)) {
 
                         foreach ($ids as $key => $storeId) {
 
@@ -587,11 +587,11 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     foreach ($match as $attribute) {
                         $values[$attribute] = $column;
                     }
-
-                    $this->getRequest()->setValues(
-                        $this->getCode(), 'catalog/product', $values, 4, 0
-                    );
                 }
+
+                $this->getRequest()->setValues(
+                    $this->getCode(), 'catalog/product', $values, 4, 0
+                );
             }
 
         }
