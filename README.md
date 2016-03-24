@@ -49,7 +49,7 @@ With PIMGento, you can import :
 " target="_blank"><img src="http://img.youtube.com/vi/MpC01qVIVFA/0.jpg" 
 alt="Video PIMGento for Akeneo" width="240" height="180" border="10" /></a>
 
-* Configuration options for the backend [(Sceenshots)](http://imgur.com/a/OUnNl)
+* Configuration options for the backend [(Screenshots)](http://imgur.com/a/OUnNl)
 
 ## Requirements
 
