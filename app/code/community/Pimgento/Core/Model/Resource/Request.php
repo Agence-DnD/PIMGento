@@ -191,20 +191,30 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
 
                 if ($attribute['backend_type'] !== 'static') {
 
-                    $select = $adapter->select()
-                        ->from(
-                            $this->getTableName($name),
-                            array(
-                                'entity_type_id' => new Zend_Db_Expr($entityTypeId),
-                                'attribute_id'   => new Zend_Db_Expr($attribute['attribute_id']),
-                                'store_id'       => new Zend_Db_Expr($storeId),
-                                'entity_id'      => 'entity_id',
-                                'value'          => $value
-                            )
-                        );
-
-                    if ($this->columnExists($this->getTableName($name), $value)) {
-                        $select->where('TRIM(`' . $value . '`) <> ?', new Zend_Db_Expr('""'));
+                    if($value instanceof Zend_Db_Expr){
+                        $select = $adapter->select()
+                            ->from(
+                                $this->getTableName($name),
+                                array(
+                                    'entity_type_id' => new Zend_Db_Expr($entityTypeId),
+                                    'attribute_id'   => new Zend_Db_Expr($attribute['attribute_id']),
+                                    'store_id'       => new Zend_Db_Expr($storeId),
+                                    'entity_id'      => 'entity_id',
+                                    'value'          => $value,
+                                )
+                            );
+                    } else {
+                        $select = $adapter->select()
+                            ->from(
+                                $this->getTableName($name),
+                                array(
+                                    'entity_type_id' => new Zend_Db_Expr($entityTypeId),
+                                    'attribute_id'   => new Zend_Db_Expr($attribute['attribute_id']),
+                                    'store_id'       => new Zend_Db_Expr($storeId),
+                                    'entity_id'      => 'entity_id',
+                                    'value'          => new Zend_Db_Expr('IF(`' . $this->getTableName($name) . '`.`' . $value . '` <> "",`' . $this->getTableName($name) . '`.`' . $value . '`,NULL)'),
+                                )
+                            );
                     }
 
                     $backendType = $attribute['backend_type'];
