@@ -743,7 +743,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         foreach ($websites as $website) {
             $select = $adapter->select()
                 ->from(
-                    $resource->getTable('catalog/product'),
+                    $resource->getTable('pimgento_core/code'),
                     array(
                         'product_id' => 'entity_id',
                         'website_id' => $this->_zde($website->getId())
