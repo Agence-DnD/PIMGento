@@ -1092,6 +1092,34 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
         }
 
+        if ($this->columnExists('RELATED-groups')) {
+            $related[] = array(
+                'type_id' => 1,
+                'column'  => 'RELATED-groups',
+            );
+        }
+
+        if ($this->columnExists('UPSELL-groups')) {
+            $related[] = array(
+                'type_id' => 4,
+                'column'  => 'UPSELL-groups',
+            );
+        }
+
+        if ($this->columnExists('CROSSSELL-groups')) {
+            $related[] = array(
+                'type_id' => 5,
+                'column'  => 'CROSSSELL-groups',
+            );
+        }
+
+        if ($this->columnExists('X_SELL-groups')) {
+            $related[] = array(
+                'type_id' => 5,
+                'column'  => 'X_SELL-groups',
+            );
+        }
+
         foreach ($related as $type) {
             /* @var $product Pimgento_Product_Model_Import */
             $product = Mage::getModel('pimgento_product/import');
