@@ -47,8 +47,10 @@ abstract class Pimgento_Core_Model_Import_Abstract
         $tags = $this->getConfig('cache');
         if ($tags) {
             Mage::app()->cleanCache(explode(',', $tags));
-            if (strpos($tags, 'full_page')) {
-                Enterprise_PageCache_Model_Cache::getCacheInstance()->clean(Enterprise_PageCache_Model_Processor::CACHE_TAG);
+            if (strpos($tags, 'full_page') && $this->isEnterprise()) {
+                Enterprise_PageCache_Model_Cache::getCacheInstance()->clean(
+                    Enterprise_PageCache_Model_Processor::CACHE_TAG
+                );
                 Mage::app()->getCacheInstance()->cleanType('full_page');
             }
             $task->setMessage(
