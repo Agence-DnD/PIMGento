@@ -21,14 +21,11 @@ class Pimgento_Family_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $cronFiles = Mage::getStoreConfig('pimdata/family/cron_file');
+        $files = $this->getFiles('family');
 
-        if ($cronFiles) {
-            $files = explode(';', $cronFiles);
-            foreach ($files as $file) {
-                if ($file) {
-                    $this->launch('pimgento_family', $file);
-                }
+        if (count($files)) {
+            foreach ($files as $key => $file) {
+                $this->launch('pimgento_family', $file, ($key == count($files) - 1), $schedule);
             }
         }
 

@@ -124,11 +124,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
+        $adapter->query('SET SESSION group_concat_max_len = 1000000;');
+
         if (!$this->columnsRequired(array('groups'), $task)) {
             return false;
         }
 
-        $adapter->addColumn($this->getTable(), '_children',   'VARCHAR(255) NULL');
+        $adapter->addColumn($this->getTable(), '_children',   'TEXT NULL');
         $adapter->addColumn($this->getTable(), '_attributes', 'VARCHAR(255) NOT NULL DEFAULT ""');
 
         if ($adapter->isTableExists('pimgento_variant')) {
@@ -393,7 +395,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         array(
                             'c' => $resource->getTable('pimgento_core/code')
                         ),
-                        'FIND_IN_SET(REPLACE(`c`.`code`,"' . $columnPrefix . '_",""), `p`.`' . $column . '`)
+                        'FIND_IN_SET(`c`.`code`, CONCAT("' . $columnPrefix . '", "_", `p`.`' . $column . '`))
                         AND `c`.`import` = "' . $option->getCode() . '"',
                         array(
                             $column => new Zend_Db_Expr('GROUP_CONCAT(`c`.`entity_id` SEPARATOR ",")')
@@ -455,8 +457,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'attribute_set_id' => 'family',
             'type_id'          => '_type_id',
             'sku'              => 'code',
-            'has_options'      => $this->_zde(0),
-            'required_options' => $this->_zde(0),
             'updated_at'       => $this->_zde('now()'),
         );
 
@@ -488,8 +488,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $file = $task->getFile();
 
         $values = array(
+            'tax_class_id' => '_tax_class_id',
+        );
+
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0, 2);
+
+        $values = array(
             'options_container'     => '_options_container',
-            'tax_class_id'          => '_tax_class_id',
             'enable_googlecheckout' => $this->_zde(0),
             'is_recurring'          => $this->_zde(0),
             'visibility'            => $this->_zde(4),
@@ -640,6 +645,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             $attributes = explode(',', $row['_attributes']);
 
+            $position = 0;
             foreach ($attributes as $id) {
 
                 if (!$id) {
@@ -653,7 +659,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $values = array(
                     'product_id'   => $row['entity_id'],
                     'attribute_id' => $id,
-                    'position'     => 1,
+                    'position'     => $position++,
                 );
 
                 $adapter->insertIgnore($resource->getTable('catalog/product_super_attribute'), $values);
@@ -737,7 +743,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         foreach ($websites as $website) {
             $select = $adapter->select()
                 ->from(
-                    $resource->getTable('catalog/product'),
+                    $resource->getTable('pimgento_core/code'),
                     array(
                         'product_id' => 'entity_id',
                         'website_id' => $this->_zde($website->getId())
@@ -990,7 +996,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 array(
                     'category_id' => 'c.entity_id',
                     'product_id'  => 'p.entity_id',
-                    'position'    => $this->_zde(0)
                 )
             )
             ->joinInner(
@@ -1000,7 +1005,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $insert = $adapter->insertFromSelect(
-            $select, $resource->getTable('catalog/category_product'), array('category_id', 'product_id', 'position'), 1
+            $select, $resource->getTable('catalog/category_product'), array('category_id', 'product_id'), 1
         );
 
         $adapter->query($insert);
@@ -1080,6 +1085,41 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
         }
 
+        if ($this->columnExists('X_SELL-products')) {
+            $related[] = array(
+                'type_id' => 5,
+                'column'  => 'X_SELL-products',
+            );
+        }
+
+        if ($this->columnExists('RELATED-groups')) {
+            $related[] = array(
+                'type_id' => 1,
+                'column'  => 'RELATED-groups',
+            );
+        }
+
+        if ($this->columnExists('UPSELL-groups')) {
+            $related[] = array(
+                'type_id' => 4,
+                'column'  => 'UPSELL-groups',
+            );
+        }
+
+        if ($this->columnExists('CROSSSELL-groups')) {
+            $related[] = array(
+                'type_id' => 5,
+                'column'  => 'CROSSSELL-groups',
+            );
+        }
+
+        if ($this->columnExists('X_SELL-groups')) {
+            $related[] = array(
+                'type_id' => 5,
+                'column'  => 'X_SELL-groups',
+            );
+        }
+
         foreach ($related as $type) {
             /* @var $product Pimgento_Product_Model_Import */
             $product = Mage::getModel('pimgento_product/import');
@@ -1121,7 +1161,101 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Drop table (Step 17)
+     * Insert Asset (images) (Step 17)
+     *
+     * @param Pimgento_Core_Model_Task $task
+     *
+     * @return bool
+     */
+    public function setAsset($task)
+    {
+        $resource = $this->getResource();
+        $adapter  = $this->getAdapter();
+        $helper   = Mage::helper('pimgento_asset');
+
+        if (!Mage::helper('core')->isModuleEnabled('Pimgento_Asset')) {
+            $task->setMessage(
+                $helper->__('Asset import is not available')
+            );
+            return false;
+        }
+
+        if (!$adapter->isTableExists('pimgento_asset')) {
+            $task->setMessage(
+                $helper->__('Asset import is not available')
+            );
+            return false;
+        }
+
+        /* @var $assetModel Pimgento_Asset_Model_Import */
+        $assetModel = Mage::getModel('pimgento_asset/import');
+
+        $attributeCode = Mage::getStoreConfig('pimdata/' . $assetModel->getCode() . '/attribute');
+
+        if (!$attributeCode) {
+            $task->setMessage(
+                $helper->__('Please select asset attribute in Pimgento Configuration (Asset)')
+            );
+            return false;
+        }
+
+        if (!$adapter->tableColumnExists($this->getTable(), $attributeCode)) {
+            $task->setMessage(
+                $helper->__('Column "%s" not found', $attributeCode)
+            );
+            return false;
+        }
+
+        $attribute = $resource->getAttribute('media_gallery', 4);
+
+        if (!$attribute) {
+            $task->setMessage($helper->__('Attribute %s not found', 'media_gallery'));
+            return false;
+        }
+
+        $attributeId = $attribute['attribute_id'];
+
+        $exists = $adapter->select()->from(
+            $resource->getTable('catalog/product_attribute_media_gallery'),
+            array('value')
+        );
+
+        $select = $adapter->select()
+            ->from(
+                array(
+                    'a' => $adapter->getTableName('pimgento_asset')
+                ),
+                array()
+            )
+            ->joinInner(
+                array('p' => $this->getTable()),
+                'FIND_IN_SET(`a`.`asset`, `p`.`' . $attributeCode . '`)',
+                array(
+                    'attribute_id' => $this->_zde($attributeId),
+                    'entity_id'    => 'p.entity_id',
+                    'value'        => 'a.image',
+                )
+            )
+            ->joinInner(
+                array('e' => $resource->getTable('catalog/product')),
+                'p.entity_id = e.entity_id',
+                array()
+            )
+            ->where('a.image NOT IN (?)', $exists);
+
+        $insert = $adapter->insertFromSelect(
+            $select, $resource->getTable('catalog/product_attribute_media_gallery'),
+            array('attribute_id', 'entity_id', 'value'),
+            1
+        );
+
+        $adapter->query($insert);
+
+        return true;
+    }
+
+    /**
+     * Drop table (Step 18)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -1131,11 +1265,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $this->getRequest()->dropTable($this->getCode());
 
+        Mage::dispatchEvent('task_executor_drop_table_after', array('task' => $task));
+
         return true;
     }
 
     /**
-     * Reindex (Step 18)
+     * Reindex (Step 19)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -1143,6 +1279,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function reindex($task)
     {
+        if ($task->getNoReindex()) {
+            return false;
+        }
+
         if (!$this->getConfig('reindex')) {
             $task->setMessage(
                 Mage::helper('pimgento_product')->__('Reindex is disabled')

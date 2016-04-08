@@ -89,13 +89,17 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
         /* @var $attribute Pimgento_Attribute_Model_Import */
         $attribute = Mage::getModel('pimgento_attribute/import');
 
+        $columns = array(
+            'option_id'  => 'a.entity_id',
+            'sort_order' => $this->_zde('"0"')
+        );
+
+        if ($this->getRequest()->columnExists($this->getTable(), 'sort_order')) {
+            $columns['sort_order'] = 'a.sort_order';
+        }
+
         $options = $adapter->select()
-            ->from(
-                array('a' => $this->getTable()),
-                array(
-                    'option_id' => 'a.entity_id',
-                )
-            )
+            ->from(array('a' => $this->getTable()), $columns)
             ->joinInner(
                 array('b' => $resource->getTable('pimgento_core/code')),
                 'a.attribute = b.code AND b.import = "' . $attribute->getCode() . '"',
@@ -105,7 +109,7 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $insert = $adapter->insertFromSelect(
-            $options, $resource->getTable('eav/attribute_option'), array('option_id', 'attribute_id'), 2
+            $options, $resource->getTable('eav/attribute_option'), array('option_id', 'sort_order', 'attribute_id'), 1
         );
 
         $adapter->query($insert);
@@ -175,6 +179,8 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $this->getRequest()->dropTable($this->getCode());
 
+        Mage::dispatchEvent('task_executor_drop_table_after', array('task' => $task));
+
         return true;
     }
 
@@ -187,6 +193,10 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function reindex($task)
     {
+        if ($task->getNoReindex()) {
+            return false;
+        }
+
         if (!$this->getConfig('reindex')) {
             $task->setMessage(
                 Mage::helper('pimgento_option')->__('Reindex is disabled')
@@ -212,6 +222,30 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
         }
 
         Mage::dispatchEvent('shell_reindex_finalize_process');
+
+        return true;
+    }
+
+    /**
+     * Remove exclusion from config
+     *
+     * @return bool
+     */
+    public function deleteExclusion()
+    {
+        parent::deleteExclusion();
+
+        /* @var $attribute Pimgento_Attribute_Model_Import */
+        $attribute = Mage::getModel('pimgento_attribute/import');
+
+        $exclusions = Mage::getStoreConfig('pimdata/' . $attribute->getCode() . '/exclusions');
+
+        if ($exclusions) {
+            $exclusions = explode(',', $exclusions);
+            foreach ($exclusions as $code) {
+                $this->getAdapter()->delete($this->getTable(), array('attribute = ?' => $code));
+            }
+        }
 
         return true;
     }

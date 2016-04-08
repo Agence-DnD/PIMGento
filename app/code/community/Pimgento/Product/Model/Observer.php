@@ -95,14 +95,18 @@ class Pimgento_Product_Model_Observer
                         'method'  => 'pimgento_product/import::setRelated'
                     ),
                     17 => array(
+                        'comment' => $helper->__('Insert product images (Asset, only Akeneo Enterprise)'),
+                        'method'  => 'pimgento_product/import::setAsset'
+                    ),
+                    18 => array(
                         'comment' => $helper->__('Drop temporary table'),
                         'method'  => 'pimgento_product/import::dropTable'
                     ),
-                    18 => array(
+                    19 => array(
                         'comment' => $helper->__('Reindex data'),
                         'method'  => 'pimgento_product/import::reindex'
                     ),
-                    19 => array(
+                    20 => array(
                         'comment' => $helper->__('Clean cache'),
                         'method'  => 'pimgento_product/import::cleanCache'
                     ),

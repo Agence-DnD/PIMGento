@@ -21,14 +21,11 @@ class Pimgento_Position_Model_Cron extends Pimgento_Core_Model_Cron
             return $this;
         }
 
-        $cronFiles = Mage::getStoreConfig('pimdata/position/cron_file');
+        $files = $this->getFiles('position');
 
-        if ($cronFiles) {
-            $files = explode(';', $cronFiles);
-            foreach ($files as $file) {
-                if ($file) {
-                    $this->launch('update_position', $file);
-                }
+        if (count($files)) {
+            foreach ($files as $key => $file) {
+                $this->launch('update_position', $file, ($key == count($files) - 1), $schedule);
             }
         }
 
