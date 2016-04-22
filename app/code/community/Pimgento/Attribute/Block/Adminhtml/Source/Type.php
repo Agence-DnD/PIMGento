@@ -23,7 +23,10 @@ class Pimgento_Attribute_Block_Adminhtml_Source_Type extends Mage_Adminhtml_Bloc
         /* @var $input Mage_Eav_Model_Adminhtml_System_Config_Source_Inputtype */
         $input = Mage::getModel('eav/adminhtml_system_config_source_inputtype');
 
-        return $input->toOptionArray();
+        $types = $input->toOptionArray();
+        $types[] = array('value' => 'price', 'label' => Mage::helper('pimgento_attribute')->__('Price'));
+
+        return $types;
     }
 
 }
