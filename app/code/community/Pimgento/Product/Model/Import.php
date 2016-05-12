@@ -381,6 +381,19 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $columnPrefix = explode('-', $column);
             $columnPrefix = reset($columnPrefix);
 
+            $canUpdate = $adapter->fetchOne(
+                $adapter->select()
+                    ->from(
+                        $resource->getTable('eav/attribute'),
+                        $this->_zde("IF(`frontend_input` = 'select' OR `frontend_input` = 'multiselect', 1, 0)")
+                    )
+                    ->where('attribute_code = ?', $columnPrefix)
+            );
+
+            if (!$canUpdate) {
+                continue;
+            }
+
             if ($adapter->tableColumnExists($this->getTable(), $column)) {
 
                 $select = $adapter->select()
@@ -549,20 +562,24 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                                 }
                             }
 
-                            foreach ($values as $attribute => $column) {
+                            if ($this->getConfig('store_url_key')) {
 
-                                if ($attribute == 'url_key') {
-                                    $adapter->addColumn(
-                                        $this->getTable(), $column . '_' . $key, 'VARCHAR(255) NOT NULL default ""'
-                                    );
-                                    $values = array(
-                                        $column . '_' . $key => $this->_zde(
-                                            'CONCAT(`' . $column . '`,"-' . $key . '")'
-                                        ),
-                                    );
-                                    $adapter->update($this->getTable(), $values);
+                                foreach ($values as $attribute => $column) {
 
-                                    $values[$attribute] = $column . '_' . $key;
+                                    if ($attribute == 'url_key') {
+                                        $adapter->addColumn(
+                                            $this->getTable(), $column . '_' . $key, 'VARCHAR(255) NOT NULL default ""'
+                                        );
+                                        $values = array(
+                                            $column . '_' . $key => $this->_zde(
+                                                'CONCAT(`' . $column . '`,"-' . $key . '")'
+                                            ),
+                                        );
+                                        $adapter->update($this->getTable(), $values);
+
+                                        $values[$attribute] = $column . '_' . $key;
+                                    }
+
                                 }
 
                             }

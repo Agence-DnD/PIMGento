@@ -57,6 +57,7 @@
                 <tax_default>0</tax_default>
                 <matches>a:1:{s:18:"_1426514886830_830";a:2:{s:18:"pimgento_attribute";s:7:"enabled";s:17:"magento_attribute";s:6:"status";}}</matches>
                 <reindex>1</reindex>
+                <store_url_key>1</store_url_key>
             </product>
         </pimdata>
     </default>

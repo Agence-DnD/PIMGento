@@ -101,11 +101,21 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </tax_default>
+                        <store_url_key translate="label">
+                            <label>Add store to URL key</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Avoid URL key duplication</comment>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store_url_key>
                         <configurable_enabled translate="label">
                             <label>Create configurable</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>9</sort_order>
+                            <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -115,7 +125,7 @@
                             <frontend_type>multiselect</frontend_type>
                             <source_model>pimgento_product/system_config_source_configurable_attribute</source_model>
                             <comment>Only attributes used to create configurable products</comment>
-                            <sort_order>10</sort_order>
+                            <sort_order>11</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -129,7 +139,7 @@
                             <frontend_model>pimgento_product/adminhtml_system_configurable_default</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
                             <comment>Use the value column to force data for specific attribute. Leave empty to retrieve the value of the first simple product.</comment>
-                            <sort_order>11</sort_order>
+                            <sort_order>12</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -142,7 +152,7 @@
                             <frontend_type>text</frontend_type>
                             <frontend_model>pimgento_product/adminhtml_system_configurable_disabled</frontend_model>
                             <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
-                            <sort_order>12</sort_order>
+                            <sort_order>13</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
