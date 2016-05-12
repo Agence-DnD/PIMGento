@@ -385,7 +385,15 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $adapter->select()
                     ->from(
                         $resource->getTable('eav/attribute'),
-                        $this->_zde("IF(`frontend_input` = 'select' OR `frontend_input` = 'multiselect', 1, 0)")
+                        $this->_zde("IF(
+                            (`frontend_input` = 'select' OR `frontend_input` = 'multiselect') AND
+                            (
+                               `source_model` = 'eav/entity_attribute_source_table' OR
+                               `source_model` = 'eav/entity_attribute_backend_array' OR
+                               `source_model` IS NULL
+                            )
+                            , 1, 0
+                         )")
                     )
                     ->where('attribute_code = ?', $columnPrefix)
             );
