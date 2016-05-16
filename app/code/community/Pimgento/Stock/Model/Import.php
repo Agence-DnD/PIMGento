@@ -142,13 +142,18 @@ class Pimgento_Stock_Model_Import extends Pimgento_Core_Model_Import_Abstract
         /* Update stock */
         $select = $adapter->select()
             ->from(
-                $this->getTable(),
+                array('p' => $this->getTable()),
                 array(
-                    'product_id'  => 'entity_id',
+                    'product_id'  => 'p.entity_id',
                     'stock_id'    => $this->_zde(1),
-                    'qty'         => 'qty',
-                    'is_in_stock' => $this->_zde('IF(`qty` > 0, 1, 0)'),
+                    'qty'         => 'p.qty',
+                    'is_in_stock' => $this->_zde('IF(`p`.`qty` > 0, 1, 0)'),
                 )
+            )
+            ->joinInner(
+                array('e' => $resource->getTable('catalog/product')),
+                'p.entity_id = e.entity_id',
+                array()
             );
 
         $insert = $adapter->insertFromSelect(
