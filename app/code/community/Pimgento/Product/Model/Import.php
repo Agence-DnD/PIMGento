@@ -1035,6 +1035,63 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $adapter->query($insert);
 
+        $isActiveAttribute = $resource->getAttribute('is_active', 3);
+        $statusAttribute = $resource->getAttribute('status', 4);
+
+        // Products without a status: set it to enabled if at least one category is active
+        $select = $adapter->select()
+            ->from(
+                ['cp' => $resource->getTable('catalog/category_product')],
+                [
+                    'entity_type_id' => $this->_zde(4),
+                    'attribute_id' => $this->_zde($statusAttribute['attribute_id']),
+                    'store_id' => $this->_zde(0),
+                    'entity_id' => 'product_id',
+                    'value' => $this->_zde(Mage_Catalog_Model_Product_Status::STATUS_ENABLED),
+                ]
+            )->joinInner(
+                ['a' => $resource->getValueTable('catalog/category', $isActiveAttribute['backend_type'])],
+                '`cp`.`category_id` = `a`.`entity_id`',
+                []
+            )->where(
+                '`a`.`attribute_id` = ?', $isActiveAttribute['attribute_id']
+            )->where(
+                '`a`.`value` = ?', 1
+            )->group(
+                'product_id'
+            );
+
+        $insert = $adapter->insertFromSelect(
+            $select,
+            $resource->getValueTable('catalog/product', $statusAttribute['backend_type']),
+            ['entity_type_id', 'attribute_id', 'store_id', 'entity_id', 'value'],
+            Varien_Db_Adapter_Pdo_Mysql::INSERT_IGNORE
+        );
+
+        $adapter->query($insert);
+
+        // Products without a status: set it to disabled
+        $select = $adapter->select()
+            ->from(
+                $resource->getTable('catalog/product'),
+                [
+                    'entity_type_id' => $this->_zde(4),
+                    'attribute_id' => $this->_zde($statusAttribute['attribute_id']),
+                    'store_id' => $this->_zde(0),
+                    'entity_id' => 'entity_id',
+                    'value' => $this->_zde(Mage_Catalog_Model_Product_Status::STATUS_DISABLED),
+                ]
+            );
+
+        $insert = $adapter->insertFromSelect(
+            $select,
+            $resource->getValueTable('catalog/product', $statusAttribute['backend_type']),
+            ['entity_type_id', 'attribute_id', 'store_id', 'entity_id', 'value'],
+            Varien_Db_Adapter_Pdo_Mysql::INSERT_IGNORE
+        );
+
+        $adapter->query($insert);
+
         return true;
     }
 
