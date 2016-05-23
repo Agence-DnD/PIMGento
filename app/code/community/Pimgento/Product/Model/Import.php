@@ -381,6 +381,27 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $columnPrefix = explode('-', $column);
             $columnPrefix = reset($columnPrefix);
 
+            $canUpdate = $adapter->fetchOne(
+                $adapter->select()
+                    ->from(
+                        $resource->getTable('eav/attribute'),
+                        $this->_zde("IF(
+                            (`frontend_input` = 'select' OR `frontend_input` = 'multiselect') AND
+                            (
+                               `source_model` = 'eav/entity_attribute_source_table' OR
+                               `source_model` = 'eav/entity_attribute_backend_array' OR
+                               `source_model` IS NULL
+                            )
+                            , 1, 0
+                         )")
+                    )
+                    ->where('attribute_code = ?', $columnPrefix)
+            );
+
+            if (!$canUpdate) {
+                continue;
+            }
+
             if ($adapter->tableColumnExists($this->getTable(), $column)) {
 
                 $select = $adapter->select()
@@ -457,8 +478,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'attribute_set_id' => 'family',
             'type_id'          => '_type_id',
             'sku'              => 'code',
-            'has_options'      => $this->_zde(0),
-            'required_options' => $this->_zde(0),
             'updated_at'       => $this->_zde('now()'),
         );
 
@@ -490,8 +509,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $file = $task->getFile();
 
         $values = array(
+            'tax_class_id' => '_tax_class_id',
+        );
+
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0, 2);
+
+        $values = array(
             'options_container'     => '_options_container',
-            'tax_class_id'          => '_tax_class_id',
             'enable_googlecheckout' => $this->_zde(0),
             'is_recurring'          => $this->_zde(0),
             'visibility'            => $this->_zde(4),
@@ -546,20 +570,24 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                                 }
                             }
 
-                            foreach ($values as $attribute => $column) {
+                            if ($this->getConfig('store_url_key')) {
 
-                                if ($attribute == 'url_key') {
-                                    $adapter->addColumn(
-                                        $this->getTable(), $column . '_' . $key, 'VARCHAR(255) NOT NULL default ""'
-                                    );
-                                    $values = array(
-                                        $column . '_' . $key => $this->_zde(
-                                            'CONCAT(`' . $column . '`,"-' . $key . '")'
-                                        ),
-                                    );
-                                    $adapter->update($this->getTable(), $values);
+                                foreach ($values as $attribute => $column) {
 
-                                    $values[$attribute] = $column . '_' . $key;
+                                    if ($attribute == 'url_key') {
+                                        $adapter->addColumn(
+                                            $this->getTable(), $column . '_' . $key, 'VARCHAR(255) NOT NULL default ""'
+                                        );
+                                        $values = array(
+                                            $column . '_' . $key => $this->_zde(
+                                                'CONCAT(`' . $column . '`,"-' . $key . '")'
+                                            ),
+                                        );
+                                        $adapter->update($this->getTable(), $values);
+
+                                        $values[$attribute] = $column . '_' . $key;
+                                    }
+
                                 }
 
                             }
@@ -740,7 +768,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         foreach ($websites as $website) {
             $select = $adapter->select()
                 ->from(
-                    $resource->getTable('catalog/product'),
+                    $this->getTable(),
                     array(
                         'product_id' => 'entity_id',
                         'website_id' => $this->_zde($website->getId())
@@ -993,7 +1021,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 array(
                     'category_id' => 'c.entity_id',
                     'product_id'  => 'p.entity_id',
-                    'position'    => $this->_zde(0)
                 )
             )
             ->joinInner(
@@ -1003,7 +1030,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $insert = $adapter->insertFromSelect(
-            $select, $resource->getTable('catalog/category_product'), array('category_id', 'product_id', 'position'), 1
+            $select, $resource->getTable('catalog/category_product'), array('category_id', 'product_id'), 1
         );
 
         $adapter->query($insert);
