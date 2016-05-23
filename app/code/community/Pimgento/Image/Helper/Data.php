@@ -53,7 +53,7 @@ class Pimgento_Image_Helper_Data extends Mage_Core_Helper_Data
         $handle = opendir($directory);
 
         while (($file = readdir($handle))) {
-            if ($file != "." and $file != "..") {
+            if ($file != "." && $file != ".." && $file != ".DS_Store") {
                 if (is_dir($directory . DS . $file)) {
                     if ($level == 1) {
                         $sku = $file;
@@ -74,11 +74,13 @@ class Pimgento_Image_Helper_Data extends Mage_Core_Helper_Data
                     $path      = Mage_Core_Model_File_Uploader::getDispretionPath($fileName);
                     $fileName  = $path . DS . $fileName;
 
-                    $files[$sku][$directory] = array(
-                        'directory' => $directory . DS,
-                        'file'      => $file,
-                        'name'      => $fileName,
-                    );
+                    if(empty($files[$sku][$directory])) {
+                        $files[$sku][$directory] = array(
+                            'directory' => $directory . DS,
+                            'file' => $file,
+                            'name' => $fileName,
+                        );
+                    }
                     ksort($files[$sku]);
                 }
             }

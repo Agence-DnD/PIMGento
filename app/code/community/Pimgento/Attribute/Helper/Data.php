@@ -83,6 +83,12 @@ class Pimgento_Attribute_Helper_Data extends Mage_Core_Helper_Data
                 'backend_model' => NULL,
                 'source_model' => 'eav/entity_attribute_source_table',
             ),
+            'price' => array(
+                'backend_type' => 'decimal',
+                'frontend_input' => 'price',
+                'backend_model' => 'catalog/product_attribute_backend_price',
+                'source_model' => NULL,
+            ),
             'default' => array(
                 'backend_type' => 'varchar',
                 'frontend_input' => 'text',

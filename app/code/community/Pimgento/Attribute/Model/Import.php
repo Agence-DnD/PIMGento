@@ -306,6 +306,10 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
      */
     protected function _updateFamily($data)
     {
+        if (!isset($data['families'])) {
+            $data['families'] = "Marshalls";
+        }
+
         /* @var $model Mage_Catalog_Model_Resource_Eav_Attribute */
         $model = Mage::getModel('catalog/resource_eav_attribute');
 
