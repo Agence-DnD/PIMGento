@@ -92,6 +92,15 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </types>
+                        <families>
+                            <label>Default Attribute Set</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Enter the attribute sets to allocate attributes with no family, comma separated</comment>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </families>
                     </fields>
                 </attribute>
             </groups>
