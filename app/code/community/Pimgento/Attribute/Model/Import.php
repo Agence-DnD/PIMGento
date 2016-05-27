@@ -306,8 +306,9 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
      */
     protected function _updateFamily($data)
     {
-        if (!isset($data['families'])) {
-            $data['families'] = "Marshalls";
+        if (empty($data['families'])) {
+            $defaultAttributeSets = Mage::getStoreConfig('pimdata/attribute/families');
+            $data['families'] = $defaultAttributeSets;
         }
 
         /* @var $model Mage_Catalog_Model_Resource_Eav_Attribute */
