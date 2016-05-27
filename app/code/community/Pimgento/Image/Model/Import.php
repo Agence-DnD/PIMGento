@@ -156,6 +156,11 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     $data['small_image'] = $picture['name'];
                     $data['thumbnail'] = $picture['name'];
                 }
+                // Allocate image to Magento attribute
+                $type = basename($picture['directory']);
+                if ($type == 'image' || $type == 'small_image' || $type == 'thumbnail') {
+                    $data[$type] = $picture['name'];
+                }
 
                 $gallery[] = $picture['name'];
 
