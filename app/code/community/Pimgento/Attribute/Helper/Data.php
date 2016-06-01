@@ -16,16 +16,17 @@ class Pimgento_Attribute_Helper_Data extends Mage_Core_Helper_Data
     public function getTypes()
     {
         $types = array(
-            'pim_catalog_identifier'   => $this->_types('text'),
-            'pim_catalog_text'         => $this->_types('text'),
-            'pim_catalog_metric'       => $this->_types('text'),
-            'pim_catalog_number'       => $this->_types('text'),
-            'pim_catalog_textarea'     => $this->_types('textarea'),
-            'pim_catalog_date'         => $this->_types('date'),
-            'pim_catalog_boolean'      => $this->_types('boolean'),
-            'pim_catalog_simpleselect' => $this->_types('select'),
-            'pim_catalog_multiselect'  => $this->_types('multiselect'),
-            'default'                  => $this->_types('text'),
+            'pim_catalog_identifier'        => $this->_types('text'),
+            'pim_catalog_text'              => $this->_types('text'),
+            'pim_catalog_metric'            => $this->_types('text'),
+            'pim_catalog_number'            => $this->_types('text'),
+            'pim_catalog_textarea'          => $this->_types('textarea'),
+            'pim_catalog_date'              => $this->_types('date'),
+            'pim_catalog_boolean'           => $this->_types('boolean'),
+            'pim_catalog_simpleselect'      => $this->_types('select'),
+            'pim_catalog_multiselect'       => $this->_types('multiselect'),
+            'pim_catalog_image'             => $this->_types('media_image'),
+            'default'                       => $this->_types('text'),
         );
 
         $specific = unserialize(Mage::getStoreConfig('pimdata/attribute/types'));
@@ -87,6 +88,12 @@ class Pimgento_Attribute_Helper_Data extends Mage_Core_Helper_Data
                 'backend_type' => 'decimal',
                 'frontend_input' => 'price',
                 'backend_model' => 'catalog/product_attribute_backend_price',
+                'source_model' => NULL,
+            ),
+            'media_image' => array(
+                'backend_type' => 'varchar',
+                'frontend_input' => 'media_image',
+                'backend_model' => 'catalog/product_attribute_backend_media',
                 'source_model' => NULL,
             ),
             'default' => array(

@@ -1055,6 +1055,31 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $adapter->query($insert);
 
+        //Remove product from old categories
+        $selectToDelete = $adapter->select()
+            ->from(
+                array(
+                    'c' => $resource->getTable('pimgento_core/code')
+                ),
+                array()
+            )
+            ->joinInner(
+                array('p' => $this->getTable()),
+                'NOT FIND_IN_SET(`c`.`code`, `p`.`categories`) AND `c`.`import` = "' . $category->getCode() . '"',
+                array(
+                    'category_id' => 'c.entity_id',
+                    'product_id'  => 'p.entity_id',
+                )
+            )
+            ->joinInner(
+                array('e' => $resource->getTable('catalog/category')),
+                'c.entity_id = e.entity_id',
+                array()
+            );
+
+        $adapter->delete($resource->getTable('catalog/category_product'),
+            '(category_id, product_id) IN (' . $selectToDelete->assemble() . ')');
+
         return true;
     }
 
