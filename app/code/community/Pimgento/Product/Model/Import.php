@@ -215,60 +215,34 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $transformer = Mage::helper('pimgento_product')->transformer();
 
-        $price = 'price';
-        $specialPrice = 'special_price';
-        $msrp = 'msrp';
-        $costPrice = "cost_price";
-
+        // internal id => import id (only different when transformed)
+        $attributes = array();
+  
+        /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attr */
+        foreach (Mage::getResourceModel('catalog/product_attribute_collection') as $attr) {
+            if ($attr->getData('frontend_input') == 'price') {
+                $attributes[$attr->getData('attribute_code')] = $attr->getData('attribute_code');
+            }
+        }
+ 
         foreach ($transformer as $attribute => $match) {
-
-            if (in_array('price', $match)) {
-                $price = $attribute;
+            foreach ($attributes as $internalCode => $importCode) {
+                if (in_array($internalCode, $match)) {
+                    $attributes[$internalCode] = $attribute;
+                }
             }
-
-            if (in_array('special_price', $match)) {
-                $specialPrice = $attribute;
-            }
-
-            if (in_array('msrp', $match)) {
-                $msrp = $attribute;
-            }
-
-            if (in_array('cost_price', $match)) {
-                $costPrice = $attribute;
-            }
-
         }
 
         foreach ($stores as $currency => $store) {
 
             foreach ($store as $data) {
 
-                $columns = array(
-                    'price'         => array(
-                        $price . '-' . $currency, // price-USD
-                        $price . '-' . $data['code'] . '-' . $currency, // price-website-USD
-                        $price . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency, // price-en_US-website-USD
-                    ),
-                    'special_price' => array(
-                        $specialPrice . '-' . $currency,
-                        $specialPrice . '-' . $data['code'] . '-' . $currency,
-                        $specialPrice . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
-                    ),
-                    'msrp' => array(
-                        $msrp . '-' . $currency,
-                        $msrp . '-' . $data['code'] . '-' . $currency,
-                        $msrp . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
-                    ),
-                    'cost_price' => array(
-                        $costPrice . '-' . $currency,
-                        $costPrice . '-' . $data['code'] . '-' . $currency,
-                        $costPrice . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
-                    ),
-                );
-
-                foreach ($columns as $attribute => $cols) {
-                    foreach ($cols as $column) {
+                foreach ($attributes as $internalCode => $importCode) {
+                    foreach (array(
+                        $importCode.'-'.$currency, // price-USD
+                        $importCode.'-'.$data['code'].'-'.$currency, // price-website-USD
+                        $importCode.'-'.$data['lang'].'-'.$data['code'].'-'.$currency, // price-en_US-website-USD
+                    ) as $column) {
                         if ($adapter->tableColumnExists($this->getTable(), $column)) {
 
                             $adapter->update(
