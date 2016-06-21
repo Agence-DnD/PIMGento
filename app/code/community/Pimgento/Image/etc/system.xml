@@ -62,10 +62,10 @@
                             <show_in_store>0</show_in_store>
                         </cache>
                         <set_labels translate="label">
-                            <label>Add Image Labels from Filenames</label>
+                            <label>Set Image Labels from Filenames</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <comment>Add labels using tidied up filename (capitalised, without extension, underscore => space)</comment>
+                            <comment>Set labels using the image filename (capitalised, extension removed and underscore replaced by spaces)</comment>
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
