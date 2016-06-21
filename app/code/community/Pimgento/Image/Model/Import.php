@@ -162,8 +162,15 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     $data[$type] = $picture['name'];
                 }
 
-                $gallery[] = $picture['name'];
-
+                if (Mage::getStoreConfig('pimdata/image/set_labels')) {
+                    // Get Label text from filename without extension and with some tidying
+                    $_filename = basename($picture['file']);
+                    $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $_filename);
+                    $label = preg_replace('/_/', ' ', $withoutExt);
+                    $gallery[] = ucwords($label) . '||' . $picture['name'];
+                } else {
+                    $gallery[] = $picture['name'];
+                }
                 $key++;
             }
 
@@ -227,18 +234,26 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         while (($row = $query->fetch())) {
 
-            $images = explode(',', $row['gallery']);
+            $imageData = explode(',', $row['gallery']);
 
             $table = $resource->getTable('catalog/product_attribute_media_gallery');
 
             $adapter->delete($table, 'entity_id = ' . $row['entity_id']);
 
-            foreach ($images as $key => $image) {
+            foreach ($imageData as $key => $imageItem) {
 
+                if (Mage::getStoreConfig('pimdata/image/set_labels')) {
+                    $imageInfo = explode('||', $imageItem);
+                    $imageFile = $imageInfo[1];
+                    $imageLabel = $imageInfo[0];
+                } else {
+                    $imageFile = $imageItem;
+                    $imageLabel = null;
+                }
                 $values = array(
                     'attribute_id' => $attributeId,
                     'entity_id'    => $row['entity_id'],
-                    'value'        => $image
+                    'value'        => $imageFile
                 );
 
                 $adapter->insertOnDuplicate($table, $values, array('value'));
@@ -252,7 +267,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                             ->from($table, array('value_id'))
                             ->where('attribute_id = ?', $attributeId)
                             ->where('entity_id = ?', $row['entity_id'])
-                            ->where('value = ?', $image)
+                            ->where('value = ?', $imageFile)
                             ->limit(1)
                     );
                 }
@@ -261,7 +276,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     $values = array(
                         'value_id' => $valueId,
                         'store_id' => 0,
-                        'label'    => null,
+                        'label'    => $imageLabel,
                         'position' => $key,
                         'disabled' => 0
                     );
@@ -277,6 +292,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         return true;
     }
+
 
     /**
      * Drop table (Step 6)

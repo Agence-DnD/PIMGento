@@ -40,6 +40,7 @@
                 <cron_enabled>0</cron_enabled>
                 <delete>1</delete>
                 <cache>1</cache>
+                <set_labels>1</set_labels>
             </image>
         </pimdata>
     </default>
