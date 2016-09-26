@@ -9,6 +9,16 @@ class Pimgento_Core_Adminhtml_TaskController extends Mage_Adminhtml_Controller_A
 {
 
     /**
+     * Check the permission to run it
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('catalog/pimgento_data');
+    }
+
+    /**
      * Index Action
      */
     public function indexAction()
