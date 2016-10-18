@@ -11,9 +11,10 @@
         <reference name="head">
             <action method="addCss"><name>pimgento/css/style.css</name></action>
             <action method="addItem"><type>skin_js</type><name>pimgento/js/script.js</name></action>
-            <action method="addJs"><script>lib/flex.js</script></action>
-            <action method="addJs"><script>lib/FABridge.js</script></action>
-            <action method="addJs"><script>mage/adminhtml/flexuploader.js</script></action>
+            <action method="addJs"><name>lib/uploader/flow.min.js</name></action>
+            <action method="addJs"><name>lib/uploader/fusty-flow.js</name></action>
+            <action method="addJs"><name>lib/uploader/fusty-flow-factory.js</name></action>
+            <action method="addJs"><name>mage/adminhtml/uploader/instance.js</name></action>
         </reference>
         <reference name="content">
             <block type="pimgento_core/adminhtml_task" name="pimgento.core.task" template="pimgento/task.phtml" />
