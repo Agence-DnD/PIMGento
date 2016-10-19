@@ -29,23 +29,22 @@
         <div id="type-file" class="task-execute" style="display:none">
             <div id="<?php echo $this->getHtmlId() ?>" class="uploader">
                 <div class="buttons">
-                    <div id="<?php echo $this->getHtmlId() ?>-install-flash" style="display:none">
-                        <?php echo $this->__('This content requires last version of Adobe Flash Player.') ?>
-                    </div>
+                    <?php echo $this->getBrowseButtonHtml(); ?>
+                    <?php echo $this->getUploadButtonHtml(); ?>
                 </div>
-                <div class="clear"></div>
-                <div class="no-display" id="<?php echo $this->getHtmlId() ?>-template">
-                    <div id="{{id}}" class="file-row">
-                    <span class="file-info">{{name}} ({{size}})</span>
+            </div>
+            <div class="no-display" id="<?php echo $this->getElementId('template') ?>">
+                <div id="{{id}}-container" class="file-row">
+                    <span class="file-info">{{name}} {{size}}</span>
                     <span class="delete-button"><?php echo $this->getDeleteButtonHtml() ?></span>
                     <span class="progress-text"></span>
                     <div class="clear"></div>
-                    </div>
-                </div>
-                <div class="no-display" id="<?php echo $this->getHtmlId() ?>-template-progress">
-                    {{percent}}% {{uploaded}} / {{total}}
                 </div>
             </div>
+            <div class="no-display" id="<?php echo $this->getHtmlId() ?>-template-progress">
+                {{percent}}% {{uploaded}} / {{total}}
+            </div>
+            <?php echo $this->getChildHtml('additional_scripts'); ?>
         </div>
         <div id="type-button" class="task-execute" style="display:none">
             <?php echo $this->getExecuteButtonHtml() ?>
@@ -56,35 +55,32 @@
 
 <script type="text/javascript">
 //<![CDATA[
-    maxUploadFileSizeInBytes = <?php echo $this->getDataMaxSizeInBytes() ?>;
-    maxUploadFileSize = '<?php echo $this->getDataMaxSize() ?>';
-
     function initUploader() {
 
         $$('#type-file .complete').each(function(item) {
             item.remove();
         });
 
-        <?php echo $this->getJsObjectName() ?> = new Flex.Uploader('<?php echo $this->getHtmlId() ?>', '<?php echo $this->getSkinUrl('media/uploader.swf') ?>', <?php echo $this->getConfigJson() ?>);
-        <?php echo $this->getJsObjectName() ?>.onFilesComplete = function(completedFiles) {
-            completedFiles.each(function(file){
-                var id = <?php echo $this->getJsObjectName() ?>.getFileId(file);
+        var uploader = new Uploader(<?php echo $this->getJsonConfig(); ?>);
 
-                var progress = $(id).down('.progress-text');
+        if (varienGlobalEvents) {
+            varienGlobalEvents.attachEventHandler('tabChangeBefore', uploader.onContainerHideBefore);
+        }
 
-                progress.update('<?php echo $this->getExecuteButtonHtml() ?>');
-                progress.down().rel = file.response.replace(/"/g, "");
+        uploader._handleDelete = function() {}; // We do not want to remove uploaded file container after upload.
 
-                var lastId = $$('.file-row').last().id;
-                if (lastId !== id) {
-                    $(id).down('.progress-text').update(Translator.translate('Complete'));
-                }
+        document.on('uploader:fileSuccess', function(event) {
+            var id = event.memo.containerId;
+
+            $$('#tasks-types .file-row.complete').each(function(elem) {
+                elem.down('.progress-text').update(Translator.translate('Complete'));
             });
-        };
 
-        var flash = $('<?php echo $this->getHtmlId() ?>-flash');
-        if (flash != undefined) { flash.setStyle({float:'none'}); }
+            var progress = $(id).down('.progress-text');
 
+            progress.update($('type-button').innerHTML);
+            progress.down().rel = event.memo.response.replace(/"/g, "");
+        });
     }
 
     $('task-command').observe('change', function() {
