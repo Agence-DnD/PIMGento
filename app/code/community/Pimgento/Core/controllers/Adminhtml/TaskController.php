@@ -56,13 +56,15 @@ class Pimgento_Core_Adminhtml_TaskController extends Mage_Adminhtml_Controller_A
                 $uploader->setAllowedExtensions($helper->getAllowedExtensions());
                 $uploadSaveResult = $uploader->save($path, $_FILES['file']['name']);
 
-                $result = $uploadSaveResult['file'];
+                $result = array(
+                    'error' => '',
+                    'file'  => $uploadSaveResult['file']
+                );
 
             } catch(Exception $e) {
                 $result = array(
-                    "error" => $e->getMessage(),
-                    "errorCode" => $e->getCode(),
-                    "status" => "error"
+                    'error' => $e->getMessage(),
+                    'file'  => '',
                 );
             }
             /* @var $helper Mage_Core_Helper_Data */

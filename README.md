@@ -5,6 +5,9 @@
 
 PIMGento is a Magento extension that allows you to import your catalog from Akeneo CSV files into Magento.
 
+# Magento >= 1.9.3
+
+For Magento >= 1.9.3, referer to branch magento-1.9.3
 
 ## How it works
 

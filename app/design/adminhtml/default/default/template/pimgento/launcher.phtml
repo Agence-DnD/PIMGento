@@ -28,23 +28,18 @@
     <div id="tasks-types">
         <div id="type-file" class="task-execute" style="display:none">
             <div id="<?php echo $this->getHtmlId() ?>" class="uploader">
-                <div class="buttons">
-                    <div id="<?php echo $this->getHtmlId() ?>-install-flash" style="display:none">
-                        <?php echo $this->__('This content requires last version of Adobe Flash Player.') ?>
-                    </div>
+                <div class="buttons a-right">
+                    <?php echo $this->getBrowseButtonHtml(); ?>
+                    <?php echo $this->getUploadButtonHtml(); ?>
                 </div>
+            </div>
+        </div>
+        <div class="no-display" id="<?php echo $this->getElementId('template') ?>">
+            <div id="{{id}}-container" class="file-row">
+                <span class="file-info">{{name}} {{size}}</span>
+                <span class="delete-button"><?php echo $this->getDeleteButtonHtml() ?></span>
+                <span class="progress-text"></span>
                 <div class="clear"></div>
-                <div class="no-display" id="<?php echo $this->getHtmlId() ?>-template">
-                    <div id="{{id}}" class="file-row">
-                    <span class="file-info">{{name}} ({{size}})</span>
-                    <span class="delete-button"><?php echo $this->getDeleteButtonHtml() ?></span>
-                    <span class="progress-text"></span>
-                    <div class="clear"></div>
-                    </div>
-                </div>
-                <div class="no-display" id="<?php echo $this->getHtmlId() ?>-template-progress">
-                    {{percent}}% {{uploaded}} / {{total}}
-                </div>
             </div>
         </div>
         <div id="type-button" class="task-execute" style="display:none">
@@ -56,39 +51,69 @@
 
 <script type="text/javascript">
 //<![CDATA[
-    maxUploadFileSizeInBytes = <?php echo $this->getDataMaxSizeInBytes() ?>;
-    maxUploadFileSize = '<?php echo $this->getDataMaxSize() ?>';
+    Uploader.prototype.onFileSuccess = function(file, response) {
+        response = response.evalJSON();
+        var id = file.uniqueIdentifier;
+        var error = response.error;
+        this._getFileContainerById(id)
+            .removeClassName('progress')
+            .addClassName(error ? 'error': 'complete')
+        ;
+        /* Updated */
+        this._getProgressTextById(id).update(this._translate(
+            error ? this._XSSFilter(error) :'<?php echo $this->getExecuteButtonHtml() ?>'
+        ));
 
-    function initUploader() {
+        if (!error) {
+            this._getProgressTextById(id).down().rel = response.file;
+        }
+        /* ******* */
 
-        $$('#type-file .complete').each(function(item) {
-            item.remove();
-        });
+        setTimeout(function() {
+            if(!error) {
+                document.fire('uploader:fileSuccess', {
+                    response: Object.toJSON(response),
+                    containerId: this.elementsIds.container
+                });
+            } else {
+                document.fire('uploader:fileError', {
+                    containerId: this.elementsIds.container
+                });
+            }
+        }.bind(this) , !error ? this.onCompleteTimeout: this.onCompleteTimeout * 3);
+    };
 
-        <?php echo $this->getJsObjectName() ?> = new Flex.Uploader('<?php echo $this->getHtmlId() ?>', '<?php echo $this->getSkinUrl('media/uploader.swf') ?>', <?php echo $this->getConfigJson() ?>);
-        <?php echo $this->getJsObjectName() ?>.onFilesComplete = function(completedFiles) {
-            completedFiles.each(function(file){
-                var id = <?php echo $this->getJsObjectName() ?>.getFileId(file);
+    Uploader.prototype.onUploadStart = function() {
+        var files = this.uploader.files;
 
-                var progress = $(id).down('.progress-text');
+        files.each(function (file) {
+            var id = file.uniqueIdentifier;
 
-                progress.update('<?php echo $this->getExecuteButtonHtml() ?>');
-                progress.down().rel = file.response.replace(/"/g, "");
+            /* Updated */
+            if (!this._getProgressTextById(id).down()) {
+                this._getFileContainerById(id)
+                    .removeClassName('new')
+                    .removeClassName('error')
+                    .addClassName('progress');
+                this._getProgressTextById(id).update(this._translate('Uploading...'));
 
-                var lastId = $$('.file-row').last().id;
-                if (lastId !== id) {
-                    $(id).down('.progress-text').update(Translator.translate('Complete'));
+                var deleteButton = this._getDeleteButtonById(id);
+                if (deleteButton) {
+                    this._getDeleteButtonById(id).hide();
                 }
-            });
-        };
+            }
+            /* ******* */
+        }.bind(this));
 
-        var flash = $('<?php echo $this->getHtmlId() ?>-flash');
-        if (flash != undefined) { flash.setStyle({float:'none'}); }
+        this.files = this.uploader.files;
+    };
 
-    }
+    var currentUploader = null;
 
     $('task-command').observe('change', function() {
-        initUploader();
+        if (!currentUploader) {
+            currentUploader = new Uploader(<?php echo $this->getJsonConfig(); ?>);
+        }
     });
 
     var taskExecutor = new TaskExecutor(
