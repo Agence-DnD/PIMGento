@@ -1274,7 +1274,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             return false;
         }
 
-        $mediaGalleryAttribute = $resource->getAttribute('media_gallery', $this->_entityTypeId);
+        $mediaGalleryAttribute = $resource->getAttribute('media_gallery', 4);
 
         if (!$mediaGalleryAttribute) {
             $task->setMessage($helper->__('Attribute %s not found', 'media_gallery'));
