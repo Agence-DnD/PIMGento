@@ -280,6 +280,9 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $directory = Mage::helper('pimgento_asset')->getBaseMediaPath();
 
                 while (($row = $query->fetch())) {
+                    if (is_file($directory . $row['image'])) {
+                        continue;
+                    }
                     $dir = dirname($directory . $row['image']);
                     if (!is_dir($dir)) {
                         mkdir($dir, 0777, true);
