@@ -24,6 +24,10 @@ class Pimgento_Asset_Model_System_Config_Source_Connexion
                 'value' => 'sftp',
                 'label' => 'SFTP',
             ),
+            array(
+                'value' => 'scp',
+                'label' => 'SCP',
+            ),
         );
 
         return $options;
@@ -39,6 +43,7 @@ class Pimgento_Asset_Model_System_Config_Source_Connexion
         $options = array(
             'ftp'  => 'FTP',
             'sftp' => 'SFTP',
+            'scp'  => 'SCP',
         );
 
         return $options;
