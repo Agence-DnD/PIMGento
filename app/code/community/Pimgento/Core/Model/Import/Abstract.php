@@ -16,7 +16,7 @@ abstract class Pimgento_Core_Model_Import_Abstract
     /**
      * Constructor
      */
-    public function _construct()
+    public function __construct()
     {
         if (!$this->getCode()) {
             throw new Exception(

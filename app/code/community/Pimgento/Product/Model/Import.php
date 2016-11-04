@@ -306,7 +306,12 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             ->where('_attributes <> ?', '')
             ->group('groups');
 
-        $insert = $adapter->insertFromSelect($select, $this->getTable(), array_keys($values), 1);
+        $insert = $adapter->insertFromSelect(
+            $select,
+            $this->getTable(),
+            array_keys($values),
+            Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
+        );
 
         $adapter->query($insert);
 
@@ -435,7 +440,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     ->group('p.code');
 
                 $insert = $adapter->insertFromSelect(
-                    $select, $this->getTable(), array('entity_id', $column), 1
+                    $select,
+                    $this->getTable(),
+                    array('entity_id', $column),
+                    Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
                 );
 
                 $adapter->query($insert);
@@ -494,7 +502,12 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $parents = $adapter->select()->from($this->getTable(), $values);
 
         $adapter->query(
-            $adapter->insertFromSelect($parents, $resource->getTable('catalog/product'), array_keys($values), 1)
+            $adapter->insertFromSelect(
+                $parents,
+                $resource->getTable('catalog/product'),
+                array_keys($values),
+                Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
+            )
         );
 
         $values = array(
@@ -786,7 +799,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 );
 
             $insert = $adapter->insertFromSelect(
-                $select, $resource->getTable('catalog/product_website'), array('product_id', 'website_id'), 1
+                $select,
+                $resource->getTable('catalog/product_website'),
+                array('product_id', 'website_id'),
+                Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
             );
 
             $adapter->query($insert);
@@ -999,7 +1015,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $select,
                 $resource->getTable('catalog/product_super_attribute_pricing'),
                 array('product_super_attribute_id', 'value_index', 'is_percent', 'pricing_value', 'website_id'),
-                1
+                Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
             );
 
             $adapter->query($insert);
@@ -1050,7 +1066,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $insert = $adapter->insertFromSelect(
-            $select, $resource->getTable('catalog/category_product'), array('category_id', 'product_id'), 1
+            $select,
+            $resource->getTable('catalog/category_product'),
+            array('category_id', 'product_id'),
+            Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
         );
 
         $adapter->query($insert);
@@ -1112,7 +1131,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $select,
             $resource->getTable('cataloginventory/stock_item'),
             array('product_id', 'stock_id', 'qty', 'is_in_stock', 'low_stock_date', 'stock_status_changed_auto'),
-            2
+            Varien_Db_Adapter_Interface::INSERT_IGNORE
         );
 
         $adapter->query($insert);
@@ -1221,7 +1240,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $select,
                 $resource->getTable('catalog/product_link'),
                 array('product_id', 'linked_product_id', 'link_type_id'),
-                1
+                Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
             );
 
             $adapter->query($insert);
@@ -1316,7 +1335,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $insert = $adapter->insertFromSelect(
             $select, $resource->getTable('catalog/product_attribute_media_gallery'),
             array('attribute_id', 'entity_id', 'value'),
-            1
+            Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
         );
 
         $adapter->query($insert);

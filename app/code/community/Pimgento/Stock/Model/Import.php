@@ -134,7 +134,7 @@ class Pimgento_Stock_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $select,
             $this->getTable(),
             array('qty', 'entity_id'),
-            1
+            Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
         );
 
         $adapter->query($insert);
@@ -160,7 +160,7 @@ class Pimgento_Stock_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $select,
             $resource->getTable('cataloginventory/stock_item'),
             array('product_id', 'stock_id', 'qty', 'is_in_stock'),
-            1
+            Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
         );
 
         $adapter->query($insert);

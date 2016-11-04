@@ -194,7 +194,12 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $parents = $adapter->select()->from($this->getTable(), $values);
 
         $adapter->query(
-            $adapter->insertFromSelect($parents, $resource->getTable('catalog/category'), array_keys($values), 1)
+            $adapter->insertFromSelect(
+                $parents,
+                $resource->getTable('catalog/category'),
+                array_keys($values),
+                Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
+            )
         );
 
         $values = array(
