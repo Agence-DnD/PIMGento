@@ -82,7 +82,7 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $select,
             $adapter->getTableName('pimgento_variant'),
             array('code', 'axis'),
-            1
+            Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
         );
 
         $adapter->query($insert);

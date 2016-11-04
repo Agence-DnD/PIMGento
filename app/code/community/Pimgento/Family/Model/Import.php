@@ -98,7 +98,10 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $insert = $adapter->insertFromSelect(
-            $parents, $resource->getTable('eav/attribute_set'), array(), 1
+            $parents,
+            $resource->getTable('eav/attribute_set'),
+            array(),
+            Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
         );
 
         $adapter->query($insert);

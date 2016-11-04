@@ -109,7 +109,10 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $insert = $adapter->insertFromSelect(
-            $options, $resource->getTable('eav/attribute_option'), array('option_id', 'sort_order', 'attribute_id'), 1
+            $options,
+            $resource->getTable('eav/attribute_option'),
+            array('option_id', 'sort_order', 'attribute_id'),
+            Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
         );
 
         $adapter->query($insert);
@@ -154,7 +157,7 @@ class Pimgento_Option_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         $options,
                         $resource->getTable('eav/attribute_option_value'),
                         array('option_id', 'store_id', 'value'),
-                        1
+                        Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
                     );
 
                     $adapter->query($insert);

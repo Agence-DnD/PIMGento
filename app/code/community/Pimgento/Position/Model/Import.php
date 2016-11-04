@@ -162,7 +162,12 @@ class Pimgento_Position_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $adapter->query(
-            $adapter->insertFromSelect($select, $resource->getTable('catalog/category_product'), array(), 1)
+            $adapter->insertFromSelect(
+                $select,
+                $resource->getTable('catalog/category_product'),
+                array(),
+                Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
+            )
         );
 
         return true;

@@ -145,7 +145,7 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
                 $select,
                 $this->getTable('pimgento_core/code'),
                 array('import', 'code', 'entity_id'),
-                2
+                Varien_Db_Adapter_Interface::INSERT_IGNORE
             );
 
             $adapter->query($insert);

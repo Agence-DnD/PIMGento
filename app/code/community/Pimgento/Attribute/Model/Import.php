@@ -87,7 +87,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
             $select,
             $resource->getTable('pimgento_core/code'),
             array('import', 'code', 'entity_id'),
-            2
+            Varien_Db_Adapter_Interface::INSERT_IGNORE
         );
 
         $adapter->query($insert);
