@@ -1262,23 +1262,31 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $adapter  = $this->getAdapter();
         $helper   = Mage::helper('pimgento_asset');
 
-        if (!Mage::helper('core')->isModuleEnabled('Pimgento_Asset')) {
+        $mediaGalleryTable = $resource->getTable('catalog/product_attribute_media_gallery');
+        $mediaGalleryValueTable = $resource->getTable('catalog/product_attribute_media_gallery_value');
+
+        $stores = Mage::helper('pimgento_core')->getStoresLang();
+
+        if (!Mage::helper('core')->isModuleEnabled('Pimgento_Asset') || !$adapter->isTableExists('pimgento_asset')) {
             $task->setMessage(
                 $helper->__('Asset import is not available')
             );
             return false;
         }
 
-        if (!$adapter->isTableExists('pimgento_asset')) {
-            $task->setMessage(
-                $helper->__('Asset import is not available')
-            );
+        $mediaGalleryAttribute = $resource->getAttribute('media_gallery', $this->_entityTypeId);
+
+        if (!$mediaGalleryAttribute) {
+            $task->setMessage($helper->__('Attribute %s not found', 'media_gallery'));
             return false;
         }
+
+        $mediaGalleryAttributeId = $mediaGalleryAttribute['attribute_id'];
 
         /* @var $assetModel Pimgento_Asset_Model_Import */
         $assetModel = Mage::getModel('pimgento_asset/import');
 
+        // Get the Magento image attribute code
         $attributeCode = Mage::getStoreConfig('pimdata/' . $assetModel->getCode() . '/attribute');
 
         if (!$attributeCode) {
@@ -1288,28 +1296,41 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             return false;
         }
 
-        if (!$adapter->tableColumnExists($this->getTable(), $attributeCode)) {
-            $task->setMessage(
-                $helper->__('Column "%s" not found', $attributeCode)
-            );
-            return false;
+        $transformer = Mage::helper('pimgento_product')->transformer();
+
+        $assetAkeneoAttributeCodes = array();
+        // Trying to find one or more correspondances with transformer
+        foreach ($transformer as $akeneoAttributeCode => $magentoAttributeCodes) {
+            if (in_array($attributeCode, $magentoAttributeCodes)) {
+                $assetAkeneoAttributeCodes[] = $akeneoAttributeCode;
+            }
         }
 
-        $attribute = $resource->getAttribute('media_gallery', 4);
+        // Fall-back: if no correspondance, fall-back to standard behavior
+        if (!$assetAkeneoAttributeCodes)
+            $assetAkeneoAttributeCodes[] = $attributeCode;
 
-        if (!$attribute) {
-            $task->setMessage($helper->__('Attribute %s not found', 'media_gallery'));
-            return false;
+        foreach ($assetAkeneoAttributeCodes as $i => $assetAkeneoAttributeCode) {
+            if (!$adapter->tableColumnExists($this->getTable(), $assetAkeneoAttributeCode)) {
+                $task->setMessage(
+                    $helper->__('Column "%s" not found', $assetAkeneoAttributeCode)
+                );
+                return false;
+            }
         }
-
-        $attributeId = $attribute['attribute_id'];
 
         $exists = $adapter->select()->from(
-            $resource->getTable('catalog/product_attribute_media_gallery'),
+            $mediaGalleryTable,
             array('value')
         );
 
-        $select = $adapter->select()
+        $assetSqlColumns = implode(',', array_map(function($asset) {
+                    return '`p`.`' . $asset . '`';
+                }, $assetAkeneoAttributeCodes));
+
+        $joiningCondition = 'FIND_IN_SET(`a`.`asset`, CONCAT_WS(",", '. $assetSqlColumns . '))';
+
+        $assetSelect = $adapter->select()
             ->from(
                 array(
                     'a' => $adapter->getTableName('pimgento_asset')
@@ -1318,9 +1339,9 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             )
             ->joinInner(
                 array('p' => $this->getTable()),
-                'FIND_IN_SET(`a`.`asset`, `p`.`' . $attributeCode . '`)',
+                $joiningCondition,
                 array(
-                    'attribute_id' => $this->_zde($attributeId),
+                    'attribute_id' => $this->_zde($mediaGalleryAttributeId),
                     'entity_id'    => 'p.entity_id',
                     'value'        => 'a.image',
                 )
@@ -1330,15 +1351,115 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 'p.entity_id = e.entity_id',
                 array()
             )
-            ->where('a.image NOT IN (?)', $exists);
+            ->where('a.image NOT IN (?)', $exists)
+            ->order($joiningCondition); // Get the same order as the one listed in asset set(s)
 
-        $insert = $adapter->insertFromSelect(
-            $select, $resource->getTable('catalog/product_attribute_media_gallery'),
+        // Insert in product_attribute_media_gallery
+        $mediaGalleryInsert = $adapter->insertFromSelect(
+            $assetSelect, $mediaGalleryTable,
             array('attribute_id', 'entity_id', 'value'),
             Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
         );
 
-        $adapter->query($insert);
+        $adapter->query($mediaGalleryInsert);
+
+        // Remove no longer used images in catalog_product_entity_media_gallery
+        $assetSelect->reset(Varien_Db_Select::WHERE);
+
+        /** @todo Fetch the SELECT WHERE NOT EXISTS and remove physically
+         * the incriminated files.
+         */
+
+        $deleteFromSelect = $adapter->select()
+            ->from(array('m' => $mediaGalleryTable))
+            ->joinInner( // restriction aux produits mis à jour par le flux
+                array('p' => $this->getTable()),
+                'p.entity_id = m.entity_id'
+            )
+            ->exists($assetSelect, 'm.attribute_id = '.$mediaGalleryAttributeId.' AND m.entity_id = p.entity_id AND m.value = a.image', false)
+            ->deleteFromSelect('m');
+
+        $adapter->query($deleteFromSelect);
+
+        // Now insert in product_attribute_media_gallery_value, for each store
+        $mediaSelect = $adapter->select()
+            ->from(
+                array('p' => $this->getTable()),
+                array()
+            )
+            ->joinInner(
+                array('m' => $mediaGalleryTable),
+                'p.entity_id = m.entity_id',
+                array('m.value_id')
+            );
+
+        foreach ($stores as $local => $ids) {
+            foreach ($ids as $storeId) {
+                $columns = array(
+                    'value_id'   => 'm.value_id',
+                    'store_id'   => $this->_zde($storeId),
+                    'label'      => $this->_zde('""'),
+                    'position'   => $this->_zde(0),
+                    'disabled'   => $this->_zde(0),
+                );
+
+                $mediaSelect->reset(Varien_Db_Select::COLUMNS)->columns($columns);
+
+                $mediaGalleryValuesInsert = $adapter->insertFromSelect(
+                    $mediaSelect, $mediaGalleryValueTable,
+                    array_keys($columns),
+                    Varien_Db_Adapter_Interface::INSERT_IGNORE
+                );
+
+                $adapter->query($mediaGalleryValuesInsert);
+            }
+        }
+
+        /**
+         * Now set default values (i.e. the first asset or the first matched Akeneo
+         * asset attribute) for attributes small_image, image and thumbnail.
+         */
+
+        // Add mandatory columns in tmp table
+        $adapter->addColumn($this->getTable(), '_small_image', 'VARCHAR(255) NOT NULL default ""');
+        $adapter->addColumn($this->getTable(), '_image', 'VARCHAR(255) NOT NULL default ""');
+        $adapter->addColumn($this->getTable(), '_thumbnail', 'VARCHAR(255) NOT NULL default ""');
+
+        $columns = array(
+            'entity_id'     => 'p.entity_id',
+            '_image'        => 'a.image',
+            '_small_image'  => 'a.small_image',
+            '_thumbnail'    => 'a.thumbnail',
+        );
+
+        /**
+         * In order to be sure to find the right first image, we first have to
+         * order by FIND_IN_SET() then encapsulate the request into a subrequest
+         * and grouping the resulting query by entity_id.
+         */
+        $assetSelect
+            ->reset(Varien_Db_Select::COLUMNS)
+            ->reset(Varien_Db_Select::WHERE)
+            ->columns($columns);
+
+        $defaultImagesSelect = $adapter->select()
+            ->from(array('a' => $assetSelect))
+            ->group('a.entity_id');
+
+        // Feed tmp table with right corresponding values
+        $feedImageColumnsInsert = $adapter->insertFromSelect(
+            $defaultImagesSelect, $this->getTable(), array_keys($columns), Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
+        );
+
+        $adapter->query($feedImageColumnsInsert);
+
+        // Now update attributes values
+        $values = array(
+            'image'        => '_image',
+            'small_image'  => '_small_image',
+            'thumbnail'    => '_thumbnail',
+        );
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0);
 
         return true;
     }
