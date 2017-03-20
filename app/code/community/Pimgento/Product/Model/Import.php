@@ -957,11 +957,15 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 ->where('attribute_code = ?', 'special_price')
                 ->limit(1));
 
-        $attributes = explode(',', $this->getConfig('configurable_attributes'));
+        if ($priceId && $specialPriceId) {
 
-        if (count($attributes) && $priceId && $specialPriceId) {
-
-            $attributeId = end($attributes);
+            $attributeId = $adapter->select()
+                ->from(
+                    array('a2' => $resource->getTable('catalog/product_super_attribute')),
+                    array('attribute_id')
+                )
+                ->where('a.attribute_id = a2.attribute_id')
+                ->limit(1);
 
             $select = $adapter->select()
                 ->from(
@@ -1007,7 +1011,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     array()
                 )->joinInner(
                     array('o' => $resource->getTable('eav/attribute_option')),
-                    'a.attribute_id = o.attribute_id AND o.attribute_id = ' . $attributeId . ' AND i.value = o.option_id',
+                    'a.attribute_id = o.attribute_id AND o.attribute_id = (' . $attributeId . ') AND i.value = o.option_id',
                     array()
                 )->having('pricing_value > 0');
 

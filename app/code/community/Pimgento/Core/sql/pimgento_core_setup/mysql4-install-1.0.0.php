@@ -12,7 +12,6 @@ $installer->startSetup();
 
 $installer->run("
 
-DROP TABLE IF EXISTS `{$installer->getTable('pimgento_core/code')}`;
 CREATE TABLE IF NOT EXISTS `{$installer->getTable('pimgento_core/code')}` (
   `id`        INT(11) unsigned NOT NULL AUTO_INCREMENT,
   `import`    VARCHAR(255) NOT NULL default '',
