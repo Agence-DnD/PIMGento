@@ -95,7 +95,6 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
-        Mage::getModel('catalog/product')->getResource()->getTypeId();
 
         $parents = $adapter->select()
             ->from(
