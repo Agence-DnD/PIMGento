@@ -14,6 +14,16 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
     protected $_code = 'family';
 
     /**
+     * @var int
+     */
+    protected $_productEntityTypeId = null;
+
+    /**
+     * @var int
+     */
+    protected $_defaultAttributeSetId = null;
+
+    /**
      * Create table (Step 1)
      *
      * @param Pimgento_Core_Model_Task $task
@@ -85,13 +95,14 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
+        Mage::getModel('catalog/product')->getResource()->getTypeId();
 
         $parents = $adapter->select()
             ->from(
                 $this->getTable(),
                 array(
                     'attribute_set_id'   => 'entity_id',
-                    'entity_type_id'     => $this->_zde(4),
+                    'entity_type_id'     => $this->_zde($this->getProductEntityTypeId()),
                     'attribute_set_name' => 'label',
                     'sort_order'         => $this->_zde(1),
                 )
@@ -147,7 +158,7 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $set = Mage::getModel('eav/entity_attribute_set')->load($row['entity_id']);
 
                 if ($set->hasData()) {
-                    $set->initFromSkeleton(4)->save();
+                    $set->initFromSkeleton($this->getDefaultAttributSetId())->save();
                     $count++;
                 }
 
@@ -174,6 +185,35 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
         Mage::dispatchEvent('task_executor_drop_table_after', array('task' => $task));
 
         return true;
+    }
+
+    /**
+     * get product entity type id
+     *
+     * @return int
+     */
+    public function getProductEntityTypeId()
+    {
+        if($this->_productEntityTypeId === NULL){
+            $this->_productEntityTypeId = Mage::getModel('catalog/product')->getResource()->getTypeId();
+        }
+        return $this->_productEntityTypeId;
+    }
+
+
+    /**
+     * get default attribute set id
+     *
+     * @return int
+     */
+    public function getDefaultAttributSetId()
+    {
+        if($this->_defaultAttributeSetId === NULL){
+            $this->_defaultAttributeSetId = Mage::getSingleton('eav/config')
+                ->getEntityType(Mage_Catalog_Model_Product::ENTITY)
+                ->getDefaultAttributeSetId();
+        }
+        return $this->_defaultAttributeSetId;
     }
 
 }
