@@ -133,61 +133,59 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $adapter->addColumn($this->getTable(), '_children',   'TEXT NULL');
         $adapter->addColumn($this->getTable(), '_attributes', 'VARCHAR(255) NOT NULL DEFAULT ""');
 
-        if ($adapter->isTableExists('pimgento_variant')) {
-            $select = $adapter->select()
-                ->from(false, array())
-                ->joinInner(
-                    array('v' => $adapter->getTableName('pimgento_variant')),
-                    'p.groups = v.code',
-                    array(
-                        '_attributes' => 'v.axis'
-                    )
-                );
-
-            $adapter->query(
-                $adapter->updateFromSelect($select, array('p' => $this->getTable()))
-            );
-        }
-
-        $attributes = explode(',', $this->getConfig('configurable_attributes'));
-
-        if (!count($attributes)) {
-            $task->setMessage(
-                Mage::helper('pimgento_product')->__(
-                    'No attribute selected in configuration, configurable products will not be created'
-                )
-            );
-            return false;
-        }
-
-        $success = true;
-
-        foreach ($attributes as $id) {
-            $code = $adapter->fetchOne(
-                $adapter->select()
-                    ->from(
-                        $resource->getTable('eav/attribute'),
+        if ($this->getConfig('use_variant')) {
+            if ($adapter->isTableExists('pimgento_variant')) {
+                $select = $adapter->select()
+                    ->from(false, array())
+                    ->joinInner(
+                        array('v' => $adapter->getTableName('pimgento_variant')),
+                        'p.groups = v.code',
                         array(
-                            'attribute_code'
+                            '_attributes' => 'v.axis'
                         )
-                    )
-                    ->where('attribute_id = ?', $id)
-                    ->limit(1)
-            );
-
-            if ($code) {
-                if ($adapter->tableColumnExists($this->getTable(), $code)) {
-                    $values = array(
-                        '_attributes' => $this->_zde('TRIM(BOTH "," FROM CONCAT(`_attributes`, ",", "' . $id . '"))')
                     );
 
-                    $variant = '';
-                    if ($adapter->isTableExists('pimgento_variant')) {
-                        $variantTable = $adapter->getTableName('pimgento_variant');
-                        $variant = ' AND `groups` NOT IN (SELECT `code` FROM `' . $variantTable . '`)';
-                    }
+                $adapter->query(
+                    $adapter->updateFromSelect($select, array('p' => $this->getTable()))
+                );
+            }
+        } else {
+            $attributes = explode(',', $this->getConfig('configurable_attributes'));
 
-                    $adapter->update($this->getTable(), $values, '`' . $code . '` <> "" AND `groups` <> ""' . $variant);
+            if (!count($attributes)) {
+                $task->setMessage(
+                    Mage::helper('pimgento_product')->__(
+                        'No attribute selected in configuration, configurable products will not be created'
+                    )
+                );
+                return false;
+            }
+
+            foreach ($attributes as $id) {
+                $code = $adapter->fetchOne(
+                    $adapter->select()
+                        ->from(
+                            $resource->getTable('eav/attribute'),
+                            array(
+                                'attribute_code'
+                            )
+                        )
+                        ->where('attribute_id = ?', $id)
+                        ->limit(1)
+                );
+
+                if ($code) {
+                    if ($adapter->tableColumnExists($this->getTable(), $code)) {
+                        $values = array(
+                            '_attributes' => $this->_zde(
+                                'TRIM(BOTH "," FROM CONCAT(`_attributes`, ",", "' . $id . '"))'
+                            )
+                        );
+
+                        $adapter->update(
+                            $this->getTable(), $values, '`' . $code . '` <> "" AND `groups` <> ""'
+                        );
+                    }
                 }
             }
         }
@@ -285,6 +283,8 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         }
 
         $matches = unserialize($this->getConfig('configurable_values'));
+
+        $success = true;
 
         foreach ($matches as $match) {
             if ($adapter->tableColumnExists($this->getTable(), $match['attribute'])) {
@@ -686,6 +686,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $this->getTable(),
                 array(
                     'entity_id',
+                    'family',
                     '_attributes',
                     '_children'
                 )
@@ -708,6 +709,17 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 }
 
                 if (!is_numeric($id)) {
+                    continue;
+                }
+
+                $existsInFamily = $adapter->fetchOne(
+                    $adapter->select()
+                        ->from($resource->getTable('eav/entity_attribute'), array('attribute_set_id'))
+                        ->where('attribute_set_id = ?', $row['family'])
+                        ->where('attribute_id = ?', $id)
+                );
+
+                if (!$existsInFamily) {
                     continue;
                 }
 
