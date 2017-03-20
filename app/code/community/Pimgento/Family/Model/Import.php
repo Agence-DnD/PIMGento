@@ -147,9 +147,9 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             $exist = $adapter->fetchOne(
                 $adapter->select()
-                ->from($resource->getTable('eav/attribute_group'), array($this->_zde(1)))
-                ->where('attribute_set_id = ?', $row['entity_id'])
-                ->limit(1)
+                    ->from($resource->getTable('eav/attribute_group'), array($this->_zde(1)))
+                    ->where('attribute_set_id = ?', $row['entity_id'])
+                    ->limit(1)
             );
 
             if (!$exist) {
