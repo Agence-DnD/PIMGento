@@ -225,11 +225,22 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $query = $adapter->query($select);
 
+        $ioAdapter = new Varien_Io_File();
+        $destination = $helper->getBaseMediaPath();
+
         while (($row = $query->fetch())) {
 
             $images = explode(',', $row['gallery']);
 
             $table = $resource->getTable('catalog/product_attribute_media_gallery');
+
+            // Try to hard delete old assets if needed
+            if (Mage::getStoreConfig('pimdata/image/delete_previous')) {
+                $existingImages = $adapter->query($adapter->select()->from($table, array('entity_id', 'value'))->where('attribute_id=' . $attributeId . ' AND entity_id = ' . $row['entity_id']));
+                while (($existingRow = $existingImages->fetch())) {
+                    $ioAdapter->rm($destination . $existingRow['value']);
+                }
+            }
 
             $adapter->delete($table, 'entity_id = ' . $row['entity_id']);
 
