@@ -578,8 +578,9 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $translation = false;
 
             foreach ($codes as $code => $ids) {
-
-                if (preg_match('/^(.*)-(.*)$/', $column)) {
+                
+                //check if index-key is a localized one -> e.g. en_US
+                if (preg_match('/-[a-z]{2}_[A-Z]{2}$/', $column)) {
 
                     $translation = true;
 
