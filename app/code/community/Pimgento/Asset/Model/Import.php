@@ -68,6 +68,7 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
     public function updateColumns($task)
     {
         $adapter  = $this->getAdapter();
+        $resource = $this->getResource();
 
         /* Clean Up */
         $adapter->delete($this->getTable(), array('reference_file = ""'));
@@ -76,7 +77,7 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $websites = unserialize(Mage::getStoreConfig('pimdata/general/websites'));
 
         $codes = $adapter->fetchPairs(
-            $adapter->select()->from($adapter->getTableName('core_website'), array('code', 'website_id'))
+            $adapter->select()->from($resource->getTable('core/website'), array('code', 'website_id'))
         );
 
         $adapter->addColumn($this->getTable(), 'website_id', 'INT(11) NULL');
@@ -102,7 +103,7 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $stores = $adapter->fetchPairs(
             $adapter->select()
                 ->from(
-                    $adapter->getTableName('core_store'),
+                    $resource->getTable('core/store'),
                     array('website_id', $this->_zde('GROUP_CONCAT(`store_id` SEPARATOR ",")'))
                 )
                 ->where('website_id <> ?', 0)
@@ -122,7 +123,7 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
             foreach ($ids as $storeId) {
                 $local = $adapter->fetchOne(
                     $adapter->select()
-                        ->from($adapter->getTableName('core_config_data'), array('value'))
+                        ->from($resource->getTable('core/config_data'), array('value'))
                         ->where('path = ?', 'general/locale/code')
                         ->where('scope_id = "' . $storeId . '" OR scope_id = 0')
                         ->order('scope_id DESC')
