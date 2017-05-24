@@ -14,6 +14,16 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
     protected $_code = 'category';
 
     /**
+     * @var int
+     */
+    protected $_categoryEntityTypeId = null;
+
+    /**
+     * @var int
+     */
+    protected $_defaultAttributeSetId = null;
+
+    /**
      * Create table (Step 1)
      *
      * @param Pimgento_Core_Model_Task $task
@@ -133,27 +143,27 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $query = $adapter->query(
             $adapter->select()
-            ->from(
-                $this->getTable(),
-                array(
-                    'entity_id' => 'entity_id',
-                    'parent_id' => 'parent_id',
+                ->from(
+                    $this->getTable(),
+                    array(
+                        'entity_id' => 'entity_id',
+                        'parent_id' => 'parent_id',
+                    )
                 )
-            )
         );
 
         while (($row = $query->fetch())) {
 
             $position = $adapter->fetchOne(
                 $adapter->select()
-                ->from(
-                    $this->getTable(),
-                    array(
-                        'position' => $this->_zde('MAX(`position`) + 1')
+                    ->from(
+                        $this->getTable(),
+                        array(
+                            'position' => $this->_zde('MAX(`position`) + 1')
+                        )
                     )
-                )
-                ->where('parent_id = ?', $row['parent_id'])
-                ->group('parent_id')
+                    ->where('parent_id = ?', $row['parent_id'])
+                    ->group('parent_id')
             );
 
             $values = array(
@@ -181,8 +191,8 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $values = array(
             'entity_id'        => 'entity_id',
-            'entity_type_id'   => $this->_zde(3),
-            'attribute_set_id' => $this->_zde(3),
+            'entity_type_id'   => $this->_zde($this->getCategoryEntityTypeId()),
+            'attribute_set_id' => $this->_zde($this->getDefaultAttributeSetId()),
             'parent_id'        => 'parent_id',
             'updated_at'       => $this->_zde('now()'),
             'path'             => 'path',
@@ -227,7 +237,7 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
         );
 
         // Do not update
-        $this->getRequest()->setValues($this->getCode(), 'catalog/category', $values, 3, 0, 2);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/category', $values, $this->getCategoryEntityTypeId(), 0, 2);
 
         /* @var $helper Pimgento_Core_Helper_Data */
         $helper = Mage::helper('pimgento_core');
@@ -244,7 +254,7 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         'name' => 'label-' . $local,
                     );
 
-                    $this->getRequest()->setValues($this->getCode(), 'catalog/category', $values, 3, $storeId);
+                    $this->getRequest()->setValues($this->getCode(), 'catalog/category', $values, $this->getCategoryEntityTypeId(), $storeId);
                 }
 
             }
@@ -289,7 +299,7 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
-        $attribute = $resource->getAttribute('url_key', 3);
+        $attribute = $resource->getAttribute('url_key', $this->getCategoryEntityTypeId());
 
         /* @var $url Mage_Catalog_Model_Product_Url */
         $url = Mage::getModel('catalog/product_url');
@@ -315,7 +325,7 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         $new = $url->formatUrlKey($row['name']);
 
                         $values = array(
-                            'entity_type_id' => $this->_zde(3),
+                            'entity_type_id' => $this->_zde($this->getCategoryEntityTypeId()),
                             'attribute_id'   => $this->_zde($attribute['attribute_id']),
                             'store_id'       => $this->_zde($storeId),
                             'entity_id'      => $row['entity_id'],
@@ -449,4 +459,31 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
         return true;
     }
 
+    /**
+     * Get category entity type id
+     *
+     * @return int
+     */
+    public function getCategoryEntityTypeId()
+    {
+        if ($this->_categoryEntityTypeId === NULL) {
+            $this->_categoryEntityTypeId = Mage::getModel('catalog/category')->getResource()->getTypeId();
+        }
+        return $this->_categoryEntityTypeId;
+    }
+
+    /**
+     * Get default attribute set id for categories
+     *
+     * @return int
+     */
+    public function getDefaultAttributeSetId()
+    {
+        if ($this->_defaultAttributeSetId === NULL) {
+            $this->_defaultAttributeSetId = Mage::getSingleton('eav/config')
+                ->getEntityType(Mage_Catalog_Model_Category::ENTITY)
+                ->getDefaultAttributeSetId();
+        }
+        return $this->_defaultAttributeSetId;
+    }
 }
