@@ -815,7 +815,8 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         'product_id' => 'entity_id',
                         'website_id' => $this->_zde($website->getId())
                     )
-                );
+                )
+                ->where('import = ?', 'product');
 
             $insert = $adapter->insertFromSelect(
                 $select,
