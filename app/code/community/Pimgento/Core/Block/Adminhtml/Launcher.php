@@ -5,7 +5,7 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Pimgento_Core_Block_Adminhtml_Launcher extends Mage_Adminhtml_Block_Media_Uploader
+class Pimgento_Core_Block_Adminhtml_Launcher extends Mage_Uploader_Block_Multiple
 {
 
     /**
@@ -16,8 +16,6 @@ class Pimgento_Core_Block_Adminhtml_Launcher extends Mage_Adminhtml_Block_Media_
         parent::__construct();
 
         $this->setTemplate('pimgento/launcher.phtml');
-
-        $params = $this->getConfig()->getParams();
 
         $type = $this->_getMediaType();
 
@@ -37,16 +35,18 @@ class Pimgento_Core_Block_Adminhtml_Launcher extends Mage_Adminhtml_Block_Media_
         /* @var $urlModel Mage_Adminhtml_Model_Url */
         $urlModel = Mage::getModel('adminhtml/url');
 
-        $this->getConfig()
-             ->setUrl($urlModel->addSessionParam()->getUrl('adminhtml/task/upload', array('type' => $type)))
-             ->setParams($params)
-             ->setFileField('file')
-             ->setFilters(array(
-                    'files' => array(
-                        'label' => $helper->__('File (%s)', implode(', ', $labels)),
-                        'files' => $files
-                    )
-                ));
+        $this->getUploaderConfig()
+             ->setFileParameterName('file')
+             ->setTarget(
+                 $urlModel->addSessionParam()->getUrl('adminhtml/task/upload', array('type' => $type))
+             );
+
+        $this->getButtonConfig()
+            ->setAttributes(
+                array(
+                    'accept' => $allowed
+                )
+            );
     }
 
     /**
