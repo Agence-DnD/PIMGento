@@ -9,6 +9,11 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
 {
 
     /**
+     * @var int
+     */
+    protected $_productEntityTypeId = null;
+
+    /**
      * Retrieve Stores languages
      *
      * @return array
@@ -232,4 +237,11 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
         return $directory;
     }
 
+    public function getProductEntityTypeId()
+    {
+        if ($this->_productEntityTypeId === NULL) {
+            $this->_productEntityTypeId = Mage::getModel('catalog/product')->getResource()->getTypeId();
+        }
+        return $this->_productEntityTypeId;
+    }
 }
