@@ -149,3 +149,4 @@
 "CSV: Use MySql Load Data File","CSV: Use MySql Load Data File"
 "Asset import is not available","Asset import is not available"
 "Please select asset attribute in Pimgento Configuration (Asset)","Please select asset attribute in Pimgento Configuration (Asset)"
+"Cron: delete CSV file after import","Cron: delete CSV file after import"
