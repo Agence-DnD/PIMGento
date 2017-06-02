@@ -553,7 +553,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'options_container'     => '_options_container',
             'enable_googlecheckout' => $this->_zde(0),
             'is_recurring'          => $this->_zde(0),
-            'visibility'            => $this->_zde($this->getProductEntityTypeId()),
+            'visibility'            => $this->_zde(4),
         );
 
         if ($this->getConfig('configurable_enabled')) {
