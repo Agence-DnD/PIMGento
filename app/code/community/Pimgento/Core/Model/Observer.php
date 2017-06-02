@@ -13,6 +13,7 @@ class Pimgento_Core_Model_Observer
 
         $file = $task->getFile();
 
-        unlink($file);
+        if (file_exists($file))
+            unlink($file);
     }
 }
