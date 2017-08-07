@@ -120,7 +120,43 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Init default Group (Step 5)
+     * Insert family attribute relations (Step 5)
+     *
+     * @param Pimgento_Core_Model_Task $task
+     *
+     * @return bool
+     */
+    public function insertFamilyAttributeRelations($task) {
+        $resource = $this->getResource();
+        $adapter = $this->getAdapter();
+
+        $values = $adapter
+            ->select()
+            ->from(
+                $this->getTable(),
+                array(
+                    'family_code' => 'code',
+                    'attribute_code' => 'attributes'
+                )
+            );
+
+        $query = $adapter->query($values);
+
+        while ($row = $query->fetch()) {
+            $attributes = explode(',', $row['attribute_code']);
+            foreach ($attributes as $attribute) {
+                $adapter->insert(
+                    'pimgento_family_attribute_relations',
+                    array('family_code' => $row['family_code'], 'attribute_code' => $attribute)
+                );
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Init default Group (Step 6)
      *
      * @param Pimgento_Core_Model_Task $task
      *
@@ -171,7 +207,7 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
     }
 
     /**
-     * Drop table (Step 6)
+     * Drop table (Step 7)
      *
      * @param Pimgento_Core_Model_Task $task
      *

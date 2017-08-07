@@ -306,11 +306,6 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
      */
     protected function _updateFamily($data)
     {
-        if (empty($data['families'])) {
-            $defaultAttributeSets = Mage::getStoreConfig('pimdata/attribute/families');
-            $data['families'] = $defaultAttributeSets;
-        }
-
         /* @var $model Mage_Catalog_Model_Resource_Eav_Attribute */
         $model = Mage::getModel('catalog/resource_eav_attribute');
 
@@ -323,7 +318,22 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
 
             $groups = $this->getRequest()->getCodes($familyModel->getCode());
 
-            $families = explode(',', $data['families']);
+            $adapter  = $this->getAdapter();
+            $sql = $adapter->select()
+                ->from('pimgento_family_attribute_relations', array ('family_code' => 'family_code'))
+                ->where('attribute_code = ?', $model->getAttributeCode());
+            $query = $adapter->query($sql);
+
+            if ($query->fetchAll()) {
+                $families = array();
+                while($row = $query->fetch()) {
+                    array_push($families, $row['family_code']);
+                }
+            } else {
+                $defaultAttributeSets = Mage::getStoreConfig('pimdata/attribute/families');
+                $data['families'] = $defaultAttributeSets;
+                $families = explode(',', $data['families']);
+            }
 
             $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
 
