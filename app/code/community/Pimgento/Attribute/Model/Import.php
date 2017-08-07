@@ -324,11 +324,11 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
                 ->where('attribute_code = ?', $model->getAttributeCode());
             $query = $adapter->query($sql);
 
-            if ($query->fetchAll()) {
+            if ($row = $query->fetch()) {
                 $families = array();
-                while($row = $query->fetch()) {
+                do {
                     array_push($families, $row['family_code']);
-                }
+                } while ($row = $query->fetch());
             } else {
                 $defaultAttributeSets = Mage::getStoreConfig('pimdata/attribute/families');
                 $data['families'] = $defaultAttributeSets;
