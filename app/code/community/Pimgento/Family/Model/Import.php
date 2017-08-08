@@ -129,9 +129,11 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
     public function insertFamilyAttributeRelations($task) {
         $resource = $this->getResource();
         $adapter = $this->getAdapter();
+        $familyAttributeRelationsTable = 'pimgento_family_attribute_relations';
 
-        $values = $adapter
-            ->select()
+        $adapter->delete($familyAttributeRelationsTable);
+
+        $values = $adapter->select()
             ->from(
                 $this->getTable(),
                 array(
@@ -146,7 +148,7 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $attributes = explode(',', $row['attribute_code']);
             foreach ($attributes as $attribute) {
                 $adapter->insert(
-                    'pimgento_family_attribute_relations',
+                    $familyAttributeRelationsTable,
                     array('family_code' => $row['family_code'], 'attribute_code' => $attribute)
                 );
             }
