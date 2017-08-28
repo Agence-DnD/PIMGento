@@ -150,3 +150,4 @@
 "Asset import is not available","L'import des assets n'est pas disponible"
 "Please select asset attribute in Pimgento Configuration (Asset)","Merci de sélectionner l'attribut asset dans la configuration de Pimgento (Asset)"
 "Use variant import for axis","Utiliser l'import des variant pour les axes"
+"Cron: delete CSV file after import","Cron : supprimer le fichier CSV après import"
