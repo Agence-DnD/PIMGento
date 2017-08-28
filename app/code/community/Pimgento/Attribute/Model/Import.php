@@ -14,6 +14,11 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
     protected $_code = 'attribute';
 
     /**
+     * @var int
+     */
+    protected $_productEntityTypeId = null;
+
+    /**
      * Create table (Step 1)
      *
      * @param Pimgento_Core_Model_Task $task
@@ -81,7 +86,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
                     'entity_id'  => 'attribute_id',
                 )
             )
-            ->where('entity_type_id = ?', 4);
+            ->where('entity_type_id = ?', $this->getDefaultAttributSetId());
 
         $insert = $adapter->insertFromSelect(
             $select,
@@ -435,7 +440,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
 
         $values = array(
             'attribute_id'   => $data['entity_id'],
-            'entity_type_id' => 4
+            'entity_type_id' => $this->getDefaultAttributSetId()
         );
 
         $adapter->insertIgnore($resource->getTable('eav/attribute'), $values);
@@ -527,9 +532,21 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
                     'attribute_id',
                 )
             )
-            ->where('entity_type_id = ?', 4);
+            ->where('entity_type_id = ?', $this->getDefaultAttributSetId());
 
         return $adapter->fetchCol($select);
     }
 
+    /**
+     * get product entity type id
+     *
+     * @return int
+     */
+    public function getProductEntityTypeId()
+    {
+        if ($this->_productEntityTypeId === NULL) {
+            $this->_productEntityTypeId = Mage::helper('pimgento_core')->getProductEntityTypeId();
+        }
+        return $this->_productEntityTypeId;
+    }
 }

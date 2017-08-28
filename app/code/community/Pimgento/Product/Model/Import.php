@@ -14,6 +14,11 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     protected $_code = 'product';
 
     /**
+     * @var int
+     */
+    protected $_productEntityTypeId = null;
+
+    /**
      * Create table (Step 1)
      *
      * @param Pimgento_Core_Model_Task $task
@@ -499,7 +504,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $values = array(
             'entity_id'        => 'entity_id',
-            'entity_type_id'   => $this->_zde(4),
+            'entity_type_id'   => $this->_zde($this->getProductEntityTypeId()),
             'attribute_set_id' => 'family',
             'type_id'          => '_type_id',
             'sku'              => 'code',
@@ -542,7 +547,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'tax_class_id' => '_tax_class_id',
         );
 
-        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0, 2);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->getProductEntityTypeId(), 0, 2);
 
         $values = array(
             'options_container'     => '_options_container',
@@ -555,7 +560,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $values['visibility'] = $this->_zde('IF(`_type_id` = "simple" AND `groups` <> "", 1, 4)');
         }
 
-        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->getProductEntityTypeId(), 0);
 
         /* @var $helper Pimgento_Core_Helper_Data */
         $helper = Mage::helper('pimgento_core');
@@ -623,7 +628,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                             }
 
                             $this->getRequest()->setValues(
-                                $this->getCode(), 'catalog/product', $values, 4, $storeId
+                                $this->getCode(), 'catalog/product', $values, $this->getProductEntityTypeId(), $storeId
                             );
                         }
 
@@ -648,7 +653,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 }
 
                 $this->getRequest()->setValues(
-                    $this->getCode(), 'catalog/product', $values, 4, 0
+                    $this->getCode(), 'catalog/product', $values, $this->getProductEntityTypeId(), 0
                 );
             }
 
@@ -682,17 +687,17 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $query = $adapter->query(
             $adapter->select()
-            ->from(
-                $this->getTable(),
-                array(
-                    'entity_id',
-                    'family',
-                    '_attributes',
-                    '_children'
+                ->from(
+                    $this->getTable(),
+                    array(
+                        'entity_id',
+                        'family',
+                        '_attributes',
+                        '_children'
+                    )
                 )
-            )
-            ->where('_type_id = ?', 'configurable')
-            ->where('_attributes <> ?', $this->_zde('""'))
+                ->where('_type_id = ?', 'configurable')
+                ->where('_attributes <> ?', $this->_zde('""'))
         );
 
         $stores = Mage::app()->getStores();
@@ -757,14 +762,14 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
                     $childId = $adapter->fetchOne(
                         $adapter->select()
-                        ->from(
-                            $resource->getTable('catalog/product'),
-                            array(
-                                'entity_id'
+                            ->from(
+                                $resource->getTable('catalog/product'),
+                                array(
+                                    'entity_id'
+                                )
                             )
-                        )
-                        ->where('sku = ?', $child)
-                        ->limit(1)
+                            ->where('sku = ?', $child)
+                            ->limit(1)
                     );
 
                     if ($childId) {
@@ -932,7 +937,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
                 if (count($values)) {
                     $this->getRequest()->setValues(
-                        $this->getCode(), 'catalog/product', $values, 4, $data['id']
+                        $this->getCode(), 'catalog/product', $values, $this->getProductEntityTypeId(), $data['id']
                     );
                 }
 
@@ -965,14 +970,14 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $priceId = $adapter->fetchOne(
             $adapter->select()
                 ->from($resource->getTable('eav/attribute'), array('attribute_id'))
-                ->where('entity_type_id = ?', 4)
+                ->where('entity_type_id = ?', $this->getProductEntityTypeId())
                 ->where('attribute_code = ?', 'price')
                 ->limit(1));
 
         $specialPriceId = $adapter->fetchOne(
             $adapter->select()
                 ->from($resource->getTable('eav/attribute'), array('attribute_id'))
-                ->where('entity_type_id = ?', 4)
+                ->where('entity_type_id = ?', $this->getProductEntityTypeId())
                 ->where('attribute_code = ?', 'special_price')
                 ->limit(1));
 
@@ -1305,7 +1310,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             return false;
         }
 
-        $mediaGalleryAttribute = $resource->getAttribute('media_gallery', 4);
+        $mediaGalleryAttribute = $resource->getAttribute('media_gallery', $this->getProductEntityTypeId());
 
         if (!$mediaGalleryAttribute) {
             $task->setMessage($helper->__('Attribute %s not found', 'media_gallery'));
@@ -1356,8 +1361,8 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         );
 
         $assetSqlColumns = implode(',', array_map(function($asset) {
-                    return '`p`.`' . $asset . '`';
-                }, $assetAkeneoAttributeCodes));
+            return '`p`.`' . $asset . '`';
+        }, $assetAkeneoAttributeCodes));
 
         $joiningCondition = 'FIND_IN_SET(`a`.`asset`, CONCAT_WS(",", '. $assetSqlColumns . '))';
 
@@ -1490,7 +1495,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'small_image'  => '_small_image',
             'thumbnail'    => '_thumbnail',
         );
-        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->getProductEntityTypeId(), 0);
 
         return true;
     }
@@ -1572,4 +1577,16 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         return true;
     }
 
+    /**
+     * get product entity type id
+     *
+     * @return int
+     */
+    public function getProductEntityTypeId()
+    {
+        if ($this->_productEntityTypeId === NULL) {
+            $this->_productEntityTypeId = Mage::helper('pimgento_core')->getProductEntityTypeId();
+        }
+        return $this->_productEntityTypeId;
+    }
 }

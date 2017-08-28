@@ -232,8 +232,8 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function getProductEntityTypeId()
     {
-        if($this->_productEntityTypeId === NULL){
-            $this->_productEntityTypeId = Mage::getModel('catalog/product')->getResource()->getTypeId();
+        if ($this->_productEntityTypeId === NULL) {
+            $this->_productEntityTypeId = Mage::helper('pimgento_core')->getProductEntityTypeId();
         }
         return $this->_productEntityTypeId;
     }
