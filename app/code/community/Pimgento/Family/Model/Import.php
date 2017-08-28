@@ -34,7 +34,7 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $file = $task->getFile();
 
-        $this->getRequest()->createTableFromFile($this->getCode(), $file, 2);
+        $this->getRequest()->createTableFromFile($this->getCode(), $file);
 
         return true;
     }
@@ -95,6 +95,7 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
+        $locale   = Mage::app()->getLocale()->getLocaleCode();
 
         $parents = $adapter->select()
             ->from(
@@ -102,7 +103,7 @@ class Pimgento_Family_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 array(
                     'attribute_set_id'   => 'entity_id',
                     'entity_type_id'     => $this->_zde($this->getProductEntityTypeId()),
-                    'attribute_set_name' => 'label',
+                    'attribute_set_name' => 'label-' . $locale,
                     'sort_order'         => $this->_zde(1),
                 )
             );
