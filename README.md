@@ -63,8 +63,6 @@ alt="Video PIMGento for Akeneo" width="240" height="180" border="10" /></a>
 * Database encoding must be UTF-8
 * Flash Player
 
-You have to install the EnhancedConnectorBundle (https://github.com/akeneo-labs/EnhancedConnectorBundle/) in order to generate appropriate CSV files for Magento.
-
 > Compatibility for previous Magento versions are in development (see [roadmap](#roadmap))
 
 ## Installation
