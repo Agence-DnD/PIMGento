@@ -1119,8 +1119,16 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 array()
             );
 
-        $adapter->delete($resource->getTable('catalog/category_product'),
-            '(category_id, product_id) IN (' . $selectToDelete->assemble() . ')');
+        $delete = '            
+            DELETE ccp.* FROM ' . $resource->getTable('catalog/category_product') . ' ccp           
+             JOIN (' . $select->__toString() . ') e ON e.product_id = ccp.product_id            
+             WHERE NOT EXISTS  (                
+                 SELECT * FROM (' . $select->__toString() . ') f                
+                 WHERE f.product_id = ccp.product_id
+                 AND f.category_id = ccp.category_id
+             )
+             ';
+        $adapter->query($delete);
 
         return true;
     }
