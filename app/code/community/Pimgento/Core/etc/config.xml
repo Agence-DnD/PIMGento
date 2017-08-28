@@ -81,6 +81,14 @@
                     </pimgento_core_log_task_error>
                 </observers>
             </task_executor_error>
+            <task_executor_cron_end>
+                <observers>
+                    <sauvel_accessories_add_accessories_to_cart>
+                        <class>pimgento_core/observer</class>
+                        <method>removeImportedFiles</method>
+                    </sauvel_accessories_add_accessories_to_cart>
+                </observers>
+            </task_executor_cron_end>
         </events>
     </global>
     <admin>
@@ -122,6 +130,7 @@
                 <csv_fields_enclosure>"</csv_fields_enclosure>
                 <admin_lang>en_US</admin_lang>
                 <csv_load_data_infile>1</csv_load_data_infile>
+                <remove_csv_file_after_cron_import>0</remove_csv_file_after_cron_import>
             </general>
         </pimdata>
     </default>
