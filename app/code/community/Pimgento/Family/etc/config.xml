@@ -18,6 +18,17 @@
                 <class>Pimgento_Family_Model</class>
             </pimgento_family>
         </models>
+        <resources>
+            <pimgento_family_setup>
+                <setup>
+                    <module>Pimgento_Family</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </pimgento_family_setup>
+        </resources>
         <helpers>
             <pimgento_family>
                 <class>Pimgento_Family_Helper</class>

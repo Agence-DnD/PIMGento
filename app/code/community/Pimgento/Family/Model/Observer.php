@@ -47,14 +47,18 @@ class Pimgento_Family_Model_Observer
                         'method'  => 'pimgento_family/import::insertFamily'
                     ),
                     5 => array(
+                        'comment' => $helper->__('Create family attribute relations'),
+                        'method'  => 'pimgento_family/import::insertFamilyAttributeRelations'
+                    ),
+                    6 => array(
                         'comment' => $helper->__('Init default groups'),
                         'method'  => 'pimgento_family/import::initDefaultGroup'
                     ),
-                    6 => array(
+                    7 => array(
                         'comment' => $helper->__('Drop temporary table'),
                         'method'  => 'pimgento_family/import::dropTable'
                     ),
-                    7 => array(
+                    8 => array(
                         'comment' => $helper->__('Clean cache'),
                         'method'  => 'pimgento_family/import::cleanCache'
                     ),
