@@ -87,6 +87,21 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $adapter->query($insert);
 
+        $query = $adapter->query($select);
+        $progressedAttributes = array();
+        while ($row = $query->fetch()) {
+            $axis = explode(',', $row['axis']);
+            foreach ($axis as $singleAx) {
+                if (!in_array($singleAx, $progressedAttributes)) {
+                    /** @var Mage_Eav_Model_Attribute $attributeModel */
+                    $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode(4, $singleAx);
+                    $attributeModel->setData('is_configurable', 1);
+                    $attributeModel->save();
+                    $progressedAttributes[] = $singleAx;
+                }
+            }
+        }
+
         $attributes = Mage::getResourceModel('eav/entity_attribute_collection')
             ->setEntityTypeFilter(4)
             ->addFieldToFilter('is_configurable', 1);
