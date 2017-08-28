@@ -398,6 +398,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         foreach ($columns as $column) {
 
+            if (preg_match('/-unit/', $column)) {
+                continue;
+            }
+
             $columnPrefix = explode('-', $column);
             $columnPrefix = reset($columnPrefix);
 
@@ -424,41 +428,43 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             if ($adapter->tableColumnExists($this->getTable(), $column)) {
 
+                $prefixL = strlen($columnPrefix . '_') + 1;
+
+                $subSelect = $adapter->select()
+                    ->from(
+                        array('c' => $resource->getTable('pimgento_core/code')),
+                        array('code' => 'SUBSTRING(`c`.`code`,' . $prefixL . ')', 'entity_id' => 'c.entity_id')
+                    )
+                    ->where("c.code LIKE '" . $columnPrefix . "_%'")
+                    ->where("c.import = ?", $option->getCode());
+
+                if (!$adapter->query($subSelect)->rowCount()) {
+                    continue;
+                }
+
+                $conditionJoin = "IF (LOCATE(',', `" . $column . "`) > 0 , ". "`p`.`" . $column . "` LIKE " .
+                    new Zend_Db_Expr("CONCAT('%', `c1`.`code`, '%')") . ", `p`.`" . $column . "` = `c1`.`code` )";
+
                 $select = $adapter->select()
                     ->from(
                         array('p' => $this->getTable()),
                         array(
+                            'code'      => 'p.code',
                             'entity_id' => 'p.entity_id'
                         )
                     )
-                    ->distinct()
                     ->joinInner(
+                        array('c1' => new Zend_Db_Expr('(' . (string)$subSelect . ')')),
+                        new Zend_Db_Expr($conditionJoin),
                         array(
-                            'c' => $resource->getTable('pimgento_core/code')
-                        ),
-                        'FIND_IN_SET(
-                            `c`.`code`,
-                            REPLACE(
-                                CONCAT("' . $columnPrefix . '_",`p`.`' . $column . '`),
-                                ",",
-                                ",' . $columnPrefix . '_"
-                            )
-                        )
-                        AND `c`.`import` = "' . $option->getCode() . '"',
-                        array(
-                            $column => new Zend_Db_Expr('GROUP_CONCAT(`c`.`entity_id` SEPARATOR ",")')
+                            $column => new Zend_Db_Expr('GROUP_CONCAT(`c1`.`entity_id` SEPARATOR ",")')
                         )
                     )
                     ->group('p.code');
 
-                $insert = $adapter->insertFromSelect(
-                    $select,
-                    $this->getTable(),
-                    array('entity_id', $column),
-                    Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
+                $adapter->query(
+                    $adapter->insertFromSelect($select, $this->getTable(), array('code', 'entity_id', $column), 1)
                 );
-
-                $adapter->query($insert);
             }
         }
 
