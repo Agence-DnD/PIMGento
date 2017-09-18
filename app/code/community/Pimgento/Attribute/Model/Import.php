@@ -549,4 +549,13 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
         }
         return $this->_productEntityTypeId;
     }
+    
+    /**
+    * get default attribute set id
+    *
+    * @return int
+    */
+    protected function getDefaultAttributSetId () {
+			return Mage::getModel('catalog/product')->getDefaultAttributeSetId();
+    }
 }
