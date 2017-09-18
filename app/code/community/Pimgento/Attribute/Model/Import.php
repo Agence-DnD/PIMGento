@@ -556,6 +556,6 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
     * @return int
     */
     protected function getDefaultAttributSetId () {
-			return Mage::getModel('catalog/product')->getDefaultAttributeSetId();
+	return Mage::getModel('catalog/product')->getDefaultAttributeSetId();
     }
 }
