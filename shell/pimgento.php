@@ -93,7 +93,7 @@ function newline() {
 }
 
 function usage() {
-    echo "Usage: php -f pimgento.php -type type [-file filename]\r\n";
+    echo "Usage: php -f pimgento.php -- --type type [-file filename]\r\n";
     echo "Where: type is 'product', 'image', 'variant', 'option', 'family', 'category'\r\n";
     echo "       file is the file to load\r\n";
 }
