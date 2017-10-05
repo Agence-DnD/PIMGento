@@ -1449,7 +1449,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 )
                 ->joinInner(
                     array('a' => $adapter->getTableName('pimgento_asset')),
-                    '`a`.`asset` = LEFT(`p`.`' . $attributeCode . '`, LOCATE(",", `p`.`' . $attributeCode . '`) - 1)',
+                    '`a`.`asset` = IF(LOCATE(",", `p`.`' . $attributeCode . '`), LEFT(`p`.`' . $attributeCode . '`, LOCATE(",", `p`.`' . $attributeCode . '`) - 1), `p`.`' . $attributeCode . '`)',
                     array(
                         'image'    => 'a.image',
                         'store_id' => 'a.store_id'
