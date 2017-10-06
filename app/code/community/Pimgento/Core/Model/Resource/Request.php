@@ -259,8 +259,9 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
         } else {
             $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
             $linesTerminated = Mage::getStoreConfig('pimdata/general/csv_lines_terminated');
+            $local = Mage::getStoreConfigFlag('pimdata/general/csv_local_option');
 
-            $query = "LOAD DATA INFILE '" . addslashes($file) . "' REPLACE
+            $query = "LOAD DATA" . ($local ? ' LOCAL' : '') . " INFILE '" . addslashes($file) . "' REPLACE
                   INTO TABLE " . $this->getTableName($name) . "
                   FIELDS TERMINATED BY '" . $fieldsTerminated . "'
                   OPTIONALLY ENCLOSED BY '\"'
