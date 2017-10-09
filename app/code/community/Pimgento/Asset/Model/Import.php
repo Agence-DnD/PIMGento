@@ -152,10 +152,13 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function updateTable($task)
     {
-        $adapter = $this->getAdapter();
+        $adapter  = $this->getAdapter();
+
+        /* @var $resource Mage_Core_Model_Resource */
+        $resource = Mage::getSingleton('core/resource');
 
         /* Clean up table */
-        $adapter->truncateTable($adapter->getTableName('pimgento_asset'));
+        $adapter->truncateTable($resource->getTableName('pimgento_asset'));
 
         /* Insert data from tmp table */
         $select = $adapter->select()->from(
@@ -185,7 +188,7 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     'thumbnail'   => $file,
                 );
 
-                $adapter->insert($adapter->getTableName('pimgento_asset'), $data);
+                $adapter->insert($resource->getTableName('pimgento_asset'), $data);
             }
         }
 
@@ -215,13 +218,16 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function downloadImages($task)
     {
-        $adapter = $this->getAdapter();
+        $adapter  = $this->getAdapter();
+
+        /* @var $resource Mage_Core_Model_Resource */
+        $resource = Mage::getSingleton('core/resource');
 
         try {
             $connexion = Mage::getStoreConfig('pimdata/asset/connexion');
 
             $select = $adapter->select()->from(
-                $adapter->getTableName('pimgento_asset'),
+                $resource->getTableName('pimgento_asset'),
                 array('file', 'image')
             );
 

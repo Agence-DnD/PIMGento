@@ -80,7 +80,7 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $insert = $adapter->insertFromSelect(
             $select,
-            $adapter->getTableName('pimgento_variant'),
+            Mage::getSingleton('core/resource')->getTableName('pimgento_variant'),
             array('code', 'axis'),
             Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
         );
@@ -115,7 +115,7 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 )
             );
             $adapter->update(
-                $adapter->getTableName('pimgento_variant'),
+                Mage::getSingleton('core/resource')->getTableName('pimgento_variant'),
                 $values,
                 'FIND_IN_SET("' . $attribute->getAttributeCode() . '", axis)'
             );
