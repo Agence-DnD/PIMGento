@@ -86,7 +86,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
                     'entity_id'  => 'attribute_id',
                 )
             )
-            ->where('entity_type_id = ?', $this->getDefaultAttributSetId());
+            ->where('entity_type_id = ?', $this->getProductEntityTypeId());
 
         $insert = $adapter->insertFromSelect(
             $select,
@@ -440,7 +440,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
 
         $values = array(
             'attribute_id'   => $data['entity_id'],
-            'entity_type_id' => $this->getDefaultAttributSetId()
+            'entity_type_id' => $this->getProductEntityTypeId()
         );
 
         $adapter->insertIgnore($resource->getTable('eav/attribute'), $values);
@@ -532,7 +532,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
                     'attribute_id',
                 )
             )
-            ->where('entity_type_id = ?', $this->getDefaultAttributSetId());
+            ->where('entity_type_id = ?', $this->getProductEntityTypeId());
 
         return $adapter->fetchCol($select);
     }
