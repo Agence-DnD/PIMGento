@@ -143,7 +143,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $select = $adapter->select()
                     ->from(false, array())
                     ->joinInner(
-                        array('v' => $adapter->getTableName('pimgento_variant')),
+                        array('v' => Mage::getSingleton('core/resource')->getTableName('pimgento_variant')),
                         'p.groups = v.code',
                         array(
                             '_attributes' => 'v.axis'
@@ -1354,7 +1354,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             $adapter->select()
                 ->from(array('p' => $this->getTable()), array('entity_id'))
                 ->joinInner(
-                    array('a' => $adapter->getTableName('pimgento_asset')),
+                    array('a' => Mage::getSingleton('core/resource')->getTableName('pimgento_asset')),
                     'FIND_IN_SET(`a`.`asset`, `p`.`' . $attributeCode . '`)',
                     array(
                         'image' => $this->_zde('GROUP_CONCAT(DISTINCT `a`.`image` SEPARATOR "|")'),
@@ -1448,8 +1448,8 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     array('key' => $this->_zde('CONCAT(p.entity_id, "-", a.store_id)'), 'entity_id')
                 )
                 ->joinInner(
-                    array('a' => $adapter->getTableName('pimgento_asset')),
-                    '`a`.`asset` = LEFT(`p`.`' . $attributeCode . '`, LOCATE(",", `p`.`' . $attributeCode . '`) - 1)',
+                    array('a' => Mage::getSingleton('core/resource')->getTableName('pimgento_asset')),
+                    '`a`.`asset` = IF(LOCATE(",", `p`.`' . $attributeCode . '`), LEFT(`p`.`' . $attributeCode . '`, LOCATE(",", `p`.`' . $attributeCode . '`) - 1), `p`.`' . $attributeCode . '`)',
                     array(
                         'image'    => 'a.image',
                         'store_id' => 'a.store_id'
