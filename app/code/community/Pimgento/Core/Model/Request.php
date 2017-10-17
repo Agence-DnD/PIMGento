@@ -181,6 +181,7 @@ class Pimgento_Core_Model_Request extends Mage_Core_Model_Abstract
     {
         $handle = fopen($file, 'r');
         $line = preg_replace("/\\r|\\n|\"|'/", "", fgets($handle));
+        $line = Mage::helper('pimgento_core')->removeUtf8Bom($line);
         fclose($handle);
 
         $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
