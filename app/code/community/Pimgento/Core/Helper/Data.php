@@ -244,4 +244,16 @@ class Pimgento_Core_Helper_Data extends Mage_Core_Helper_Data
         }
         return $this->_productEntityTypeId;
     }
+
+    /**
+     * @param $str
+     * @return mixed
+     */
+    public function removeUtf8Bom($str)
+    {
+        // Remove UTF8-BOM:
+        $bom = pack('H*','EFBBBF');
+        $str = preg_replace("/^$bom/", '', $str);
+        return $str;
+    }
 }
