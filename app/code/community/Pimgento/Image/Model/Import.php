@@ -210,9 +210,9 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'thumbnail'   => 'thumbnail',
         );
 
-        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, 4, 0);
+        $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, Mage::helper('pimgento_core')->getProductEntityTypeId(), 0);
 
-        $attribute = $resource->getAttribute('media_gallery', 4);
+        $attribute = $resource->getAttribute('media_gallery', Mage::helper('pimgento_core')->getProductEntityTypeId());
 
         if (!$attribute) {
             $task->setMessage($helper->__('Attribute %s not found', 'media_gallery'));
