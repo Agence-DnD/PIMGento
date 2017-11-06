@@ -246,7 +246,7 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     $config = array(
                         'host'     => Mage::getStoreConfig('pimdata/asset/host'),
                         'user'     => Mage::getStoreConfig('pimdata/asset/user'),
-                        'password' => Mage::getStoreConfig('pimdata/asset/password'),
+                        'password' => Mage::getStoreConfig('pimdata/asset/ftp_password'),
                     );
 
                     if (Mage::getStoreConfig('pimdata/asset/directory')) {
@@ -267,7 +267,7 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     $config = array(
                         'host'     => Mage::getStoreConfig('pimdata/asset/host'),
                         'username' => Mage::getStoreConfig('pimdata/asset/user'),
-                        'password' => Mage::getStoreConfig('pimdata/asset/password'),
+                        'password' => Mage::getStoreConfig('pimdata/asset/ftp_password'),
                     );
 
                     $ftp->open($config);
@@ -293,12 +293,25 @@ class Pimgento_Asset_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 }
 
             } elseif ($connexion == 'scp') {
-                $connection = ssh2_connect(Mage::getStoreConfig('pimdata/asset/host'), 22);
-                ssh2_auth_password(
-                    $connection,
-                    Mage::getStoreConfig('pimdata/asset/user'),
-                    Mage::getStoreConfig('pimdata/asset/password')
-                );
+                $connexionType = Mage::getStoreConfig('pimdata/asset/connexion_type');
+
+                if($connexionType == 'password'){
+                    $connection = ssh2_connect(Mage::getStoreConfig('pimdata/asset/host'), 22);
+                    ssh2_auth_password(
+                        $connection,
+                        Mage::getStoreConfig('pimdata/asset/user'),
+                        Mage::getStoreConfig('pimdata/asset/scp_password')
+                    );
+                }else{
+                    $connection = ssh2_connect(Mage::getStoreConfig('pimdata/asset/host'), 22, array('hostkey'=>'ssh-rsa'));
+                    ssh2_auth_pubkey_file(
+                        $connection,
+                        Mage::getStoreConfig('pimdata/asset/user'),
+                        Mage::getBaseDir('var') . DS . Mage::getStoreConfig('pimdata/asset/ssh_public_key'),
+                        Mage::getBaseDir('var') . DS . Mage::getStoreConfig('pimdata/asset/ssh_private_key'),
+                        Mage::getStoreConfig('pimdata/asset/ssh_passphrase')
+                    );
+                }
 
                 while (($row = $query->fetch())) {
                     if (is_file($directory . $row['image'])) {
