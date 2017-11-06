@@ -17,7 +17,7 @@ class Pimgento_Asset_Model_Cron extends Pimgento_Core_Model_Cron
      */
     public function run(Mage_Cron_Model_Schedule $schedule)
     {
-        if (!Mage::getStoreConfig('pimdata/attribute/cron_enabled')) {
+        if (!Mage::getStoreConfig('pimdata/asset/cron_enabled')) {
             return $this;
         }
 
