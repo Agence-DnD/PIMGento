@@ -323,10 +323,9 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
 
             $groups = $this->getRequest()->getCodes($familyModel->getCode());
 
-            $adapter  = $this->getAdapter();
-            $sql = $adapter->select()
-                ->from('pimgento_family_attribute_relations', array ('family_code' => 'family_code'))
-                ->where('attribute_code = ?', $model->getAttributeCode());
+            $adapter = $this->getAdapter();
+            $relationsTable = Mage::getSingleton('core/resource')->getTableName('pimgento_family_attribute_relations');
+            $sql = $adapter->select()->from($relationsTable, array('family_code' => 'family_code'))->where('attribute_code = ?', $model->getAttributeCode());
             $query = $adapter->query($sql);
 
             if ($row = $query->fetch()) {
