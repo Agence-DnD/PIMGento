@@ -1302,7 +1302,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
-        $helper   = Mage::helper('pimgento_asset');
+        $helper   = Mage::helper('pimgento_product');
 
         if (!Mage::helper('core')->isModuleEnabled('Pimgento_Asset')) {
             $task->setMessage(
