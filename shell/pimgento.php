@@ -18,7 +18,7 @@ class Mage_Shell_DataflowExport extends Mage_Shell_Abstract
             usage();
             return;
         }
-        if (!in_array ($type, array('product','variant','option','family','image', 'category', 'attribute'))) {
+        if (!in_array($type, array('product', 'variant', 'option', 'family', 'image', 'category', 'attribute', 'asset'))) {
             echo 'Type "' . $type . '" is invalid' . newline();
             usage();
             return;
@@ -93,7 +93,7 @@ function newline() {
 }
 
 function usage() {
-    echo "Usage: php -f pimgentoImport.php -type type [-file filename]\r\n";
+    echo "Usage: php -f pimgento.php -type type [-file filename]\r\n";
     echo "Where: type is 'product', 'image', 'variant', 'option', 'family', 'category'\r\n";
     echo "       file is the file to load\r\n";
 }
