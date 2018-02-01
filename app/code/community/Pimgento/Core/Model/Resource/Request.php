@@ -330,6 +330,7 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
             if (++$row_count == 1) {
                 # Get column names as first row - assumes first row always has this data
                 foreach ($csv_line as $key => $value) {
+                    $value = Mage::helper('pimgento_core')->removeUtf8Bom($value);
                     array_push($columnNames, $value);
                 }
                 continue;
