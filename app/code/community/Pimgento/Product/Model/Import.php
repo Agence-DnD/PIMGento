@@ -1357,7 +1357,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     array('a' => Mage::getSingleton('core/resource')->getTableName('pimgento_asset')),
                     'FIND_IN_SET(`a`.`asset`, `p`.`' . $attributeCode . '`)',
                     array(
-                        'image' => $this->_zde('GROUP_CONCAT(DISTINCT `a`.`image` SEPARATOR "|")'),
+                        'image' => $this->_zde('GROUP_CONCAT(DISTINCT `a`.`image` ORDER BY `a`.`asset` SEPARATOR "|")'),
                     )
                 )
                 ->joinInner(
