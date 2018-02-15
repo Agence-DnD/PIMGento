@@ -1472,8 +1472,8 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $values = array(
                     'entity_type_id' => $this->getProductEntityTypeId(),
                     'attribute_id'   => $imageAttributeId,
-                    'store_id'       => $image['store_id'],
-                    'entity_id'      => Mage::app()->isSingleStoreMode() ? 0 : $image['entity_id'],
+                    'store_id'       => Mage::app()->isSingleStoreMode() ? 0 : $image['store_id'],
+                    'entity_id'      => $image['entity_id'],
                     'value'          => $image['image']
                 );
 
