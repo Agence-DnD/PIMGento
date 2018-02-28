@@ -23,34 +23,41 @@ class Pimgento_Variant_Model_Observer
         /* @var $helper Pimgento_Variant_Helper_Data */
         $helper = Mage::helper('pimgento_variant');
 
-        $task->addTask(
-            'pimgento_variant',
-            array(
-                'label'   => $helper->__('Pim: Import Variant'),
+        /** @var string $importName */
+        $importName = $helper->getImportName();
+
+        $task->addTask('pimgento_variant', array(
+                'label'   => $helper->__('Pim: Import %s', $importName),
                 'type'    => 'file',
-                'comment' => $helper->__('Import variant, upload CSV file.'),
-                'steps' => array(
+                'comment' => $helper->__('Import %s, upload CSV file.', $importName),
+                'steps'   => array(
                     1 => array(
                         'comment' => $helper->__('Create temporary table'),
                         'method'  => 'pimgento_variant/import::createTable'
                     ),
                     2 => array(
-                        'comment' => $helper->__('Insert data into temporary table'),
+                        'comment' => $helper->__('INSERT data INTO TEMPORARY TABLE'),
                         'method'  => 'pimgento_variant/import::insertData'
                     ),
                     3 => array(
+                        'comment' => $helper->__('Remove Columns'),
+                        'method'  => 'pimgento_variant/import::removeColumns'
+                    ),
+                    4 => array(
+                        'comment' => $helper->__('Add columns'),
+                        'method'  => 'pimgento_variant/import::addColumns'
+                    ),
+                    5 => array(
                         'comment' => $helper->__('Update variant table'),
                         'method'  => 'pimgento_variant/import::updateTable'
                     ),
-                    4 => array(
+                    6 => array(
                         'comment' => $helper->__('Drop temporary table'),
                         'method'  => 'pimgento_variant/import::dropTable'
                     ),
                 )
-            )
-        );
+            ));
 
         return $this;
     }
-
 }
