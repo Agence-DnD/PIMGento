@@ -29,6 +29,21 @@
                 <class>Pimgento_VariantFamily_Helper</class>
             </pimgento_variantfamily>
         </helpers>
+        <models>
+            <pimgento_variantfamily>
+                <class>Pimgento_VariantFamily_Model</class>
+            </pimgento_variantfamily>
+        </models>
+        <events>
+            <task_executor_load_task>
+                <observers>
+                    <pimgento_variantfamily_task_executor_load_task>
+                        <class>pimgento_variantfamily/observer</class>
+                        <method>taskExecutorLoadTask</method>
+                    </pimgento_variantfamily_task_executor_load_task>
+                </observers>
+            </task_executor_load_task>
+        </events>
     </global>
     <frontend>
         <translate>
@@ -52,4 +67,11 @@
             </modules>
         </translate>
     </adminhtml>
+    <default>
+        <pimgento_variantfamily>
+            <import_config>
+                <max_axes_number>5</max_axes_number>
+            </import_config>
+        </pimgento_variantfamily>
+    </default>
 </config>
