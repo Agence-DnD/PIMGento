@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * Config system.xml
+ *
+ * @category  Config
+ * @package   Config
+ * @author    Pierre Barbarin <pierre.barbarin@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      http://www.dnd.fr/
+ */
+-->
+<config>
+    <tabs>
+        <pimgento translate="label" module="pimgento_variantfamily">
+            <label>Pimgento Extensions</label>
+            <sort_order>100</sort_order>
+        </pimgento>
+    </tabs>
+    <sections>
+        <pimgento_variantfamily module="pimgento_variantfamily">
+            <label>Pimgento Variant Family</label>
+            <tab>pimgento</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>10</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <version translate="label">
+                            <label>Extension Version</label>
+                            <frontend_model>pimgento_variantfamily/adminhtml_system_config_version</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </version>
+                    </fields>
+                </general>
+            </groups>
+        </pimgento_variantfamily>
+    </sections>
+</config>
