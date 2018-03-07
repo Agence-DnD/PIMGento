@@ -134,7 +134,7 @@
                             <show_in_store>0</show_in_store>
                             <depends>
                                 <connexion>scp</connexion>
-                                <connexion_type>certificate</connexion_type>
+                                <connexion_type>key</connexion_type>
                             </depends>
                         </ssh_public_key>
                         <ssh_private_key translate="label">
@@ -149,7 +149,7 @@
                             <show_in_store>0</show_in_store>
                             <depends>
                                 <connexion>scp</connexion>
-                                <connexion_type>certificate</connexion_type>
+                                <connexion_type>key</connexion_type>
                             </depends>
                         </ssh_private_key>
                         <ssh_passphrase translate="label">
@@ -161,7 +161,7 @@
                             <show_in_store>0</show_in_store>
                             <depends>
                                 <connexion>scp</connexion>
-                                <connexion_type>certificate</connexion_type>
+                                <connexion_type>key</connexion_type>
                             </depends>
                         </ssh_passphrase>
                         <passive translate="label">
