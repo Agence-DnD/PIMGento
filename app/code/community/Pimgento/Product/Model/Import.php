@@ -126,12 +126,22 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             return false;
         }
 
+        /** @var Mage_Core_Model_Resource $coreResource */
+        $coreResource = Mage::getSingleton('core/resource');
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
         $adapter->query('SET SESSION group_concat_max_len = 1000000;');
 
-        if (!$this->columnsRequired(array('groups'), $task)) {
+        if ($this->columnExists('parent')) {
+            $groupColumn = 'parent';
+        } else if ($this->columnExists('groups')) {
+            $groupColumn = 'groups';
+        } else {
+            $groupColumn = null;
+        }
+
+        if (!$groupColumn) {
             return false;
         }
 
@@ -143,8 +153,8 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $select = $adapter->select()
                     ->from(false, array())
                     ->joinInner(
-                        array('v' => Mage::getSingleton('core/resource')->getTableName('pimgento_variant')),
-                        'p.groups = v.code',
+                        array('v' => $coreResource->getTableName('pimgento_variant')),
+                        'p.' . $groupColumn . ' = v.code',
                         array(
                             '_attributes' => 'v.axis'
                         )
@@ -188,7 +198,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         );
 
                         $adapter->update(
-                            $this->getTable(), $values, '`' . $code . '` <> "" AND `groups` <> ""'
+                            $this->getTable(), $values, '`' . $code . '` <> "" AND `' . $groupColumn . '` <> ""'
                         );
                     }
                 }
@@ -196,19 +206,19 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         }
 
         $values = array(
-            'code'               => 'groups',
-            '_children'          => $this->_zde('GROUP_CONCAT(`code` SEPARATOR ",")'),
-            '_attributes'        => '_attributes',
+            'code'               => 'e.' . $groupColumn,
+            '_children'          => $this->_zde('GROUP_CONCAT(`e`.`code` SEPARATOR ",")'),
+            '_attributes'        => 'e._attributes',
             '_type_id'           => $this->_zde('"configurable"'),
             '_options_container' => $this->_zde('"container1"'),
         );
 
         if ($this->columnExists('family')) {
-            $values['family'] = 'family';
+            $values['family'] = 'e.family';
         }
 
         if ($this->columnExists('categories')) {
-            $values['categories'] = 'categories';
+            $values['categories'] = 'e.categories';
         }
 
         /* @var $helper Pimgento_Core_Helper_Data */
@@ -278,7 +288,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                                 $this->getTable(), array($column => $this->_zde('NULL')), '`' . $column . '` = ""'
                             );
 
-                            $values[$column] = $this->_zde('MIN(`' . $column . '`)');
+                            $values[$column] = $this->_zde('MIN(`e`.`' . $column . '`)');
                         }
                     }
                 }
@@ -291,25 +301,52 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $success = true;
 
-        foreach ($matches as $match) {
-            if ($adapter->tableColumnExists($this->getTable(), $match['attribute'])) {
-                $values[$match['attribute']] =
-                    $match['value'] !== '' ? $this->_zde($match['value']) : $match['attribute'];
-            } else {
-                $success = false;
-                $task->setMessage(
-                    Mage::helper('pimgento_product')->__(
-                        'Warning: %s column not found in CSV file', $match['attribute']
-                    )
-                );
+        $codes = array_merge(
+            $helper->getStoresLang(),
+            $helper->getStoresWebsites()
+        );
+
+        foreach ($matches as $attribute) {
+            $attr  = $attribute['attribute'];
+            $value = $attribute['value'];
+
+            $columns = array(trim($attr));
+            foreach ($codes as $local => $affected) {
+                $columns[] = trim($attr) . '-' . $local;
+            }
+
+            foreach ($columns as $column) {
+                if ($adapter->tableColumnExists($this->getTable(), $column)) {
+                    if (!strlen($value)) {
+                        if ($adapter->isTableExists('pimgento_variant')) {
+                            if ($adapter->tableColumnExists($coreResource->getTableName('pimgento_variant'), $column)) {
+                                $values[$column] = 'v.' . $column;
+                            } else {
+                                $values[$column] = 'e.' . $column;
+                            }
+                        } else {
+                            $values[$column] = 'e.' . $column;
+                        }
+                    } else {
+                        $values[$column] = $this->_zde('"' . $value . '"');
+                    }
+                }
             }
         }
 
         $select = $adapter->select()
-            ->from($this->getTable(), $values)
-            ->where('groups <> ?', '')
-            ->where('_attributes <> ?', '')
-            ->group('groups');
+            ->from(array('e' => $this->getTable()), $values)
+            ->where('e.' . $groupColumn . ' <> ?', '')
+            ->where('e._attributes <> ?', '')
+            ->group('e.' . $groupColumn);
+
+        if ($adapter->isTableExists('pimgento_variant')) {
+            $select->joinInner(
+                array('v' => $coreResource->getTableName('pimgento_variant')),
+                'e.' . $groupColumn . ' = v.code',
+                array()
+            );
+        }
 
         $insert = $adapter->insertFromSelect(
             $select,
@@ -563,7 +600,15 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         );
 
         if ($this->getConfig('configurable_enabled')) {
-            $values['visibility'] = $this->_zde('IF(`_type_id` = "simple" AND `groups` <> "", 1, 4)');
+            if ($this->columnExists('parent')) {
+                $groupColumn = 'parent';
+            } else if ($this->columnExists('groups')) {
+                $groupColumn = 'groups';
+            } else {
+                $groupColumn = null;
+            }
+
+            $values['visibility'] = $this->_zde('IF(`_type_id` = "simple" AND `' . $groupColumn . '` <> "", 1, 4)');
         }
 
         $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->getProductEntityTypeId(), 0);

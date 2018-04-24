@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * Config config.xml
+ *
+ * @category  Config
+ * @package   Config
+ * @author    Pierre Barbarin <pierre.barbarin@dnd.fr>
+ * @copyright 2018 Agence Dn'D
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      http://www.dnd.fr/
+ */
+-->
+<config>
+    <modules>
+        <Pimgento_VariantFamily>
+            <version>1.0.0</version>
+        </Pimgento_VariantFamily>
+    </modules>
+    <global>
+        <helpers>
+            <pimgento_variantfamily>
+                <class>Pimgento_VariantFamily_Helper</class>
+            </pimgento_variantfamily>
+        </helpers>
+        <models>
+            <pimgento_variantfamily>
+                <class>Pimgento_VariantFamily_Model</class>
+            </pimgento_variantfamily>
+        </models>
+        <events>
+            <task_executor_load_task>
+                <observers>
+                    <pimgento_variantfamily_task_executor_load_task>
+                        <class>pimgento_variantfamily/observer</class>
+                        <method>taskExecutorLoadTask</method>
+                    </pimgento_variantfamily_task_executor_load_task>
+                </observers>
+            </task_executor_load_task>
+        </events>
+    </global>
+    <frontend>
+        <translate>
+            <modules>
+                <Pimgento_VariantFamily>
+                    <files>
+                        <default>Pimgento_VariantFamily.csv</default>
+                    </files>
+                </Pimgento_VariantFamily>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Pimgento_VariantFamily>
+                    <files>
+                        <default>Pimgento_VariantFamily.csv</default>
+                    </files>
+                </Pimgento_VariantFamily>
+            </modules>
+        </translate>
+    </adminhtml>
+    <default>
+        <pimdata>
+            <variantfamily>
+                <max_axes_number>5</max_axes_number>
+            </variantfamily>
+        </pimdata>
+    </default>
+    <crontab>
+        <jobs>
+            <pimdata_variantfamily_cron>
+                <run>
+                    <model>pimgento_variantfamily/cron::run</model>
+                </run>
+            </pimdata_variantfamily_cron>
+        </jobs>
+    </crontab>
+</config>
