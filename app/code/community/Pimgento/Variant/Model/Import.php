@@ -14,6 +14,11 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
     protected $_code = 'variant';
 
     /**
+     * @var int
+     */
+    protected $_productEntityTypeId = null;
+
+    /**
      * Create table (Step 1)
      *
      * @param Pimgento_Core_Model_Task $task
@@ -131,26 +136,24 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         /** @var Varien_Db_Adapter_Interface $adapter */
         $adapter = $this->getAdapter();
-        /** @var string $variantTable */
+
         $variantTable = Mage::getSingleton('core/resource')->getTableName('pimgento_variant');
-        /** @var  $temporaryTable */
+
         $temporaryTable = $this->getTable();
-        /** @var string $eavTable */
+
         $eavTable = Mage::getSingleton('core/resource')->getTableName('eav/attribute');
-        /** @var Zend_Db_Statement_Interface $variant */
+
         $variant = $adapter->query($adapter->select()->from($temporaryTable));
-        /** @var array $attributes */
+
         $attributes = $adapter->fetchPairs($adapter->select()->from($eavTable, [
             'attribute_code',
             'attribute_id'
-        ])->where('entity_type_id = ?', 4));
-        /** @var array $columns */
+        ])->where('entity_type_id = ?', $this->getProductEntityTypeId()));
+
         $columns = array_keys($adapter->describeTable($temporaryTable));
-        /** @var array $values */
+
         $values = [];
-        /** @var int $i */
         $i = 0;
-        /** @var array $keys */
         $keys = [];
 
         while ($row = $variant->fetch()) {
@@ -171,6 +174,16 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         foreach ($axisAttributes as $code) {
                             if (isset($attributes[$code])) {
                                 $axis[] = $attributes[$code];
+
+                                /** @var Mage_Eav_Model_Attribute $attributeModel */
+                                $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode(
+                                    $this->getProductEntityTypeId(),
+                                    $code
+                                );
+                                if ($attributeModel->hasData()) {
+                                    $attributeModel->setData('is_configurable', 1);
+                                    $attributeModel->save();
+                                }
                             }
                         }
 
@@ -235,5 +248,18 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
         }
 
         return $column;
+    }
+
+    /**
+     * get product entity type id
+     *
+     * @return int
+     */
+    public function getProductEntityTypeId()
+    {
+        if ($this->_productEntityTypeId === NULL) {
+            $this->_productEntityTypeId = Mage::helper('pimgento_core')->getProductEntityTypeId();
+        }
+        return $this->_productEntityTypeId;
     }
 }

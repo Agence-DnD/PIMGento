@@ -20,6 +20,11 @@ class Pimgento_VariantFamily_Model_Import extends Pimgento_Core_Model_Import_Abs
     protected $_code = 'variantfamily';
 
     /**
+     * @var int
+     */
+    protected $_productEntityTypeId = null;
+
+    /**
      * Create table (Step 1)
      *
      * @param Pimgento_Core_Model_Task $task
@@ -114,7 +119,7 @@ class Pimgento_VariantFamily_Model_Import extends Pimgento_Core_Model_Import_Abs
         $attributes = $adapter->fetchPairs($adapter->select()->from($eavTable, [
             'attribute_code',
             'attribute_id'
-        ])->where('entity_type_id = ?', 4));
+        ])->where('entity_type_id = ?', $this->getProductEntityTypeId()));
 
         while (($row = $variantFamily->fetch())) {
             $axisAttributes = explode(',', $row['_axis']);
@@ -124,6 +129,16 @@ class Pimgento_VariantFamily_Model_Import extends Pimgento_Core_Model_Import_Abs
             foreach ($axisAttributes as $axisAttribute) {
                 if (isset($attributes[$axisAttribute])) {
                     $axis[] = $attributes[$axisAttribute];
+
+                    /** @var Mage_Eav_Model_Attribute $attributeModel */
+                    $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode(
+                        $this->getProductEntityTypeId(),
+                        $axisAttribute
+                    );
+                    if ($attributeModel->hasData()) {
+                        $attributeModel->setData('is_configurable', 1);
+                        $attributeModel->save();
+                    }
                 }
             }
 
@@ -174,5 +189,18 @@ class Pimgento_VariantFamily_Model_Import extends Pimgento_Core_Model_Import_Abs
         Mage::dispatchEvent('task_executor_drop_table_after', ['task' => $task]);
 
         return true;
+    }
+
+    /**
+     * get product entity type id
+     *
+     * @return int
+     */
+    public function getProductEntityTypeId()
+    {
+        if ($this->_productEntityTypeId === NULL) {
+            $this->_productEntityTypeId = Mage::helper('pimgento_core')->getProductEntityTypeId();
+        }
+        return $this->_productEntityTypeId;
     }
 }
