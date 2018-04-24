@@ -13,58 +13,7 @@
  */
 -->
 <config>
-    <tabs>
-        <pimgento translate="label" module="pimgento_variantfamily">
-            <label>Pimgento Extensions</label>
-            <sort_order>100</sort_order>
-        </pimgento>
-    </tabs>
     <sections>
-        <pimgento_variantfamily module="pimgento_variantfamily">
-            <label>Pimgento Variant Family</label>
-            <tab>pimgento</tab>
-            <frontend_type>text</frontend_type>
-            <sort_order>10</sort_order>
-            <show_in_default>1</show_in_default>
-            <show_in_website>0</show_in_website>
-            <show_in_store>0</show_in_store>
-            <groups>
-                <general translate="label">
-                    <label>General</label>
-                    <sort_order>10</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>0</show_in_website>
-                    <show_in_store>0</show_in_store>
-                    <fields>
-                        <version translate="label">
-                            <label>Extension Version</label>
-                            <frontend_model>pimgento_variantfamily/adminhtml_system_config_version</frontend_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </version>
-                    </fields>
-                </general>
-                <import_config translate="label">
-                    <label>Import configurations</label>
-                    <sort_order>10</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>0</show_in_website>
-                    <show_in_store>0</show_in_store>
-                    <fields>
-                        <max_axes_number translate="label">
-                            <label>Max Axes Number</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </max_axes_number>
-                    </fields>
-                </import_config>
-            </groups>
-        </pimgento_variantfamily>
         <pimdata>
             <groups>
                 <variantfamily translate="label" module="pimgento_core">
@@ -110,6 +59,14 @@
                                 <cron_enabled>1</cron_enabled>
                             </depends>
                         </cron_file>
+                        <max_axes_number translate="label">
+                            <label>Max Axes Number</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_axes_number>
                     </fields>
                 </variantfamily>
             </groups>

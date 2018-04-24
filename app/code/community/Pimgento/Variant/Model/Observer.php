@@ -36,7 +36,7 @@ class Pimgento_Variant_Model_Observer
                         'method'  => 'pimgento_variant/import::createTable'
                     ),
                     2 => array(
-                        'comment' => $helper->__('INSERT data INTO TEMPORARY TABLE'),
+                        'comment' => $helper->__('Insert data into temporary table'),
                         'method'  => 'pimgento_variant/import::insertData'
                     ),
                     3 => array(

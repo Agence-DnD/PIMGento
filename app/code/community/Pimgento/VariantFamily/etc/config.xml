@@ -19,11 +19,6 @@
         </Pimgento_VariantFamily>
     </modules>
     <global>
-        <blocks>
-            <pimgento_variantfamily>
-                <class>Pimgento_VariantFamily_Block</class>
-            </pimgento_variantfamily>
-        </blocks>
         <helpers>
             <pimgento_variantfamily>
                 <class>Pimgento_VariantFamily_Helper</class>
@@ -68,10 +63,19 @@
         </translate>
     </adminhtml>
     <default>
-        <pimgento_variantfamily>
-            <import_config>
+        <pimdata>
+            <variantfamily>
                 <max_axes_number>5</max_axes_number>
-            </import_config>
-        </pimgento_variantfamily>
+            </variantfamily>
+        </pimdata>
     </default>
+    <crontab>
+        <jobs>
+            <pimdata_variantfamily_cron>
+                <run>
+                    <model>pimgento_variantfamily/cron::run</model>
+                </run>
+            </pimdata_variantfamily_cron>
+        </jobs>
+    </crontab>
 </config>

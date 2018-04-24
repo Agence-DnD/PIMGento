@@ -78,6 +78,8 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             $adapter->dropColumn($variantTable, $column);
         }
+
+        return true;
     }
 
     /**
@@ -113,6 +115,8 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
         if (!$adapter->tableColumnExists($temporaryTable, 'axis')) {
             $adapter->addColumn($temporaryTable, 'axis', 'VARCHAR(255)');
         }
+
+        return true;
     }
 
     /**
