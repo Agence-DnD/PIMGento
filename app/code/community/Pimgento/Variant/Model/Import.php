@@ -14,6 +14,11 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
     protected $_code = 'variant';
 
     /**
+     * @var int
+     */
+    protected $_productEntityTypeId = null;
+
+    /**
      * Create table (Step 1)
      *
      * @param Pimgento_Core_Model_Task $task
@@ -22,9 +27,10 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function createTable($task)
     {
+        /** @var string $file */
         $file = $task->getFile();
 
-        $this->getRequest()->createTableFromFile($this->getCode(), $file);
+        $this->getRequest()->createTableFromFile($this->getCode(), $file, ['code']);
 
         return true;
     }
@@ -39,21 +45,81 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function insertData($task)
     {
+        /** @var string $file */
         $file = $task->getFile();
-
+        /** @var int $lines */
         $lines = $this->getRequest()->insertDataFromFile($this->getCode(), $file);
 
         if (!$lines) {
-            $task->error(
-                Mage::helper('pimgento_variant')->__(
-                    'No data to insert, verify the file is not empty or CSV configuration is correct'
-                )
-            );
+            $task->error(Mage::helper('pimgento_variant')->__('No data to insert, verify the file is not empty or CSV configuration is correct'));
         }
 
-        $task->setMessage(
-            Mage::helper('pimgento_variant')->__('%s lines found', $lines)
-        );
+        $task->setMessage(Mage::helper('pimgento_variant')->__('%s lines found', $lines));
+
+        return true;
+    }
+
+    /**
+     * Remove columns from variant table
+     */
+    public function removeColumns()
+    {
+        /** @var Varien_Db_Adapter_Interface $adapter */
+        $adapter = $this->getAdapter();
+        /** @var array $except */
+        $except = [
+            'code',
+            'axis'
+        ];
+        /** @var string $variantTable */
+        $variantTable = Mage::getSingleton('core/resource')->getTableName('pimgento_variant');
+
+        $columns = array_keys($adapter->describeTable($variantTable));
+
+        foreach ($columns as $column) {
+            if (in_array($column, $except)) {
+                continue;
+            }
+
+            $adapter->dropColumn($variantTable, $column);
+        }
+
+        return true;
+    }
+
+    /**
+     * Add columns to variant table
+     */
+    public function addColumns()
+    {
+        /** @var Varien_Db_Adapter_Interface $adapter */
+        $adapter = $this->getAdapter();
+        /** @var string $temporaryTable */
+        $temporaryTable = $this->getTable();
+        /** @var array $except */
+        $except = [
+            'code',
+            'axis',
+            'type',
+            '_entity_id',
+            '_is_new'
+        ];
+        /** @var string $variantTable */
+        $variantTable = Mage::getSingleton('core/resource')->getTableName('pimgento_variant');
+        /** @var array $columns */
+        $columns = array_keys($adapter->describeTable($temporaryTable));
+
+        foreach ($columns as $column) {
+            if (in_array($column, $except)) {
+                continue;
+            }
+
+            $adapter->addColumn($variantTable, $this->_columnName($column), 'TEXT');
+        }
+
+        if (!$adapter->tableColumnExists($temporaryTable, 'axis')) {
+            $adapter->addColumn($temporaryTable, 'axis', 'VARCHAR(255)');
+        }
 
         return true;
     }
@@ -68,57 +134,79 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function updateTable($task)
     {
-        $adapter  = $this->getAdapter();
+        /** @var Varien_Db_Adapter_Interface $adapter */
+        $adapter = $this->getAdapter();
 
-        $column = $this->columnExists('axis') ? 'axis' : 'attributes';
+        $variantTable = Mage::getSingleton('core/resource')->getTableName('pimgento_variant');
 
-        $select = $adapter->select()
-            ->from(
-                $this->getTable(),
-                array('code', $column)
-            );
+        $temporaryTable = $this->getTable();
 
-        $insert = $adapter->insertFromSelect(
-            $select,
-            Mage::getSingleton('core/resource')->getTableName('pimgento_variant'),
-            array('code', 'axis'),
-            Varien_Db_Adapter_Interface::INSERT_ON_DUPLICATE
-        );
+        $eavTable = Mage::getSingleton('core/resource')->getTableName('eav/attribute');
 
-        $adapter->query($insert);
+        $variant = $adapter->query($adapter->select()->from($temporaryTable));
 
-        $query = $adapter->query($select);
-        $progressedAttributes = array();
-        while ($row = $query->fetch()) {
-            $axis = explode(',', $row['axis']);
-            foreach ($axis as $singleAx) {
-                if (!in_array($singleAx, $progressedAttributes)) {
-                    /** @var Mage_Eav_Model_Attribute $attributeModel */
-                    $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode(4, $singleAx);
-                    $attributeModel->setData('is_configurable', 1);
-                    $attributeModel->save();
-                    $progressedAttributes[] = $singleAx;
+        $attributes = $adapter->fetchPairs($adapter->select()->from($eavTable, [
+            'attribute_code',
+            'attribute_id'
+        ])->where('entity_type_id = ?', $this->getProductEntityTypeId()));
+
+        $columns = array_keys($adapter->describeTable($temporaryTable));
+
+        $values = [];
+        $i = 0;
+        $keys = [];
+
+        while ($row = $variant->fetch()) {
+
+            $values[$i] = [];
+
+            foreach ($columns as $column) {
+                if ($adapter->tableColumnExists($variantTable, $this->_columnName($column))) {
+                    if ($column != 'axis') {
+                        $values[$i][$this->_columnName($column)] = $row[$column];
+                    }
+
+                    if ($column == 'axis' && !$adapter->tableColumnExists($temporaryTable, 'family_variant')) {
+                        $axisAttributes = explode(',', $row['axis']);
+
+                        $axis = array();
+
+                        foreach ($axisAttributes as $code) {
+                            if (isset($attributes[$code])) {
+                                $axis[] = $attributes[$code];
+
+                                /** @var Mage_Eav_Model_Attribute $attributeModel */
+                                $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode(
+                                    $this->getProductEntityTypeId(),
+                                    $code
+                                );
+                                if ($attributeModel->hasData()) {
+                                    $attributeModel->setData('is_configurable', 1);
+                                    $attributeModel->save();
+                                }
+                            }
+                        }
+
+                        $values[$i][$column] = join(',', $axis);
+                    }
+
+                    $keys = array_keys($values[$i]);
                 }
+            }
+            $i++;
+
+            /**
+             * Write 500 values at a time.
+             */
+            if (count($values) > 500) {
+                $adapter->insertOnDuplicate($variantTable, $values, $keys);
+                $values = [];
+                $i      = 0;
             }
         }
 
-        $attributes = Mage::getResourceModel('eav/entity_attribute_collection')
-            ->setEntityTypeFilter(4)
-            ->addFieldToFilter('is_configurable', 1);
-
-        $attributes->getSelect()->order("LENGTH(attribute_code) DESC");
-
-        foreach ($attributes as $attribute) {
-            $values = array(
-                'axis' => $this->_zde(
-                    'REPLACE(axis, "' . $attribute->getAttributeCode() . '", "' . $attribute->getAttributeId() . '")'
-                )
-            );
-            $adapter->update(
-                Mage::getSingleton('core/resource')->getTableName('pimgento_variant'),
-                $values,
-                'FIND_IN_SET("' . $attribute->getAttributeCode() . '", axis)'
-            );
+        if (count($values) > 0) {
+            $adapter->insertOnDuplicate($variantTable, $values, $keys);
         }
 
         return true;
@@ -140,4 +228,38 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
         return true;
     }
 
+    /**
+     * Replace column name
+     *
+     * @param string $column
+     *
+     * @return string
+     */
+    protected function _columnName($column)
+    {
+        $matches = array(
+            'label' => 'name',
+        );
+
+        foreach ($matches as $name => $replace) {
+            if (preg_match('/^' . $name . '/', $column)) {
+                $column = preg_replace('/^' . $name . '/', $replace, $column);
+            }
+        }
+
+        return $column;
+    }
+
+    /**
+     * get product entity type id
+     *
+     * @return int
+     */
+    public function getProductEntityTypeId()
+    {
+        if ($this->_productEntityTypeId === NULL) {
+            $this->_productEntityTypeId = Mage::helper('pimgento_core')->getProductEntityTypeId();
+        }
+        return $this->_productEntityTypeId;
+    }
 }
