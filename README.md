@@ -22,9 +22,12 @@ With PIMGento, you can import :
 * Products
 * Products positions by category
 * Images
-* Variants
+* Variants or Product Model (Akeneo >= 2.0)
+* Variant family (Akeneo >= 2.0)
 * Stocks
 * Assets (Akeneo E.E >= 1.5)
+
+**Note:** Pimgento_VariantFamily must be disabled for Akeneo < 2.0
 
 ## Features
 

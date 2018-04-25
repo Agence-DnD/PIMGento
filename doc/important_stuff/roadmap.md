@@ -3,10 +3,8 @@ Roadmap
 
 Short-term plans
 ----------------
-* Compatibility with Akeneo 2.0 and the new product model (November 2017)
 * Reviewing/merging pending PRs (November 2017-December 2017)
 * Responding/fixing pending issues (November 2017-December 2017)
-* CLI Improvement (december 2017)
 
 Mid-term and long-term plans
 ----------------------------
