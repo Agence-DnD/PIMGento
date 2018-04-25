@@ -35,7 +35,7 @@ class Pimgento_VariantFamily_Model_Observer
         $helper = Mage::helper('pimgento_variantfamily');
 
         $task->addTask('pimgento_variantfamily', [
-                'label'   => $helper->__('Pim: Import Variant Family'),
+                'label'   => $helper->__('Pim: Import Variant Family (Akeneo > 2.0)'),
                 'type'    => 'file',
                 'comment' => $helper->__('Import Variant Family, upload CSV file.'),
                 'steps'   => [

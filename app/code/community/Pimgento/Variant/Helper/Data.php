@@ -22,7 +22,7 @@ class Pimgento_Variant_Helper_Data extends Mage_Core_Helper_Data
         $variantFamilyEnabled = Mage::helper('core')->isModuleEnabled('Pimgento_VariantFamily');
 
         if ($variantFamilyEnabled) {
-            return $this->__('Product Model');
+            return $this->__('Product Model (Akeneo > 2.0)');
         }
 
         return $this->__('Variant');
