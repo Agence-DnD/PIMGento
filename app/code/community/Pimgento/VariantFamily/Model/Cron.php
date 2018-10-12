@@ -5,7 +5,7 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Pimgento_Variant_Model_Cron extends Pimgento_Core_Model_Cron
+class Pimgento_VariantFamily_Model_Cron extends Pimgento_Core_Model_Cron
 {
 
     /**
