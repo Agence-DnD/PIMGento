@@ -25,7 +25,7 @@ Magento
 
 | Magento Version | PIMGento Version |
 |-----------------|------------------|
-| < 1.9.3         | 1.X.X.b          |
-| >= 1.9.3        | 1.X.X.a          |
+| < 1.9.3         | 1.X.X.a          |
+| >= 1.9.3        | 1.X.X.b          |
 
 __Note__: Magento 1.9.3 dropped Flash support in Mage_Uploader module which have been used by PIMGento. That's why we have two versions of the module (for PIMGento 1.3.2.b you need to enable Flash in your browser).
