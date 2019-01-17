@@ -1,8 +1,10 @@
 # PIMGento
 
+> This version of PIMGento connector will not be maintained anymore. We kindly invite you to visit the Github repository of the new [PIMGento (API) connector](https://github.com/Agence-DnD/PIMGento-API).
+
 PIMGento is a Magento extension that allows you to import your catalog from Akeneo CSV files into Magento.
 
-You can discover PIMGento on the official website (https://www.pimgento.com/docs/v1.0/).
+You can discover PIMGento on the [official website](https://www.pimgento.com/docs/v1.0/).
 
 ## Documentation
 
