@@ -41,6 +41,7 @@
                 <delete>1</delete>
                 <delete_previous>0</delete_previous>
                 <cache>1</cache>
+                <set_labels>1</set_labels>
             </image>
         </pimdata>
     </default>
